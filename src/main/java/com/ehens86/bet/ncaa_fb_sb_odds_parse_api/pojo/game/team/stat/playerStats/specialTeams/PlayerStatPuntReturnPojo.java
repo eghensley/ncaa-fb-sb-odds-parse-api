@@ -9,11 +9,18 @@ public class PlayerStatPuntReturnPojo {
 	private Integer puntReturnFairCatch;
 	private Integer puntReturnStartYard;
 	private Integer puntReturnFumble;
+	private Integer puntReturnBlock;
 
 	public PlayerStatPuntReturnPojo() {
 		this.puntReturnTouchdown = 0;
 	}
 
+	public PlayerStatPuntReturnPojo(String playerName) {
+		this.playerName = playerName;
+		this.puntReturn = 1;
+		this.puntReturnTouchdown = 0;
+	}
+	
 	/**
 	 * @return the playerName
 	 */
@@ -132,5 +139,28 @@ public class PlayerStatPuntReturnPojo {
 	public void setPuntReturnFumble(Integer puntReturnFumble) {
 		this.puntReturnFumble = puntReturnFumble;
 	}
+	
+	/**
+	 * @return the puntReturnBlock
+	 */
+	public Integer getPuntReturnBlock() {
+		return puntReturnBlock;
+	}
 
+	/**
+	 * @param puntReturnBlock the puntReturnBlock to set
+	 */
+	public void setPuntReturnBlock(Integer puntReturnBlock) {
+		this.puntReturnBlock = puntReturnBlock;
+	}
+
+	public void applyReturnFairCatch() {
+		this.puntReturnYard = 0;
+		this.puntReturnFairCatch = 1;
+	}
+
+	public void applyReturnMuff() {
+		this.puntReturnYard = 0;
+		this.puntReturnFumble = 1;
+	}
 }

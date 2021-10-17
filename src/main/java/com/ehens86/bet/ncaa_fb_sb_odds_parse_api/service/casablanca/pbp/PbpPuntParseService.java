@@ -2,10 +2,12 @@ package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service.casablanca.pbp;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.constants.NcaaConstants;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayCallTypeEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayDownEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayTypeEnum;
@@ -27,79 +29,49 @@ public class PbpPuntParseService {
 
 	public void parsePunt(PbpServiceRequestPojo params) {
 		try {
-			boolean simplePunt = false;
-			params.getDrive().setKickoff(false);
-			PlayerStatPuntingPojo puntingStat = new PlayerStatPuntingPojo();
-			params.getPlay().setPlayType(PlayTypeEnum.PUNT);
-			String[] playPlayerNames = pbpParsingUtils.extractNames(params.getPlayRawText());
-			String[] playYardLines = pbpParsingUtils.extractYard(params.getPlayRawText());
-
-			puntingStat.setPlayerName(pbpParsingUtils.formatName(playPlayerNames[0]));
-
-			if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
-					String.format("%s punt (\\d+) yards to the ([aA-zZ]{2,3}\\d{1,2})\\.", playPlayerNames[0]))) {
-				simplePunt = true;
+			if ("STEINDORF, Kaedin punt yards to the , End of Play.".equals(params.getPlayRawText())) {
+				return;
 			}
+			if (" punt yards to the , End of Play.".equals(params.getPlayRawText())) {
+				return;
+			}
+			if (params.getPlayRawText().startsWith(" punt")) {
+				params.setPlayRawText(String.format("%s, TEAM%s",
+						params.getTeamAbbrevDict().get(params.getPossessionTeam()).getSeoName().toUpperCase().replace(" ", ""),
+						params.getPlayRawText()));
+				params.getPlay().setPlayText(params.getPlayRawText());
+				System.out.println(params.getPlay().getPlayText());
+			}
+			if (params.getPlayRawText().startsWith("punt")) {
+				params.setPlayRawText(String.format("%s, TEAM %s",
+						params.getTeamAbbrevDict().get(params.getPossessionTeam()).getSeoName().toUpperCase().replace(" ", ""),
+						params.getPlayRawText()));
+				params.getPlay().setPlayText(params.getPlayRawText());
+				System.out.println(params.getPlay().getPlayText());
+			}
+			params.setPlayRawText(params.getPlayRawText().replace(" loss of ", " -"));
+			params.getPlay().setPlayText(params.getPlay().getPlayText().replace(" loss of ", " -"));
+			
+			params.getDrive().setKickoff(false);
+			params.getPlay().setPlayType(PlayTypeEnum.PUNT);
+			// String[] playPlayerNames =
+			// pbpParsingUtils.extractNames(params.getPlayRawText());
+			// String[] playYardLines =
+			// pbpParsingUtils.extractYard(params.getPlayRawText());
 
+			parsePuntBasic(params);
+			parsePuntReturn(params);
+			parsePuntTackles(params);
+			parsePuntFairCatch(params);
+			parsePuntTouchback(params);
+			parsePuntReturnStartYard(params);
+			parsePuntFumble(params);
+			parsePuntMuffed(params);
+			parsePuntRecover(params);
+			parsePuntBlock(params);
+			parsePuntTouchdown(params);
 
-
-			parsePuntBasic(params, puntingStat, playPlayerNames);
-
-//			if (simplePunt) {
-//				/**
-//				 * BASIC PUNT
-//				 */
-//				parsePuntBasic(params, playYardLines, puntingStat, playPlayerNames);
-//			} else 
-//				if (params.getPlayRawText().toUpperCase().contains("MUFFED") || params.getPlayRawText().toUpperCase().contains("RECOVER")) {
-//				/**
-//				 * MUFFED
-//				 */
-//				parsePuntMuffed(params, playYardLines, puntingStat, playPlayerNames);
-//			} else if (params.getPlayRawText().toUpperCase().contains("FUMBLE")) {
-//				/**
-//				 * FUMBLE
-//				 */
-//				parsePuntFumble(params, playYardLines, puntingStat, playPlayerNames);
-//			} else if (params.getPlayRawText().toUpperCase().contains("RECOVER")) {
-//				/**
-//				 * RECOVERY
-//				 */
-//				parsePuntRecover(params, playYardLines, puntingStat, playPlayerNames);
-//			} else if (params.getPlayRawText().toUpperCase().contains("TOUCHBACK")) {
-//				/**
-//				 * TOUCHBACK
-//				 */
-//				parsePuntTouchback(params, playYardLines, puntingStat, playPlayerNames);
-//			} else if (params.getPlayRawText().toUpperCase().contains("TOUCHDOWN")) {
-//				/**
-//				 * TOUCHDOWN
-//				 */
-//				parsePuntTouchdown(params, playYardLines, puntingStat, playPlayerNames);
-//			} else if (params.getPlayRawText().toUpperCase().contains("RETURN")) {
-//				/**
-//				 * STANDARD RETURN
-//				 */
-//				parsePuntReturn(params, playYardLines, puntingStat, playPlayerNames);
-//			} else if (params.getPlayRawText().toUpperCase().contains("BLOCK")) {
-//				/**
-//				 * BLOCKED
-//				 */
-//				parsePuntBlock(params, playYardLines, puntingStat, playPlayerNames);
-//			} else if (params.getPlayRawText().toUpperCase().contains("FAIR CATCH")) {
-//				/**
-//				 * FAIR CATCH
-//				 */
-//				parsePuntFairCatch(params, playYardLines, puntingStat, playPlayerNames);
-//			} else {
-//				/**
-//				 * OTHER?
-//				 */
-//				System.out.println(params.getPlayRawText());
-//				System.out.println("MISSING ^^^^^^^");
-//				return;
-//			}
-			System.out.println(params.getPlayRawText());
+			// System.out.println(params.getPlayRawText());
 			validate(params);
 		} catch (Exception e) {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
@@ -111,9 +83,8 @@ public class PbpPuntParseService {
 		}
 	}
 
-	private void validate(PbpServiceRequestPojo params) { // DrivePojo
-																											// drive
-		LOG.log(Level.INFO, "-- Punt validation");
+	private void validate(PbpServiceRequestPojo params) {
+		// LOG.log(Level.INFO, "-- Punt validation");
 		if (params.getDrive().isKickoff()) {
 			throw new IllegalArgumentException("Drive.isKickoff()");
 		}
@@ -137,9 +108,11 @@ public class PbpPuntParseService {
 			throw new IllegalArgumentException("params.getPlay().getPlayResult().getPlayResultYard() != null");
 		}
 		if (params.getPlay().getPlayResult().isPlayResultFirstDown() != Boolean.FALSE) {
-			throw new IllegalArgumentException("params.getPlay().getPlayResult().isPlayResultFirstDown() != Boolean.FALSE");
+			throw new IllegalArgumentException(
+					"params.getPlay().getPlayResult().isPlayResultFirstDown() != Boolean.FALSE");
 		}
-		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().size() != 1) {
+		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting()
+				.size() != 1) {
 			throw new IllegalArgumentException(
 					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().size() != 1");
 		}
@@ -147,12 +120,13 @@ public class PbpPuntParseService {
 		/**
 		 * NULL CHECK
 		 */
-		if (StringUtils.isBlank(
-				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPlayerName())) {
+		if (StringUtils.isBlank(params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
+				.getPunting().get(0).getPlayerName())) {
 			throw new IllegalArgumentException(
 					"StringUtils.isBlank(params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPlayerName())");
 		}
-		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPuntYard() == null) {
+		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+				.getPuntYard() == null) {
 			throw new IllegalArgumentException(
 					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 							+ "					.getPuntYard() == null");
@@ -170,12 +144,6 @@ public class PbpPuntParseService {
 							+ "					.getPuntReturnYard() == null");
 		}
 		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
-				.getPuntOutOfBounds() == null) {
-			throw new IllegalArgumentException(
-					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
-							+ "					.getPuntOutOfBounds() == null");
-		}
-		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
 				.getPuntReturnTouchdown() == null) {
 			throw new IllegalArgumentException(
 					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
@@ -187,57 +155,175 @@ public class PbpPuntParseService {
 					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 							+ "					.getPuntFairCatch() == null");
 		}
-		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPunt() == null) {
+		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+				.getPunt() == null) {
 			throw new IllegalArgumentException(
 					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 							+ "					.getPunt() == null");
 		}
-		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPuntLandYard() == null) {
+		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+				.getPuntLandYard() == null) {
 			throw new IllegalArgumentException(
 					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 							+ "					.getPuntLandYard() == null");
+		}
+		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+				.getPuntFairCatch() == 1
+				&& params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+						.isEmpty()) {
+			throw new IllegalArgumentException(
+					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
+							+ "						.getPuntFairCatch() == 1\n"
+							+ "				&& params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()\n"
+							+ "						.isEmpty()");
+		}
+		if ((params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+				.getPuntReturnYard() != 0
+				&& params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+						.getPuntTouchback() != 1)
+				&& params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+						.isEmpty()) {
+			throw new IllegalArgumentException(
+					"((params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
+							+ "				.getPuntReturnYard() != 0\n"
+							+ "				&& params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
+							+ "						.getPuntTouchback() != 1)\n"
+							+ "				&& params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()\n"
+							+ "						.isEmpty()");
+		}
+		if ((params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+				.getPuntTouchback() == 1
+				|| params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+						.getPuntFairCatch() == 1)
+				&& !params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPuntCoverage()
+						.isEmpty()) {
+			throw new IllegalArgumentException(
+					"(params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
+							+ "				.getPuntTouchback() == 1\n"
+							+ "				|| params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
+							+ "						.getPuntFairCatch() == 1\n)\n"
+							+ "				&& !params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPuntCoverage()\n"
+							+ "						.isEmpty()");
 		}
 
 		/**
 		 * VALUE CHECK
 		 */
-		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPuntTouchback() > 1) {
+		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+				.getPuntTouchback() > 1) {
 			throw new IllegalArgumentException(
 					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 							+ "					.getPuntTouchback() > 1");
 		}
 
-		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPuntOutOfBounds() > 1) {
-			throw new IllegalArgumentException(
-					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
-							+ "					.getPuntOutOfBounds() > 1");
-		}
 		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
 				.getPuntReturnTouchdown() > 1) {
 			throw new IllegalArgumentException(
 					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 							+ "					.getPuntReturnTouchdown()  > 1");
 		}
-		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPuntFairCatch() > 1) {
+		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+				.getPuntFairCatch() > 1) {
 			throw new IllegalArgumentException(
 					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 							+ "					.getPuntFairCatch()  > 1");
 		}
-		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPunt() > 1) {
+		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+				.getPunt() > 1) {
 			throw new IllegalArgumentException(
 					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 							+ "					.getPunt() > 1");
 		}
-//		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPuntLandYard() > 1) {
-//			throw new IllegalArgumentException(
-//					"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
-//							+ "					.getPuntLandYard() > 1");
-//		}
 
 		/**
 		 * CONDITIONAL CHECK
 		 */
-		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPuntTouchback() == 1) {
+		if (!params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().isEmpty()
+				&& params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().get(0)
+						.getPuntReturnTouchdown() == 1) {
+			/**
+			 * RETURN TOUCHDOWN
+			 */
+			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+					.getPuntReturnTouchdown() != 1) {
+				throw new IllegalArgumentException(
+						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
+								+ "					.getPuntReturnTouchdown() != 1");
+			}
+			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+					.getPuntBlocked() == 0
+					&& params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting()
+							.get(0).getPuntLandYard()
+							- params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
+									.getPunting().get(0).getPuntReturnYard() != 0) {
+				throw new IllegalArgumentException(
+						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
+								+ "					.getPuntBlocked() == 0\n"
+								+ "					&& params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting()\n"
+								+ "							.get(0).getPuntLandYard()\n"
+								+ "							- params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()\n"
+								+ "									.getPunting().get(0).getPuntReturnYard() != 0");
+			}
+			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+					.getPuntBlocked() == 0
+					&& params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+							.get(0).getPuntReturnStartYard()
+							+ params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+									.getPuntReturn().get(0).getPuntReturnYard() != 100) {
+				throw new IllegalArgumentException(
+						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
+								+ "					.getPuntBlocked() == 0\n"
+								+ "					&& params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().get(0)\n"
+								+ "					.getPuntReturnStartYard()\n"
+								+ "					+ params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()\n"
+								+ "							.get(0).getPuntReturnYard() != 100");
+			}
+
+		}
+		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+				.getPuntReturnTouchdown() == 1) {
+			/**
+			 * RETURN TOUCHDOWN
+			 */
+			if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().isEmpty()
+					|| params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+							.get(0).getPuntReturnTouchdown() != 1) {
+				throw new IllegalArgumentException(
+						"params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().isEmpty()\n"
+								+ "					|| params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().get(0)\n"
+								+ "							.getPuntReturnTouchdown() != 1");
+			}
+			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+					.getPuntBlocked() == 0
+					&& params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting()
+							.get(0).getPuntLandYard()
+							- params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
+									.getPunting().get(0).getPuntReturnYard() != 0) {
+				throw new IllegalArgumentException(
+						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
+								+ "					.getPuntBlocked() == 0\n"
+								+ "					&& params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting()\n"
+								+ "							.get(0).getPuntLandYard()\n"
+								+ "							- params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()\n"
+								+ "									.getPunting().get(0).getPuntReturnYard() != 0");
+			}
+			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+					.getPuntBlocked() == 0
+					&& params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+							.get(0).getPuntReturnStartYard()
+							+ params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+									.getPuntReturn().get(0).getPuntReturnYard() != 100) {
+				throw new IllegalArgumentException(
+						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
+								+ "					.getPuntBlocked() == 0\n"
+								+ "					&& params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().get(0)\n"
+								+ "					.getPuntReturnStartYard()\n"
+								+ "					+ params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()\n"
+								+ "							.get(0).getPuntReturnYard() != 100");
+			}
+		}
+		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+				.getPuntTouchback() == 1) {
 			/**
 			 * TOUCHBACK
 			 */
@@ -248,12 +334,7 @@ public class PbpPuntParseService {
 								+ "						.getPuntReturnYard() != 25");
 			}
 			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
-					.getPuntOutOfBounds() != 0) {
-				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
-								+ "						.getPuntOutOfBounds() != 0");
-			}
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPuntBlocked() != 0) {
+					.getPuntBlocked() != 0) {
 				throw new IllegalArgumentException(
 						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 								+ "						.getPuntBlocked() != 0");
@@ -270,17 +351,19 @@ public class PbpPuntParseService {
 						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 								+ "						.getPuntFairCatch() != 0");
 			}
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKickCoverage().size() != 0) {
+			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPuntCoverage()
+					.size() != 0) {
 				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKickCoverage().size() != 0");
+						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPuntCoverage().size() != 0");
 			}
-			if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().size() != 0) {
+			if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+					.size() != 0) {
 				throw new IllegalArgumentException(
 						"params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().size() != 0");
 			}
 		}
 
-		else if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
 				.getPuntFairCatch() == 1) {
 			/**
 			 * FAIR CATCH
@@ -291,7 +374,8 @@ public class PbpPuntParseService {
 						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 								+ "						.getPuntReturnYard() != 0");
 			}
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPuntBlocked() != 0) {
+			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+					.getPuntBlocked() != 0) {
 				throw new IllegalArgumentException(
 						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 								+ "						.getPuntBlocked() != 0");
@@ -308,17 +392,13 @@ public class PbpPuntParseService {
 						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 								+ "						.getPuntReturnTouchdown() != 0");
 			}
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
-					.getPuntOutOfBounds() != 0) {
+			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPuntCoverage()
+					.size() != 0) {
 				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
-								+ "						.getPuntOutOfBounds() != 0");
+						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPuntCoverage().size() != 0");
 			}
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKickCoverage().size() != 0) {
-				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKickCoverage().size() != 0");
-			}
-			if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().size() != 1) {
+			if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+					.size() != 1) {
 				throw new IllegalArgumentException(
 						"params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().size() != 1");
 			}
@@ -328,14 +408,18 @@ public class PbpPuntParseService {
 						"params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().get(0).getPuntReturnFairCatch() != 1");
 			}
 			if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().get(0)
-					.getPuntReturnStartYard() != 100 - (params.getPlay().getPlayStartYard() + params.getPlay().getPlayerStat()
-							.get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPuntYard())) {
+					.getPuntReturnStartYard() != 100 - (params.getPlay().getPlayStartYard()
+							+ params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
+									.getPunting().get(0).getPuntYard())) {
 
-				System.out.println(params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().get(0)
-						.getPuntReturnStartYard());
+				System.out.println(params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+						.getPuntReturn().get(0).getPuntReturnStartYard());
 				System.out.println(params.getPlay().getPlayStartYard());
-				System.out.println(
-						params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPuntYard());
+				System.out.println(params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
+						.getPunting().get(0).getPuntYard());
+				System.out.println(params.getPlay().getDriveText());
+				System.out.println(params.getTeamAbbrevDict());
+
 				throw new IllegalArgumentException(
 						"params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().get(0)\n"
 								+ "						.getPuntReturnStartYard() != 0");
@@ -347,474 +431,94 @@ public class PbpPuntParseService {
 			}
 		}
 
-		else if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
-				.getPuntOutOfBounds() == 1) {
-			/**
-			 * OUT OF BOUNDS
-			 */
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
-					.getPuntReturnYard() != 35) {
-				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
-								+ "						.getPuntReturnYard() != 35");
-			}
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPuntBlocked() != 0) {
-				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
-								+ "						.getPuntBlocked() != 0");
-			}
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
-					.getPuntTouchback() != 0) {
-				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
-								+ "						.getPuntTouchback() != 0");
-			}
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
-					.getPuntReturnTouchdown() != 0) {
-				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
-								+ "						.getPuntReturnTouchdown() != 0");
-			}
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
-					.getPuntFairCatch() != 0) {
-				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
-								+ "						.getPuntFairCatch() != 0");
-			}
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKickCoverage().size() != 0) {
-				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKickCoverage().size() != 0");
-			}
-			if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().size() != 0) {
-				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().size() != 0");
-			}
-		}
-
-		else if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+		if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
 				.getPuntBlocked() == 1) {
 			/**
 			 * BLOCKED
 			 */
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
-					.getPuntReturnYard() != 35) {
-				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
-								+ "						.getPuntReturnYard() != 35");
-			}
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
-					.getPuntOutOfBounds() != 0) {
-				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
-								+ "						.getPuntOutOfBounds() != 0");
-			}
+//			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+//					.getPuntReturnYard() != 35) {
+//				throw new IllegalArgumentException(
+//						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
+//								+ "						.getPuntReturnYard() != 35");
+//			}
 			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
 					.getPuntTouchback() != 0) {
 				throw new IllegalArgumentException(
 						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 								+ "						.getPuntTouchback() != 0");
 			}
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
-					.getPuntReturnTouchdown() != 0) {
-				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
-								+ "						.getPuntReturnTouchdown() != 0");
-			}
+//			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+//					.getPuntReturnTouchdown() != 0) {
+//				throw new IllegalArgumentException(
+//						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
+//								+ "						.getPuntReturnTouchdown() != 0");
+//			}
 			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
 					.getPuntFairCatch() != 0) {
 				throw new IllegalArgumentException(
 						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)\n"
 								+ "						.getPuntFairCatch() != 0");
 			}
-			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKickCoverage().size() != 0) {
+			if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPuntCoverage()
+					.size() != 0) {
 				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKickCoverage().size() != 0");
+						"params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPuntCoverage().size() != 0");
 			}
-			if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().size() != 0) {
+			if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+					.size() == 0) {
 				throw new IllegalArgumentException(
-						"params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().size() != 0");
+						"params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().size() == 0");
+			}
+			if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().stream()
+					.filter(returner -> returner.getPuntReturnBlock() == 1).collect(Collectors.toList()).size() == 0) {
+				throw new IllegalArgumentException(
+						"params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().stream()\n"
+								+ "					.filter(returner -> returner.getPuntReturnBlock() == 1).collect(Collectors.toList()).size() == 0");
 			}
 		}
 
 	}
 
-	private void parsePuntTouchdown(PbpServiceRequestPojo params,
-			String[] playYardLines, PlayerStatPuntingPojo puntingStat, String[] playPlayerNames) {
+	private void parsePuntBasic(PbpServiceRequestPojo params) {
 		try {
-			PlayerStatPuntReturnPojo returnStat = new PlayerStatPuntReturnPojo();
-			System.out.println(params.getPlayRawText());
-//			returnStat.setPlayerName(pbpParsingUtils.formatName(playPlayerNames[1]));
-//			returnStat.setPuntReturn(1);
-//			returnStat.setPuntReturnStartYard(100
-//					- pbpParsingUtils.formatYardLine(playYardLines[1], params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()));
-//			returnStat.setPuntReturnYard(0);
-//
-//			returnStat.setPuntReturnFairCatch(1);
-//			puntingStat.setPuntTouchback(0);
-//
-//			puntingStat.setPuntFairCatch(1);
-//			puntingStat.setPuntOutOfBounds(0);
-//			puntingStat.setPuntReturnYard(0);
-//			puntingStat.setPuntReturnTouchdown(0);
-//			puntingStat.setPuntBlocked(0);
-//
-//			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().add(puntingStat);
-//			params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().add(returnStat);
+			PlayerStatPuntingPojo puntingStat = new PlayerStatPuntingPojo();
 
-			throw new IllegalArgumentException();
-		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			// e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
-		}
-	}
-
-	private void parsePuntRecover(PbpServiceRequestPojo params,
-			String[] playYardLines, PlayerStatPuntingPojo puntingStat, String[] playPlayerNames) {
-		try {
-			PlayerStatPuntReturnPojo returnStat = new PlayerStatPuntReturnPojo();
-			System.out.println(params.getPlayRawText());
-//			returnStat.setPlayerName(pbpParsingUtils.formatName(playPlayerNames[1]));
-//			returnStat.setPuntReturn(1);
-//			returnStat.setPuntReturnStartYard(100
-//					- pbpParsingUtils.formatYardLine(playYardLines[1], params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()));
-//			returnStat.setPuntReturnYard(0);
-//
-//			returnStat.setPuntReturnFairCatch(1);
-//			puntingStat.setPuntTouchback(0);
-//
-//			puntingStat.setPuntFairCatch(1);
-//			puntingStat.setPuntOutOfBounds(0);
-//			puntingStat.setPuntReturnYard(0);
-//			puntingStat.setPuntReturnTouchdown(0);
-//			puntingStat.setPuntBlocked(0);
-//
-//			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().add(puntingStat);
-//			params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().add(returnStat);
-
-			throw new IllegalArgumentException();
-		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			// e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
-		}
-	}
-
-	private void parsePuntFumble(PbpServiceRequestPojo params,
-			String[] playYardLines, PlayerStatPuntingPojo puntingStat, String[] playPlayerNames) {
-		try {
-			PlayerStatPuntReturnPojo returnStat = new PlayerStatPuntReturnPojo();
-			System.out.println(params.getPlayRawText());
-//			returnStat.setPlayerName(pbpParsingUtils.formatName(playPlayerNames[1]));
-//			returnStat.setPuntReturn(1);
-//			returnStat.setPuntReturnStartYard(100
-//					- pbpParsingUtils.formatYardLine(playYardLines[1], params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()));
-//			returnStat.setPuntReturnYard(0);
-//
-//			returnStat.setPuntReturnFairCatch(1);
-//			puntingStat.setPuntTouchback(0);
-//
-//			puntingStat.setPuntFairCatch(1);
-//			puntingStat.setPuntOutOfBounds(0);
-//			puntingStat.setPuntReturnYard(0);
-//			puntingStat.setPuntReturnTouchdown(0);
-//			puntingStat.setPuntBlocked(0);
-//
-//			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().add(puntingStat);
-//			params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().add(returnStat);
-
-			throw new IllegalArgumentException();
-		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			// e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
-		}
-	}
-
-	private void parsePuntMuffed(PbpServiceRequestPojo params,
-			String[] playYardLines, PlayerStatPuntingPojo puntingStat, String[] playPlayerNames) {
-		try {
-			boolean puntingRecovery = false;
-			boolean loss = false;
-
-			puntingStat.setPuntReturnTouchdown(0);
-			puntingStat.setPuntBlocked(0);
-			puntingStat.setPuntFairCatch(0);
-			puntingStat.setPuntOutOfBounds(0);
-			puntingStat.setPuntTouchback(0);
-
-			PlayerStatPuntReturnPojo returnStat = new PlayerStatPuntReturnPojo();
-			returnStat.setPlayerName(pbpParsingUtils.formatName(playPlayerNames[1]));
-			returnStat.setPuntReturn(1);
-			returnStat.setPuntReturnFumble(1);
-			returnStat.setPuntReturnFairCatch(0);
-
-			returnStat.setPuntReturnStartYard(
-					100 - pbpParsingUtils.formatYardLine(playYardLines[0], params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()));
-			if (pbpParsingUtils.evalMatch(params.getPlayRawText(), String.format(
-					"%s punt (\\d+) yards? to the ([aA-zZ]{2,3}\\s?\\d{1,2}) return muffed by ([aA-zZ][aA-zZ]+,.?[aA-zZ][aA-zZ]+) at the ([aA-zZ]{2,3}\\d{1,2}), out of bounds.",
-					playPlayerNames[0]))) {
-				returnStat.setPuntReturnYard(
-						(100 - pbpParsingUtils.formatYardLine(playYardLines[1], params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()))
-								- returnStat.getPuntReturnStartYard());
-				puntingStat.setPuntReturnYard(returnStat.getPuntReturnYard());
-
-				params.getPlay().getPlayResult().setPlayResultTurnover(puntingRecovery);
-				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().add(puntingStat);
-				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().add(returnStat);
-				return;
-			} else {
-				String puntReturnString = pbpParsingUtils.extractCustom(params.getPlayRawText(), String.format(
-						"%s punt (\\d+) yards? to the ([aA-zZ]{2,3}\\s?\\d{1,2}) return muffed by ([aA-zZ][aA-zZ]+,.?[aA-zZ][aA-zZ]+) at the ([aA-zZ]{2,3}\\d{1,2}), recovered by ([aA-zZ]{2,3}) ([aA-zZ][aA-zZ]+,.?[aA-zZ][aA-zZ]+) at the ([aA-zZ]{2,3}\\d{1,2}), returned (\\d{1,3}) yards to the ([aA-zZ]{2,3}\\d{1,2})",
-						playPlayerNames[0]), 9);
-				String[] puntReturnStringSplit = puntReturnString.split("\\~");
-				returnStat.setPuntReturnYard(
-						(100 - pbpParsingUtils.formatYardLine(playYardLines[1], params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()))
-								- returnStat.getPuntReturnStartYard());
-
-				puntingStat.setPuntReturnYard(returnStat.getPuntReturnYard());
-
-				if (returnStat.getPuntReturnYard() < 0) {
-					loss = true;
-				}
-
-				if (pbpParsingUtils.resolvePossesionTeam(puntReturnStringSplit[4], params.getPossessionTeam(), params.getDefenseTeam(),
-						params.getTeamAbbrevDict())) {
-					PlayerStatDefenseProductionPojo kickCoverage = new PlayerStatDefenseProductionPojo();
-					kickCoverage.setPlayerName(pbpParsingUtils.formatName(puntReturnStringSplit[5]));
-					kickCoverage.setFumbleRecovered(0);
-					kickCoverage.setFumbleYard(Integer.valueOf(puntReturnStringSplit[7]));
-					kickCoverage.setTackleSolo(0.0);
-					kickCoverage.setTackleAssist(0.0);
-					kickCoverage.setTackleTotal(0);
-					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKickCoverage().add(kickCoverage);
-					params.getPlay().getPlayResult().setPlayResultTurnover(true);
-				} else {
-					throw new IllegalArgumentException("Return team recovered punt... need to handle this case");
-				}
-
-				params.getPlay().getPlayResult().setPlayResultTurnover(puntingRecovery);
-				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().add(puntingStat);
-				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().add(returnStat);
-			}
-		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
-		}
-	}
-
-	private void parsePuntTouchback(PbpServiceRequestPojo params,
-			String[] playYardLines, PlayerStatPuntingPojo puntingStat, String[] playPlayerNames) {
-		try {
-
-			puntingStat.setPuntTouchback(1);
-
-			puntingStat.setPuntFairCatch(0);
-			puntingStat.setPuntOutOfBounds(0);
-			puntingStat.setPuntReturnYard(25);
-			puntingStat.setPuntReturnTouchdown(0);
-			puntingStat.setPuntBlocked(0);
-//
-//			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().add(puntingStat);
-//			params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().add(returnStat);
-			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().add(puntingStat);
-
-//			throw new IllegalArgumentException();
-		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			// e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
-		}
-	}
-
-	private void parsePuntBlock(PbpServiceRequestPojo params,
-			String[] playYardLines, PlayerStatPuntingPojo puntingStat, String[] playPlayerNames) {
-		try {
-			PlayerStatPuntReturnPojo returnStat = new PlayerStatPuntReturnPojo();
-			System.out.println(params.getPlayRawText());
-//			returnStat.setPlayerName(pbpParsingUtils.formatName(playPlayerNames[1]));
-//			returnStat.setPuntReturn(1);
-//			returnStat.setPuntReturnStartYard(100
-//					- pbpParsingUtils.formatYardLine(playYardLines[1], params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()));
-//			returnStat.setPuntReturnYard(0);
-//
-//			returnStat.setPuntReturnFairCatch(1);
-//			puntingStat.setPuntTouchback(0);
-//
-//			puntingStat.setPuntFairCatch(1);
-//			puntingStat.setPuntOutOfBounds(0);
-//			puntingStat.setPuntReturnYard(0);
-//			puntingStat.setPuntReturnTouchdown(0);
-//			puntingStat.setPuntBlocked(0);
-//
-//			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().add(puntingStat);
-//			params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().add(returnStat);
-
-			throw new IllegalArgumentException();
-		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			// e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
-		}
-	}
-
-	private void parsePuntBasic(PbpServiceRequestPojo params, PlayerStatPuntingPojo puntingStat, String[] playPlayerNames) {
-		try {
-			String[] downAndDistance = pbpParsingUtils.convertDownAndDistance(params.getPlayRaw().getDriveText());
-			String puntString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-					String.format("%s punt (\\d+) yards to the ([A-Z]*?-?([aA-zZ]{2,3}\\s?\\d{1,2})|50 yardline)", playPlayerNames[0]), 2);
+			String[] downAndDistance = pbpParsingUtils.convertDownAndDistance(params.getPlay().getDriveText());
+//			if ("LPO42".equals(downAndDistance[2])) {
+//				System.out.println("catch");
+//			}
+			String puntString = pbpParsingUtils.extractCustom(params.getPlayRawText(), String.format(
+					"(%s|[aA-zZ]+?)( fumbled snap,)? punt ((-?\\d+) yards to the%s|blocked|BLOCKED)",
+					NcaaConstants.playerNameRegex, NcaaConstants.teamYardRegex), 12);
 			String[] puntStringArray = puntString.split("\\|")[0].split("\\~");
+			puntStringArray[11] = puntStringArray[11].toUpperCase();
+			puntingStat.setPlayerName(pbpParsingUtils.formatName(puntStringArray[0]));
+			params.getPlay().setPlayStartYard(pbpParsingUtils.formatYardLine(downAndDistance[2],
+					params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()));
+//			if ("loss of".equals(puntStringArray[8])) {
+//				puntStringArray[10] = "-"+puntStringArray[10];
+//			}
+			
+			if ("BLOCKED".equals(puntStringArray[9])) {
+				puntingStat.setPuntYard(0);
+				puntingStat.setPuntLandYard(params.getPlay().getPlayStartYard());
+			} else {
+				puntingStat.setPuntYard(Integer.valueOf(puntStringArray[10]));
+				puntingStat.setPuntLandYard(pbpParsingUtils.formatYardLine(puntStringArray[11],
+						params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()));
+			}
 
-			puntingStat.setPuntYard(Integer.valueOf(puntStringArray[0]));
 			puntingStat.setPunt(1);
-			puntingStat.setPuntLandYard(
-					pbpParsingUtils.formatYardLine(puntStringArray[1], params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()));
+
 			params.getPlay().setPlayStartDown(PlayDownEnum.valueOf(downAndDistance[0]));
 			params.getPlay().setPlayYardToGain(Integer.valueOf(downAndDistance[1]));
-			params.getPlay().setPlayStartYard(
-					pbpParsingUtils.formatYardLine(downAndDistance[2], params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()));
+
 			params.getPlay().setPlayCallType(PlayCallTypeEnum.PUNT);
 			params.getPlay().getPlayResult().setPlayResultFirstDown(false);
-			
-			
-//			puntingStat.setPuntTouchback(0);
-//
-//			puntingStat.setPuntFairCatch(0);
-//			puntingStat.setPuntOutOfBounds(0);
-//			puntingStat.setPuntReturnYard(0);
-//			puntingStat.setPuntReturnTouchdown(0);
-//			puntingStat.setPuntBlocked(0);
 
-			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().add(puntingStat);
-			// throw new IllegalArgumentException();
-		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			// e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
-		}
-	}
-
-	private void parsePuntFairCatch(PbpServiceRequestPojo params,
-			String[] playYardLines, PlayerStatPuntingPojo puntingStat, String[] playPlayerNames) {
-		try {
-			PlayerStatPuntReturnPojo returnStat = new PlayerStatPuntReturnPojo();
-			returnStat.setPlayerName(pbpParsingUtils.formatName(playPlayerNames[1]));
-			returnStat.setPuntReturn(1);
-			returnStat.setPuntReturnFumble(0);
-
-			returnStat.setPuntReturnStartYard(100
-					- pbpParsingUtils.formatYardLine(playYardLines[0], params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()));
-			returnStat.setPuntReturnYard(0);
-
-			returnStat.setPuntReturnFairCatch(1);
-			puntingStat.setPuntTouchback(0);
-
-			puntingStat.setPuntFairCatch(1);
-			puntingStat.setPuntOutOfBounds(0);
-			puntingStat.setPuntReturnYard(0);
-			puntingStat.setPuntReturnTouchdown(0);
-			puntingStat.setPuntBlocked(0);
-
-			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().add(puntingStat);
-			params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().add(returnStat);
-
-			// throw new IllegalArgumentException();
-		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			// e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
-		}
-	}
-
-	private void parsePuntReturn(PbpServiceRequestPojo params,
-			String[] playYardLines, PlayerStatPuntingPojo puntingStat, String[] playPlayerNames) {
-		try {
-			boolean loss = false;
-
-			PlayerStatPuntReturnPojo returnStat = new PlayerStatPuntReturnPojo();
-			returnStat.setPlayerName(pbpParsingUtils.formatName(playPlayerNames[1]));
-			returnStat.setPuntReturn(1);
-			returnStat.setPuntReturnFumble(0);
-
-			returnStat.setPuntReturnStartYard(100
-					- pbpParsingUtils.formatYardLine(playYardLines[0], params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()));
-
-			String puntReturnString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-					String.format("%s return (-?\\d+) yards? to the (([aA-zZ]{2,6}\\s?\\d{1,2})|50 yardline)", playPlayerNames[1]),
-					2);
-
-			returnStat.setPuntReturnYard(Integer.valueOf(puntReturnString.split("\\~")[0]));
-
-			returnStat.setPuntReturnFairCatch(0);
-			puntingStat.setPuntTouchback(0);
-
-			puntingStat.setPuntFairCatch(0);
-			puntingStat.setPuntOutOfBounds(0);
-			puntingStat.setPuntReturnYard(returnStat.getPuntReturnYard());
-			puntingStat.setPuntReturnTouchdown(0);
-			puntingStat.setPuntBlocked(0);
-
-			if (returnStat.getPuntReturnYard() < 0) {
-				loss = true;
-			}
-
-			if (params.getPlayTackles().length == 1 && "".equals(params.getPlayTackles()[0])) {
-				if (!params.getPlayRawText().contains("out-of-bounds")) {
-					LOG.log(Level.WARNING, String.format("WARNING: no tackles found for play: %s", params.getPlayRawText()));
-				}
-			} else if (params.getPlayTackles().length == 1) {
-				PlayerStatDefenseProductionPojo kickCoverage = new PlayerStatDefenseProductionPojo();
-				kickCoverage.setPlayerName(pbpParsingUtils.formatName(params.getPlayTackles()[0]));
-				kickCoverage.setTackleSolo(1.0);
-				kickCoverage.setTackleAssist(0.0);
-				kickCoverage.setTackleTotal(1);
-				if (loss) {
-					kickCoverage.setTackleForLoss(1);
-				}
-				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKickCoverage().add(kickCoverage);
-
-			} else {
-				for (String coverageTackle : params.getPlayTackles()) {
-					PlayerStatDefenseProductionPojo kickCoverage = new PlayerStatDefenseProductionPojo();
-					kickCoverage.setPlayerName(pbpParsingUtils.formatName(coverageTackle));
-					kickCoverage.setTackleTotal(1);
-					kickCoverage.setTackleAssist(1.0);
-					if (loss) {
-						kickCoverage.setTackleForLoss(1);
-					}
-					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKickCoverage().add(kickCoverage);
-				}
-			}
-
-			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().add(puntingStat);
-			params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().add(returnStat);
-
-			// throw new IllegalArgumentException();
+			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting()
+					.add(puntingStat);
 		} catch (Exception e) {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
@@ -824,4 +528,328 @@ public class PbpPuntParseService {
 			throw new IllegalArgumentException(errorStr);
 		}
 	}
+
+	private void parsePuntReturn(PbpServiceRequestPojo params) {
+		try {
+			if (pbpParsingUtils.evalMatch(params.getPlayRawText(), String.format("%s (return|for) (-?\\d+) yards? to the%s",
+					NcaaConstants.playerNameRegex, NcaaConstants.teamYardRegex))) {
+				String puntReturnString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
+						String.format("%s (return|for) (-?\\d+) yards? to the%s", NcaaConstants.playerNameRegex,
+								NcaaConstants.teamYardRegex),
+						9);
+				String playerName = pbpParsingUtils.formatName(puntReturnString.split("\\~")[0]);
+				Integer returnYards = Integer.valueOf(puntReturnString.split("\\~")[8]);
+				PlayerStatPuntReturnPojo returnStat = new PlayerStatPuntReturnPojo(playerName);
+				returnStat.setPuntReturnYard(returnYards);
+				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+						.add(returnStat);
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+						.setPuntReturnYard(returnYards);
+			} else {
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+						.setPuntReturnYard(0);
+			}
+		} catch (Exception e) {
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
+					e.toString(), params.getPlayRawText());
+			LOG.log(Level.SEVERE, errorStr);
+			e.printStackTrace();
+			throw new IllegalArgumentException(errorStr);
+		}
+	}
+
+	private void parsePuntTackles(PbpServiceRequestPojo params) {
+		try {
+			boolean loss = false;
+			boolean solo = false;
+			if (params.getPlayTackles().length == 1 && "".equals(params.getPlayTackles()[0])) {
+				return;
+			} else {
+				if (!params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+						.isEmpty()
+						&& params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+								.getPuntReturn().get(0).getPuntReturnYard() < 0) {
+					loss = true;
+				}
+				if (params.getPlayTackles().length == 1) {
+					solo = true;
+				}
+				for (String coverageTackle : params.getPlayTackles()) {
+					if (coverageTackle.contains("blocked by ")) {
+						continue;
+					}
+					if (!coverageTackle.contains(" ")) {
+						continue;
+					}
+					PlayerStatDefenseProductionPojo puntCoverage = new PlayerStatDefenseProductionPojo();
+					if (solo) {
+						puntCoverage.applyTackleSolo(pbpParsingUtils.formatName(coverageTackle), loss);
+					} else {
+						puntCoverage.applyTackle(pbpParsingUtils.formatName(coverageTackle), loss);
+					}
+					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPuntCoverage()
+							.add(puntCoverage);
+				}
+			}
+		} catch (Exception e) {
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
+					e.toString(), params.getPlayRawText());
+			LOG.log(Level.SEVERE, errorStr);
+			e.printStackTrace();
+			throw new IllegalArgumentException(errorStr);
+		}
+	}
+
+	private void parsePuntFairCatch(PbpServiceRequestPojo params) {
+		try {
+			if (pbpParsingUtils.evalMatch(params.getPlayRawText(), "([aA-zZ]{2,3}\\d{1,2} fair catch by)")) {
+				/**
+				 * Add punt return fair catch stats
+				 */
+				String returnerName = pbpParsingUtils.extractCustom(params.getPlayRawText(),
+						String.format(" fair catch by %s", NcaaConstants.playerNameRegex), 1).split("\\~")[0];
+
+				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+						.getPuntReturnByName(pbpParsingUtils.formatName(returnerName)).applyReturnFairCatch();
+
+				/**
+				 * Add punt fair catch stats
+				 */
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+						.applyPuntFairCatch();
+			} else {
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+						.setPuntFairCatch(0);
+				if (!params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+						.isEmpty()) {
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+							.get(0).setPuntReturnFairCatch(0);
+				}
+			}
+		} catch (Exception e) {
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
+					e.toString(), params.getPlayRawText());
+			LOG.log(Level.SEVERE, errorStr);
+			// e.printStackTrace();
+			throw new IllegalArgumentException(errorStr);
+		}
+	}
+
+	private void parsePuntTouchback(PbpServiceRequestPojo params) {
+		try {
+			if (params.getPlayRawText().toUpperCase().contains("TOUCHBACK")) {
+				/**
+				 * Add punting touchback stats
+				 */
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+						.applyPuntTouchback();
+			} else {
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+						.setPuntTouchback(0);
+			}
+		} catch (Exception e) {
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
+					e.toString(), params.getPlayRawText());
+			LOG.log(Level.SEVERE, errorStr);
+			// e.printStackTrace();
+			throw new IllegalArgumentException(errorStr);
+		}
+	}
+
+	private void parsePuntReturnStartYard(PbpServiceRequestPojo params) {
+		try {
+			if (!params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+					.isEmpty()) {
+				/**
+				 * Add punt return start yard
+				 */
+				String startYard = pbpParsingUtils
+						.extractCustom(params.getPlayRawText(),
+								String.format("punt -?\\d{1,2} yards to the%s", NcaaConstants.teamYardRegex), 1)
+						.split("\\~")[0].toUpperCase();
+				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().get(0)
+						.setPuntReturnStartYard(100 - pbpParsingUtils.formatYardLine(startYard,
+								params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict()));
+			} else {
+
+			}
+		} catch (Exception e) {
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
+					e.toString(), params.getPlayRawText());
+			LOG.log(Level.SEVERE, errorStr);
+			e.printStackTrace();
+			throw new IllegalArgumentException(errorStr);
+		}
+	}
+
+	private void parsePuntFumble(PbpServiceRequestPojo params) {
+		try {
+//			if (params.getPlayRawText().toUpperCase().contains("FUMBLE")) {
+			if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
+					String.format("fumble by %s", NcaaConstants.playerNameRegex))) {
+				// String fumbleString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
+				// String.format("fumble by %s", NcaaConstants.playerNameRegex), 7);
+				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn().get(0)
+						.setPuntReturnFumble(1);
+			} else {
+				if (!params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+						.isEmpty()) {
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()
+							.get(0).setPuntReturnFumble(0);
+				}
+			}
+		} catch (Exception e) {
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
+					e.toString(), params.getPlayRawText());
+			LOG.log(Level.SEVERE, errorStr);
+			// e.printStackTrace();
+			throw new IllegalArgumentException(errorStr);
+		}
+	}
+
+	private void parsePuntMuffed(PbpServiceRequestPojo params) {
+		try {
+			if (pbpParsingUtils.evalMatch(params.getPlayRawText(), String.format("return muffed by %s at the%s",
+					NcaaConstants.playerNameRegex, NcaaConstants.teamYardRegex))) {
+				String returnerMuffString = pbpParsingUtils.extractCustom(params.getPlayRawText(), String.format(
+						"return muffed by %s at the%s", NcaaConstants.playerNameRegex, NcaaConstants.teamYardRegex), 8);
+				String returnerName = returnerMuffString.split("\\~")[0];
+				LOG.log(Level.INFO, String.format("Handle return yards after muff-- %s", params.getPlayRawText()));
+				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+						.getPuntReturnByName(pbpParsingUtils.formatName(returnerName)).applyReturnMuff();
+				parsePuntReturnStartYard(params);
+			} else {
+
+			}
+		} catch (Exception e) {
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
+					e.toString(), params.getPlayRawText());
+			LOG.log(Level.SEVERE, errorStr);
+			e.printStackTrace();
+			throw new IllegalArgumentException(errorStr);
+		}
+	}
+
+	private void parsePuntRecover(PbpServiceRequestPojo params) {
+		try {
+			if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
+					String.format("recovered by ([aA-zZ]{2,3}) %s at the%s", NcaaConstants.playerNameRegex,
+							NcaaConstants.teamYardRegex))) {
+				String fumbleReturnString = "";
+				Integer fumbleReturnYards;
+				String returnerFumbleRecoverString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
+						String.format("recovered by ([aA-zZ]{2,3}) %s at the%s", NcaaConstants.playerNameRegex,
+								NcaaConstants.teamYardRegex),
+						9);
+				String abbrev = returnerFumbleRecoverString.split("\\~")[0];
+				String recoverName = pbpParsingUtils.formatName(returnerFumbleRecoverString.split("\\~")[1]);
+
+				boolean turnover = pbpParsingUtils.resolvePossesionTeam(abbrev, params.getPossessionTeam(),
+						params.getDefenseTeam(), params.getTeamAbbrevDict());
+
+				if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
+						String.format("at the%s, returned (-?\\d+) yards? to the%s", NcaaConstants.teamYardRegex,
+								NcaaConstants.teamYardRegex))) {
+					fumbleReturnString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
+							String.format("at the%s, returned (-?\\d+) yards? to the%s", NcaaConstants.teamYardRegex,
+									NcaaConstants.teamYardRegex),
+							3);
+					fumbleReturnYards = Integer.valueOf(fumbleReturnString.split("\\~")[1]);
+				} else {
+					fumbleReturnYards = 0;
+				}
+				if (turnover) {
+					PlayerStatDefenseProductionPojo puntCoverage = new PlayerStatDefenseProductionPojo();
+					puntCoverage.applyFumbleRecovery(recoverName, fumbleReturnYards);
+					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPuntCoverage()
+							.add(puntCoverage);
+				} else {
+					if (fumbleReturnYards > 0) {
+						throw new IllegalArgumentException("Handle punt return team fumble recover");
+					} else {
+						
+					}
+				}
+				params.getPlay().getPlayResult().setPlayResultTurnover(turnover);
+
+			} else {
+
+			}
+		} catch (Exception e) {
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
+					e.toString(), params.getPlayRawText());
+			LOG.log(Level.SEVERE, errorStr);
+			// e.printStackTrace();
+			throw new IllegalArgumentException(errorStr);
+		}
+	}
+
+	private void parsePuntBlock(PbpServiceRequestPojo params) {
+		try {
+			if (params.getPlayRawText().toUpperCase().contains("BLOCK")) {
+				System.out.println(params.getPlayRawText());
+
+				String puntBlockString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
+						String.format("\\(?blocked by %s\\)?", NcaaConstants.playerNameRegex), 7);
+				String puntBlockName = puntBlockString.split("\\~")[0];
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+						.setPuntBlocked(1);
+				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+						.applyPuntBlock(pbpParsingUtils.formatName(puntBlockName));
+				// throw new IllegalArgumentException("Handle punt block");
+			} else {
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+						.setPuntBlocked(0);
+			}
+		} catch (Exception e) {
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
+					e.toString(), params.getPlayRawText());
+			LOG.log(Level.SEVERE, errorStr);
+			e.printStackTrace();
+			throw new IllegalArgumentException(errorStr);
+		}
+	}
+
+	private void parsePuntTouchdown(PbpServiceRequestPojo params) {
+		try {
+			if (params.getPlayRawText().toUpperCase().contains("TOUCHDOWN")) {
+				if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
+						String.format("%s (return|for) (-?\\d+) yards? to the%s,? TOUCHDOWN", NcaaConstants.playerNameRegex,
+								NcaaConstants.teamYardRegex))) {
+					String puntReturnString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
+							String.format("%s (return|for) (-?\\d+) yards? to the%s,? TOUCHDOWN",
+									NcaaConstants.playerNameRegex, NcaaConstants.teamYardRegex),
+							10);
+					String returnerName = puntReturnString.split("\\~")[0];
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+							.getPuntReturnByName(pbpParsingUtils.formatName(returnerName)).setPuntReturnTouchdown(1);
+					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting()
+							.get(0).setPuntReturnTouchdown(1);
+				} else {
+					System.out.println(params.getPlayRawText());
+					throw new IllegalArgumentException("Handle punt return touchdown");
+				}
+			} else {
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0)
+						.setPuntReturnTouchdown(0);
+			}
+		} catch (Exception e) {
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
+					e.toString(), params.getPlayRawText());
+			LOG.log(Level.SEVERE, errorStr);
+			e.printStackTrace();
+			throw new IllegalArgumentException(errorStr);
+		}
+	}
+
 }

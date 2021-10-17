@@ -29,6 +29,8 @@ public class PlayByPlayPeriodPojo {
 			return PlayPeriodEnum.THIRD;
 		} else if ("4TH".equals(this.title)) {
 			return PlayPeriodEnum.FOURTH;
+		} else if ("OT".equals(this.title)) {
+			return PlayPeriodEnum.OT;
 		} else {
 			throw new IllegalArgumentException(String.format("No PlayPeriodEnum for %s", this.title));
 		}

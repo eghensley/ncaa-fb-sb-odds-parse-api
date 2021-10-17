@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.constants.NcaaConstants;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.HomeAwayEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayCallTypeEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayDownEnum;
@@ -53,6 +54,14 @@ public class PlayByPlayService {
 
 	public void parsePbP(PlayByPlayPojo playByPlayRaw, GamePojo game) {
 		try {
+			
+			if ("5851600".equals(game.getStatsUrl()) || "5851699".equals(game.getStatsUrl())) {
+				return;
+			}
+			
+			if ("5851706".equals(game.getStatsUrl())) {
+				System.out.println("catch");
+			}
 			DrivePojo drive;
 			PbpPojo gamePlays = new PbpPojo();
 			HashMap<String, HomeAwayEnum> teamDict = new HashMap<String, HomeAwayEnum>();
@@ -69,7 +78,12 @@ public class PlayByPlayService {
 				PlayPeriodEnum playPeriod = period.getTitleEnum();
 				Integer periodSeconds = pbpParsingUtils.convertMinSecToSec("15:00");
 				for (PlayByPlayPossessionPojo possession : period.getPossessions()) {
-					String possessionTeam = possession.getTeamId();
+					String possessionTeam;
+					if ("5851706".equals(game.getStatsUrl()) && "".equals(possession.getTeamId())) {
+						possessionTeam = "1195";
+					} else {
+						possessionTeam = possession.getTeamId();
+					}
 					String defenseTeam = playByPlayRaw.pullOpponent(possessionTeam);
 					drive = new DrivePojo();
 					drive.setPossessionTeamId(possessionTeam);
@@ -87,7 +101,18 @@ public class PlayByPlayService {
 						PlayByPlayPlayPojo playRaw = possession.getPlays().get(i);
 						PlayPojo play;
 
-						String playRawText = playRaw.getScoreText();
+						String playRawText = playRaw.getScoreText().replace("  ", " ").replaceAll("#\\d{1,2} ", "").replace(" III,", ",");
+						if (pbpParsingUtils.evalMatch(playRawText, String.format("[A-Z]\\.[A-Z][a-z]+ [A-Z] "))) {
+							String suffixReplaceFull = pbpParsingUtils.extractCustom(playRawText,
+									String.format("([A-Z]\\.[A-Z][a-z]+ [A-Z]) "),
+									1).split("\\~")[0];
+							String suffixReplaceNew = suffixReplaceFull.split(" ")[0];
+							playRawText = playRawText.replace(suffixReplaceFull, suffixReplaceNew);
+						}
+//						if (playRawText.startsWith("(")) {
+//							System.out.println("catch");
+//						}
+						playRawText = playRawText.replaceAll("^\\(\\d{1,2}:\\d{1,2}\\) ", "");
 
 						if (playRawText.contains("Start of ") && playRawText.contains("quarter")) {
 							continue;
@@ -109,7 +134,7 @@ public class PlayByPlayService {
 							play = new PlayPojo();
 							play.setPeriod(playPeriod);
 							play.setPlayText(playRawText);
-							play.setDriveText(playRaw.getDriveText());
+							play.setDriveText(playRaw.getDriveText().replace("AMP;", ""));
 							for (String teamId : teamDict.keySet()) {
 								play.getPlayerStat().put(teamId, new PlayerStatPojo());
 							}
@@ -127,7 +152,7 @@ public class PlayByPlayService {
 //							System.out.println(playRawText);
 							continue;
 						} else if (playRaw.getScoreText().contains("kickoff")) {
-							//pbpKickoffParse.parseKickoff(serviceRequest);
+							pbpKickoffParse.parseKickoff(serviceRequest);
 							continue;
 						} else if (playRaw.getScoreText().contains("pass")) {
 							pbpPassParse.parsePass(serviceRequest);
@@ -136,8 +161,8 @@ public class PlayByPlayService {
 							pbpRushParse.parseRush(serviceRequest);
 							continue;
 						} else if (playRaw.getScoreText().contains("punt")) {
+							//System.out.println(playRawText);
 							pbpPuntParse.parsePunt(serviceRequest);
-							System.out.println(playRawText);
 							continue;
 						} else {
 //							System.out.println(playRawText);

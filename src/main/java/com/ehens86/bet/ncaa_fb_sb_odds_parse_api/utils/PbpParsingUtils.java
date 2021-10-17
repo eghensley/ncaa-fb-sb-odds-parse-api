@@ -37,9 +37,10 @@ public class PbpParsingUtils {
 		try {
 //		String regex = "([aA-zZ]+, [aA-zZ][a-z]+)";
 			// "([A-Z][aA-zZ']+ ?[A-Z]{0,2}\\.?,.?[aA-zZ][aA-zZ']+)";
-			String regex = "(((Van )?[A-Z][aA-zZ']+ ?[A-Z]{0,2}\\.?,.?[aA-zZ][aA-zZ'\\.]+)|([A-Z]([A-Z]|[a-z]+) [A-Z][a-z]+))";
+			// String regex = "(((Van )?[A-Z][aA-zZ']+
+			// ?[A-Z]{0,2}\\.?,.?[aA-zZ][aA-zZ'\\.]+)|([A-Z]([A-Z]|[a-z]+) [A-Z][a-z]+))";
 
-			Pattern pattern = Pattern.compile(regex);
+			Pattern pattern = Pattern.compile(NcaaConstants.playerNameRegex);
 			Matcher matcher = pattern.matcher(inputStr);
 
 			StringBuilder result = new StringBuilder();
@@ -63,8 +64,8 @@ public class PbpParsingUtils {
 	public String[] extractYard(String inputStr) {
 		try {
 //		String regex = "([aA-zZ]+, [aA-zZ][a-z]+)";
-			String regex = " [A-Z]*?-?([aA-zZ]{2,3}\\s?\\d{1,2})";
-			Pattern pattern = Pattern.compile(regex);
+			// String regex = " [A-Z]*?-?([aA-zZ]{2,3}\\s?\\d{1,2})";
+			Pattern pattern = Pattern.compile(NcaaConstants.teamYardRegex);
 			Matcher matcher = pattern.matcher(inputStr);
 
 			StringBuilder result = new StringBuilder();
@@ -91,7 +92,7 @@ public class PbpParsingUtils {
 	public String[] extractTackle(String inputStr) {
 		try {
 //		String regex = "([aA-zZ]+, [aA-zZ][a-z]+)";
-			String regex = "(\\(.+\\))";
+			String regex = "(\\([aA-zZ].+\\))";
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(inputStr);
 
@@ -178,7 +179,7 @@ public class PbpParsingUtils {
 
 	public String[] convertDownAndDistance(String inputStr) {
 		try {
-			String regex = "(\\d[a-z]{2}) and (\\d+) at [A-Z]*?-?([a-zA-Z]{2,3}\\s?\\d{1,2})";
+			String regex = String.format("(\\d[a-z]{2}) and (\\d+) at ?%s", NcaaConstants.teamYardRegex);
 			Integer groups = 3;
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(inputStr);
@@ -206,6 +207,7 @@ public class PbpParsingUtils {
 				throw new IllegalArgumentException(String.format("%s cannot be parsed to down enum", downRaw));
 			}
 			resultRawSplit[0] = down;
+			resultRawSplit[2] = resultRawSplit[2].toUpperCase();			
 			// System.out.println(result.toString());
 			return resultRawSplit;
 		} catch (Exception e) {
@@ -225,11 +227,19 @@ public class PbpParsingUtils {
 			if (inputStr.contains(",")) {
 				splitNameRaw = inputStr.split(",");
 				name = splitNameRaw[1].toUpperCase() + " " + splitNameRaw[0].toUpperCase();
-			} else {
+			} else if (inputStr.contains(".")) {
+				splitNameRaw = inputStr.split("\\.");
+				name = splitNameRaw[0].toUpperCase() + " " + splitNameRaw[1].toUpperCase();
+			} else if (inputStr.contains(" ")){
 				splitNameRaw = inputStr.split(" ");
 				name = splitNameRaw[0].toUpperCase() + " " + splitNameRaw[1].toUpperCase();
+			} else if ("".equals(inputStr)) {
+				throw new IllegalArgumentException("Empty String");
+//				return inputStr.toUpperCase();
+			} else {
+				name = inputStr.toUpperCase();
 			}
-			 
+
 			return name;
 		} catch (Exception e) {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
@@ -244,8 +254,9 @@ public class PbpParsingUtils {
 	public boolean resolvePossesionTeam(String abbrev, String possTeam, String defTeam,
 			Map<String, PlayByPlayTeamPojo> teamAbbrevDict) {
 		try {
+
 			if ((NcaaConstants.teamIdYardAbbrevDict.containsKey(possTeam)
-					&& NcaaConstants.teamIdYardAbbrevDict.get(possTeam).equals(abbrev))
+					&& NcaaConstants.teamIdYardAbbrevDict.get(possTeam).contains(abbrev))
 					|| ((!NcaaConstants.teamIdYardAbbrevDict.containsKey(possTeam)
 							&& teamAbbrevDict.get(possTeam).getSeoName().toUpperCase().contains(abbrev)))
 					|| ((!NcaaConstants.teamIdYardAbbrevDict.containsKey(defTeam)
@@ -259,11 +270,13 @@ public class PbpParsingUtils {
 							&& !teamAbbrevDict.get(possTeam).getSeoName().contains("-")
 							&& abbrev.equals(String.format("U%s",
 									teamAbbrevDict.get(possTeam).getSeoName().split("-")[0].substring(0, 1)
-											.toUpperCase()))))					
-					) {
+											.toUpperCase())))
+							|| (!NcaaConstants.teamIdYardAbbrevDict.containsKey(defTeam)
+									&& !teamAbbrevDict.get(possTeam).getSixCharAbbr().contains(abbrev))
+					)) {
 				return true;
 			} else if ((NcaaConstants.teamIdYardAbbrevDict.containsKey(defTeam)
-					&& NcaaConstants.teamIdYardAbbrevDict.get(defTeam).equals(abbrev))
+					&& NcaaConstants.teamIdYardAbbrevDict.get(defTeam).contains(abbrev))
 					|| ((!NcaaConstants.teamIdYardAbbrevDict.containsKey(defTeam)
 							&& teamAbbrevDict.get(defTeam).getSeoName().toUpperCase().contains(abbrev)))
 					|| ((!NcaaConstants.teamIdYardAbbrevDict.containsKey(possTeam)
@@ -277,8 +290,11 @@ public class PbpParsingUtils {
 							&& !teamAbbrevDict.get(defTeam).getSeoName().contains("-")
 							&& abbrev.equals(String.format("U%s",
 									teamAbbrevDict.get(defTeam).getSeoName().split("-")[0].substring(0, 1)
-											.toUpperCase()))))	
-					) {
+											.toUpperCase())))
+							|| (!NcaaConstants.teamIdYardAbbrevDict.containsKey(possTeam)
+									&& !teamAbbrevDict.get(defTeam).getSixCharAbbr().contains(abbrev))
+
+					)) {
 				return false;
 			} else {
 				throw new IllegalArgumentException(String.format("No match found for %s", abbrev));
@@ -288,7 +304,10 @@ public class PbpParsingUtils {
 			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
 					e.toString(), abbrev);
 			LOG.log(Level.SEVERE, errorStr);
-			// e.printStackTrace();
+			System.out.println(possTeam);
+			System.out.println(defTeam);
+			System.out.println(teamAbbrevDict);
+			e.printStackTrace();
 			throw new IllegalArgumentException(errorStr);
 		}
 	}
@@ -297,11 +316,12 @@ public class PbpParsingUtils {
 			Map<String, PlayByPlayTeamPojo> teamAbbrevDict) {
 		try {
 			// getSixCharAbbr().substring(0, 2)
-			if ("50 yardline".equals(inputStr) || "the 50".equals(inputStr)) {
+			if ("50 yardline".equals(inputStr) || "the 50".equals(inputStr) || "50 YARDLINE".equals(inputStr)) {
 				return 50;
 			} else {
+
 				Integer yardLine;
-				String rawYard = extractCustom(inputStr, "([a-zA-Z]{2,3})\\s?(\\d{1,2})", 2);
+				String rawYard = extractCustom(inputStr, "([A-Z]*?-?[a-zA-Z]{2,3})\\s?(\\d{1,2})", 2);
 				// System.out.println(rawYard);
 				String[] splitYard = rawYard.split("\\|")[0].split("\\~");
 

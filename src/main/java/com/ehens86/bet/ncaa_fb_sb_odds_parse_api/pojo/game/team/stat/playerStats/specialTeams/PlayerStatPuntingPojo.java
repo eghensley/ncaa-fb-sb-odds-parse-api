@@ -7,7 +7,7 @@ public class PlayerStatPuntingPojo {
 	private Integer puntLong;
 	private Integer puntBlocked;
 	private Integer puntReturnYard;
-	private Integer puntOutOfBounds;
+//	private Integer puntOutOfBounds;
 	private Integer puntReturnTouchdown;
 	private Integer puntFairCatch;
 	private Integer puntTouchback;
@@ -45,19 +45,19 @@ public class PlayerStatPuntingPojo {
 		this.puntReturnYard = puntReturnYard;
 	}
 
-	/**
-	 * @return the puntOutOfBounds
-	 */
-	public Integer getPuntOutOfBounds() {
-		return puntOutOfBounds;
-	}
-
-	/**
-	 * @param puntOutOfBounds the puntOutOfBounds to set
-	 */
-	public void setPuntOutOfBounds(Integer puntOutOfBounds) {
-		this.puntOutOfBounds = puntOutOfBounds;
-	}
+//	/**
+//	 * @return the puntOutOfBounds
+//	 */
+//	public Integer getPuntOutOfBounds() {
+//		return puntOutOfBounds;
+//	}
+//
+//	/**
+//	 * @param puntOutOfBounds the puntOutOfBounds to set
+//	 */
+//	public void setPuntOutOfBounds(Integer puntOutOfBounds) {
+//		this.puntOutOfBounds = puntOutOfBounds;
+//	}
 
 	/**
 	 * @return the puntReturnTouchdown
@@ -155,6 +155,32 @@ public class PlayerStatPuntingPojo {
 	 */
 	public void setPuntTouchback(Integer puntTouchback) {
 		this.puntTouchback = puntTouchback;
+	}
+	
+	public void applyPuntTouchback() {
+		this.puntTouchback = 1;
+		this.puntFairCatch = 0;
+		//this.puntOutOfBounds = 0;
+		this.puntReturnYard = 25;
+		this.puntReturnTouchdown = 0;
+		this.puntBlocked = 0;
+	}
+	
+	public void applyPuntFairCatch() {
+		this.puntTouchback = 0;
+		this.puntFairCatch = 1;
+		//this.puntOutOfBounds = 0;
+		this.puntReturnYard = 0;
+		this.puntReturnTouchdown = 0;
+		this.puntBlocked = 0;
+	}
+	
+	public void applyPuntReturn(Integer returnYard) {
+		this.puntTouchback = 0;
+		this.puntFairCatch = 0;
+		//this.puntOutOfBounds = 0;
+		this.puntReturnYard = returnYard;
+		this.puntBlocked = 0;
 	}
 
 	/**

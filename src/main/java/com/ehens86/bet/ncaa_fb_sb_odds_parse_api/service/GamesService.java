@@ -70,7 +70,7 @@ public class GamesService {
 	}
 
 	public ParseResponse parseWeekFcsGames() {
-		String url = String.format("https://www.ncaa.com/scoreboard/football/fcs/2021/02");
+		String url = String.format("https://www.ncaa.com/scoreboard/football/fcs/2021/01");
 		ParseRequest req = new ParseRequest();
 		UrlParseRequest urlParseRequest;
 
@@ -163,6 +163,10 @@ public class GamesService {
 			if (!gameInfoRaw.getTabs().isBoxscore()) {
 				game.setValid(false);
 				return;
+			}
+			
+			if ("5851674".equals(gameInfoRaw.getId())) {
+				gameInfoRaw.getChampionship().setDivision("FCS");
 			}
 			game = gameInfoService.parseGameInfo(gameInfoRaw, game);
 

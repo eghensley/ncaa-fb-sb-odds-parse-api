@@ -263,6 +263,34 @@ public class PlayerStatDefenseProductionPojo {
 		this.passBreakUp = passBreakUp;
 	}
 
+	public void applyFumbleRecovery(String playerName, Integer returnYards) {
+		this.playerName = playerName;
+		this.fumbleRecovered = 1;
+		this.fumbleYard = returnYards;
+	}
+
+	public void applyTackleSolo(String playerName, boolean forLoss) {
+		this.playerName = playerName;
+		this.tackleSolo = 1.0;
+		this.tackleTotal = 1;
+		if (forLoss) {
+			this.tackleForLoss = 1;
+		} else {
+			this.tackleForLoss = 0;
+		}
+	}
+
+	public void applyTackle(String playerName, boolean forLoss) {
+		this.playerName = playerName;
+		this.tackleSolo = 0.0;
+		this.tackleTotal = 1;
+		if (forLoss) {
+			this.tackleForLoss = 1;
+		} else {
+			this.tackleForLoss = 0;
+		}
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

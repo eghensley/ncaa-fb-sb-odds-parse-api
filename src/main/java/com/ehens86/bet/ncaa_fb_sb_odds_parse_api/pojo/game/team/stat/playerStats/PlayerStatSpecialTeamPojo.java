@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -24,6 +25,8 @@ public class PlayerStatSpecialTeamPojo {
 	private List<PlayerStatPuntReturnPojo> puntReturn;
 	private List<PlayerStatKickReturnPojo> kickReturn;
 	private List<PlayerStatDefenseProductionPojo> kickCoverage;
+	private List<PlayerStatDefenseProductionPojo> puntCoverage;
+
 	private List<PlayerStatKickoffPojo> kickoff;
 
 	public PlayerStatSpecialTeamPojo() {
@@ -33,6 +36,7 @@ public class PlayerStatSpecialTeamPojo {
 		this.kickReturn = new ArrayList<PlayerStatKickReturnPojo>();
 		this.kickCoverage = new ArrayList<PlayerStatDefenseProductionPojo>();
 		this.kickoff = new ArrayList<PlayerStatKickoffPojo>();
+		this.puntCoverage = new ArrayList<PlayerStatDefenseProductionPojo>();
 
 	}
 
@@ -85,6 +89,34 @@ public class PlayerStatSpecialTeamPojo {
 	public List<PlayerStatPuntReturnPojo> getPuntReturn() {
 		return puntReturn;
 	}
+	
+	public PlayerStatPuntReturnPojo getPuntReturnByName(String playerName) {
+		if (puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName())).collect(Collectors.toList()).isEmpty()) {
+			this.puntReturn.add(new PlayerStatPuntReturnPojo(playerName));
+//			return this.puntReturn.get(0);
+		}
+			return puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName())).collect(Collectors.toList()).get(0);
+//		}
+	}
+	
+	public void applyPuntBlock(String playerName) {
+		if (puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName())).collect(Collectors.toList()).isEmpty()) {
+			if (!this.puntReturn.isEmpty() && this.puntReturn.size() == 1) {
+				this.puntReturn.get(0).setPuntReturnBlock(0);
+			}
+			
+			PlayerStatPuntReturnPojo block = new PlayerStatPuntReturnPojo(playerName);
+			block.setPuntReturn(0);
+			block.setPuntReturnBlock(1);
+			block.setPuntReturnFairCatch(0);
+			block.setPuntReturnFumble(0);
+			block.setPuntReturnStartYard(0);
+			block.setPuntReturnYard(0);
+			this.puntReturn.add(block);
+		} else {
+			puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName())).collect(Collectors.toList()).get(0).setPuntReturnBlock(1);
+		}
+	}
 
 	/**
 	 * @param puntReturn the puntReturn to set
@@ -106,6 +138,22 @@ public class PlayerStatSpecialTeamPojo {
 	public void setKickReturn(List<PlayerStatKickReturnPojo> kickReturn) {
 		this.kickReturn = kickReturn;
 	}
+
+	/**
+	 * @return the puntCoverage
+	 */
+	public List<PlayerStatDefenseProductionPojo> getPuntCoverage() {
+		return puntCoverage;
+	}
+
+
+	/**
+	 * @param puntCoverage the puntCoverage to set
+	 */
+	public void setPuntCoverage(List<PlayerStatDefenseProductionPojo> puntCoverage) {
+		this.puntCoverage = puntCoverage;
+	}
+
 
 	public PlayerStatPuntReturnPojo findPuntReturnByPlayerName(String rawPlayerName) {
 

@@ -3,6 +3,7 @@ package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStat
 public class PlayerStatReceivingPojo {
 	private String playerName;
 	private Integer receivingReception;
+	private Integer receivingTarget;
 	private Integer receivingYard;
 	private Integer receivingTouchdown;
 	private Integer receivingLong;
@@ -12,6 +13,12 @@ public class PlayerStatReceivingPojo {
 
 	public PlayerStatReceivingPojo() {
 
+	}
+	
+	public PlayerStatReceivingPojo(String name, Integer reception) {
+		this.playerName = name;
+		this.receivingTarget = 1;
+		this.receivingReception = reception;
 	}
 
 	public PlayerStatReceivingPojo(String playerName, Integer receivingReception, Integer receivingYard,
@@ -140,95 +147,21 @@ public class PlayerStatReceivingPojo {
 		this.recievingFirstDown = recievingFirstDown;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((playerName == null) ? 0 : playerName.hashCode());
-		result = prime * result + ((receivingDrop == null) ? 0 : receivingDrop.hashCode());
-		result = prime * result + ((receivingLong == null) ? 0 : receivingLong.hashCode());
-		result = prime * result + ((receivingReception == null) ? 0 : receivingReception.hashCode());
-		result = prime * result + ((receivingTouchdown == null) ? 0 : receivingTouchdown.hashCode());
-		result = prime * result + ((receivingYard == null) ? 0 : receivingYard.hashCode());
-		result = prime * result + ((receivingYardAfterCatch == null) ? 0 : receivingYardAfterCatch.hashCode());
-		result = prime * result + ((recievingFirstDown == null) ? 0 : recievingFirstDown.hashCode());
-		return result;
+	/**
+	 * @return the receivingTarget
+	 */
+	public Integer getReceivingTarget() {
+		return receivingTarget;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof PlayerStatReceivingPojo)) {
-			return false;
-		}
-		PlayerStatReceivingPojo other = (PlayerStatReceivingPojo) obj;
-		if (playerName == null) {
-			if (other.playerName != null) {
-				return false;
-			}
-		} else if (!playerName.equals(other.playerName)) {
-			return false;
-		}
-		if (receivingDrop == null) {
-			if (other.receivingDrop != null) {
-				return false;
-			}
-		} else if (!receivingDrop.equals(other.receivingDrop)) {
-			return false;
-		}
-		if (receivingLong == null) {
-			if (other.receivingLong != null) {
-				return false;
-			}
-		} else if (!receivingLong.equals(other.receivingLong)) {
-			return false;
-		}
-		if (receivingReception == null) {
-			if (other.receivingReception != null) {
-				return false;
-			}
-		} else if (!receivingReception.equals(other.receivingReception)) {
-			return false;
-		}
-		if (receivingTouchdown == null) {
-			if (other.receivingTouchdown != null) {
-				return false;
-			}
-		} else if (!receivingTouchdown.equals(other.receivingTouchdown)) {
-			return false;
-		}
-		if (receivingYard == null) {
-			if (other.receivingYard != null) {
-				return false;
-			}
-		} else if (!receivingYard.equals(other.receivingYard)) {
-			return false;
-		}
-		if (receivingYardAfterCatch == null) {
-			if (other.receivingYardAfterCatch != null) {
-				return false;
-			}
-		} else if (!receivingYardAfterCatch.equals(other.receivingYardAfterCatch)) {
-			return false;
-		}
-		if (recievingFirstDown == null) {
-			if (other.recievingFirstDown != null) {
-				return false;
-			}
-		} else if (!recievingFirstDown.equals(other.recievingFirstDown)) {
-			return false;
-		}
-		return true;
+	/**
+	 * @param receivingTarget the receivingTarget to set
+	 */
+	public void setReceivingTarget(Integer receivingTarget) {
+		this.receivingTarget = receivingTarget;
 	}
 
-	@Override
-	public String toString() {
-		return "PlayerStatReceivingPojo [playerName=" + playerName + ", receivingReception=" + receivingReception
-				+ ", receivingYard=" + receivingYard + ", receivingTouchdown=" + receivingTouchdown + ", receivingLong="
-				+ receivingLong + ", receivingDrop=" + receivingDrop + ", receivingYardAfterCatch="
-				+ receivingYardAfterCatch + ", recievingFirstDown=" + recievingFirstDown + "]";
-	}
+
+
 
 }

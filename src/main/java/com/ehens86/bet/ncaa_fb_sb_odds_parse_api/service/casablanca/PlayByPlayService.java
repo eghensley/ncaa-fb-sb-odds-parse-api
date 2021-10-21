@@ -54,14 +54,11 @@ public class PlayByPlayService {
 
 	public void parsePbP(PlayByPlayPojo playByPlayRaw, GamePojo game) {
 		try {
-			
+
 			if ("5851600".equals(game.getStatsUrl()) || "5851699".equals(game.getStatsUrl())) {
 				return;
 			}
-			
-			if ("5851706".equals(game.getStatsUrl())) {
-				System.out.println("catch");
-			}
+
 			DrivePojo drive;
 			PbpPojo gamePlays = new PbpPojo();
 			HashMap<String, HomeAwayEnum> teamDict = new HashMap<String, HomeAwayEnum>();
@@ -101,11 +98,12 @@ public class PlayByPlayService {
 						PlayByPlayPlayPojo playRaw = possession.getPlays().get(i);
 						PlayPojo play;
 
-						String playRawText = playRaw.getScoreText().replace("  ", " ").replaceAll("#\\d{1,2} ", "").replace(" III,", ",");
+						String playRawText = playRaw.getScoreText().replace("  ", " ").replaceAll("#\\d{1,2} ", "")
+								.replace(" III,", ",").replace(" Jr ", " ");
 						if (pbpParsingUtils.evalMatch(playRawText, String.format("[A-Z]\\.[A-Z][a-z]+ [A-Z] "))) {
-							String suffixReplaceFull = pbpParsingUtils.extractCustom(playRawText,
-									String.format("([A-Z]\\.[A-Z][a-z]+ [A-Z]) "),
-									1).split("\\~")[0];
+							String suffixReplaceFull = pbpParsingUtils
+									.extractCustom(playRawText, String.format("([A-Z]\\.[A-Z][a-z]+ [A-Z]) "), 1)
+									.split("\\~")[0];
 							String suffixReplaceNew = suffixReplaceFull.split(" ")[0];
 							playRawText = playRawText.replace(suffixReplaceFull, suffixReplaceNew);
 						}
@@ -130,6 +128,16 @@ public class PlayByPlayService {
 							continue;
 						} else if (playRawText.contains("End of game")) {
 							continue;
+						} else if (playRawText.contains(" conversion ")) {
+							continue;
+						} else if (playRawText.contains("pass attempt Failed.")) {
+							continue;
+						} else if (playRawText.contains("pass attempt ")) {
+							continue;
+						} else if (playRawText.contains(" spiked")) {
+							continue;
+						} else if (playRawText.contains(" Spike")) {
+							continue;
 						} else {
 							play = new PlayPojo();
 							play.setPeriod(playPeriod);
@@ -139,30 +147,61 @@ public class PlayByPlayService {
 								play.getPlayerStat().put(teamId, new PlayerStatPojo());
 							}
 						}
-
-						String[] playTackles = pbpParsingUtils.extractTackle(playRawText);
-						PbpServiceRequestPojo serviceRequest = new PbpServiceRequestPojo(drive, play, playRaw, playRawText, playTackles, teamDict,
-									teamAbbrevDict, possessionTeam, defenseTeam);
 						
+//						System.out.println(playRawText);
+						String[] playTackles = pbpParsingUtils.extractTackle(playRawText);
+						
+						playRawText=playRawText.replace("'", "");
+						playRawText=playRawText.replace("Jr,", "Jr");
+						playRawText=playRawText.replace("([^,])( Jr\\.) ", "$1 ");
+						playRawText=playRawText.replaceAll("(([A-Z])\\.([A-Z][a-z]*))", "$2. $3");
+						playRawText=playRawText.replaceAll("([A-Z])\\. ([A-Z])\\.", "$1$2");
+						playRawText=playRawText.replaceAll("((, [A-Z])\\. )", "$2 ");
+						playRawText=playRawText.replace(" . ", " ");
+
+						playRawText=playRawText.replaceAll("[\\.]+$", "");
+						playRawText=playRawText
+								.replaceAll(String.format(" (to the|at)%s,? fumbled? by %s at forced", NcaaConstants.teamYardRegex,
+										NcaaConstants.playerNameRegex), " $1 $2 fumbled by $3 at $2 forced");
+						playRawText=playRawText.replace("Albany (NY)", "Albany");
+						playRawText=playRawText.replaceAll("([A-Z]\\. [A-Z][a-z]+),?( Jr\\.?)", "$1");
+						playRawText=playRawText.replaceAll("([A-Z]\\. [A-Z][a-z]+),?( III)", "$1");
+						playRawText=playRawText.replaceAll("([A-Z]\\. [A-Z][a-z]+),?( II)", "$1");
+
+						playRawText=playRawText.replace("C. La Chapelle", "C. LaChapelle");
+						
+						if (playRawText.startsWith(" ")) {
+							playRawText=playRawText.stripLeading();
+							play.setPlayText(playRawText);
+						}
+
+						PbpServiceRequestPojo serviceRequest = new PbpServiceRequestPojo(drive, play, playRaw,
+								playRawText, playTackles, teamDict, teamAbbrevDict, possessionTeam, defenseTeam);
+
 						if (playRaw.getScoreText().contains("NO PLAY")) {
 //							System.out.println(playRawText);
 //							pbpKickoffParse.parseKickoff(drive, play, playRaw, playRawText, playTackles, teamDict,
 //									teamAbbrevDict, possessionTeam, defenseTeam);
+						} else if (playRaw.getScoreText().contains("The ruling on the field has been overturned")) {
+//							System.out.println(playRawText);
+							continue;
 						} else if (playRaw.getScoreText().contains("PENALTY")) {
 //							System.out.println(playRawText);
 							continue;
 						} else if (playRaw.getScoreText().contains("kickoff")) {
-							pbpKickoffParse.parseKickoff(serviceRequest);
+							// System.out.println(playRawText);
+							// pbpKickoffParse.parseKickoff(serviceRequest);
 							continue;
 						} else if (playRaw.getScoreText().contains("pass")) {
+							System.out.println(playRawText);
 							pbpPassParse.parsePass(serviceRequest);
 							continue;
 						} else if (playRaw.getScoreText().contains("rush for")) {
-							pbpRushParse.parseRush(serviceRequest);
+							//pbpRushParse.parseRush(serviceRequest);
 							continue;
 						} else if (playRaw.getScoreText().contains("punt")) {
-							//System.out.println(playRawText);
-							pbpPuntParse.parsePunt(serviceRequest);
+							// System.out.println(playRawText);
+							// pbpPuntParse.parsePunt(serviceRequest);
 							continue;
 						} else {
 //							System.out.println(playRawText);
@@ -172,7 +211,7 @@ public class PlayByPlayService {
 
 					}
 
-					gamePlays.getDrives().add(drive);
+//					gamePlays.getDrives().add(drive);
 //					List<DrivePojo> reconciledDrives = reconcileDriveOnsideKick(drive, splitStart);
 //					for (DrivePojo reconciledDrive : reconciledDrives) {
 //						List<DrivePojo> tailedDrives = reconcileDriveTailKickoff(reconciledDrive);
@@ -228,7 +267,8 @@ public class PlayByPlayService {
 
 		if (drive.isKickoff()) {
 			if (drive.getDrivePlays().size() != 1) {
-				LOG.log(Level.WARNING, String.format("drive.getDrivePlays().size() = %s", drive.getDrivePlays().size()));
+				LOG.log(Level.WARNING,
+						String.format("drive.getDrivePlays().size() = %s", drive.getDrivePlays().size()));
 //				throw new IllegalArgumentException(
 //						String.format("drive.getDrivePlays().size() = %s", drive.getDrivePlays().size()));
 			}

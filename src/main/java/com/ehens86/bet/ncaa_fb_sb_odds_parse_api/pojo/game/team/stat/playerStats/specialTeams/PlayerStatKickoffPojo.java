@@ -11,10 +11,17 @@ public class PlayerStatKickoffPojo {
 	private Integer kickoffReturnTouchdown;
 	private Integer kickoffFairCatch;
 	private Integer kickoff;
-	
+	private Integer kickoffLandYard;
+
 	public PlayerStatKickoffPojo() {
 		
 	}
+	
+	public PlayerStatKickoffPojo(String playerName) {
+		this.playerName = playerName;
+		this.kickoff = 1;
+	}
+	
 	
 	/**
 	 * @return the playerName
@@ -154,5 +161,43 @@ public class PlayerStatKickoffPojo {
 	 */
 	public void setKickoffReturnTouchdown(Integer kickoffReturnTouchdown) {
 		this.kickoffReturnTouchdown = kickoffReturnTouchdown;
+	}
+	
+	
+	/**
+	 * @return the kickoffLandYard
+	 */
+	public Integer getKickoffLandYard() {
+		return kickoffLandYard;
+	}
+
+	/**
+	 * @param kickoffLandYard the kickoffLandYard to set
+	 */
+	public void setKickoffLandYard(Integer kickoffLandYard) {
+		this.kickoffLandYard = kickoffLandYard;
+	}
+
+	public void applyTouchback() {
+		this.kickoffTouchback = 1;
+		this.kickoffFairCatch = 0;
+		this.kickoffReturnTouchdown = 0;
+		this.kickoffReturnYard = 25;
+	}
+	
+	public void applyOutOfBounds() {
+		this.kickoffTouchback = 0;
+		this.kickoffFairCatch = 0;
+		this.kickoffReturnTouchdown = 0;
+		this.kickoffReturnYard = 35;
+		this.kickoffOutOfBounds = 1;
+	}
+	
+	public void applyFairCatch() {
+		this.kickoffTouchback = 0;
+		this.kickoffFairCatch = 1;
+		this.kickoffOutOfBounds = 0;
+		this.kickoffReturnYard = 25 - (100 - this.kickoffLandYard);
+		this.kickoffReturnTouchdown = 0;
 	}
 }

@@ -2,24 +2,27 @@ package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStat
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.constants.NcaaConstants;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.defense.PlayerStatDefenseProductionPojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.specialTeams.PlayerStatPuntReturnPojo;
 
 public class PlayerStatDefensePojo {
 	private static final Logger LOG = Logger.getLogger(PlayerStatDefensePojo.class.toString());
 
-	private Collection<PlayerStatDefenseProductionPojo> defenseProduction;
+	private List<PlayerStatDefenseProductionPojo> defenseProduction;
 
 	public PlayerStatDefensePojo() {
 		this.defenseProduction = new ArrayList<PlayerStatDefenseProductionPojo>();
 	}
 
-	public PlayerStatDefensePojo(Collection<PlayerStatDefenseProductionPojo> defenseProduction) {
+	public PlayerStatDefensePojo(List<PlayerStatDefenseProductionPojo> defenseProduction) {
 		super();
 		this.defenseProduction = defenseProduction;
 	}
@@ -27,14 +30,30 @@ public class PlayerStatDefensePojo {
 	/**
 	 * @return the defenseProduction
 	 */
-	public Collection<PlayerStatDefenseProductionPojo> getDefenseProduction() {
+	public List<PlayerStatDefenseProductionPojo> getDefenseProduction() {
 		return defenseProduction;
+	}
+
+	public PlayerStatDefenseProductionPojo findRushDefenseProductionByName(String playerName) {
+		if (this.defenseProduction.stream().filter(name -> playerName.equals(name.getPlayerName()))
+				.collect(Collectors.toList()).isEmpty()) {
+			PlayerStatDefenseProductionPojo newDef = new PlayerStatDefenseProductionPojo();
+			newDef.applyRushSpecialTeamsBase(playerName);
+			this.defenseProduction.add(newDef);
+		}
+		return this.defenseProduction.stream().filter(name -> playerName.equals(name.getPlayerName()))
+				.collect(Collectors.toList()).get(0);
+	}
+
+	public PlayerStatDefenseProductionPojo findDefenseWithFumbleRecovery() {
+		return this.defenseProduction.stream().filter(name -> name.getFumbleRecovered() == 1)
+				.collect(Collectors.toList()).get(0);
 	}
 
 	/**
 	 * @param defenseProduction the defenseProduction to set
 	 */
-	public void setDefenseProduction(Collection<PlayerStatDefenseProductionPojo> defenseProduction) {
+	public void setDefenseProduction(List<PlayerStatDefenseProductionPojo> defenseProduction) {
 		this.defenseProduction = defenseProduction;
 	}
 

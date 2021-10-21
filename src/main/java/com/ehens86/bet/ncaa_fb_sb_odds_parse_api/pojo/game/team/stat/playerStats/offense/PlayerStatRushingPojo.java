@@ -6,13 +6,18 @@ public class PlayerStatRushingPojo {
 	private Integer rushingYard;
 	private Integer rushingTouchdown;
 	private Integer rushingLong;
-private Integer rushingFirstDown;
+	private Integer rushingFirstDown;
+private Integer rushingFumble;
+private Integer rushingFumbleLost;
 
 	public PlayerStatRushingPojo() {
 
 	}
 
-
+	public PlayerStatRushingPojo(String name) {
+		this.playerName = name;
+		this.rushingAttempt = 1;
+	}
 
 	public PlayerStatRushingPojo(String playerName, Integer rushingAttempt, Integer rushingYard,
 			Integer rushingTouchdown, Integer rushingLong, Integer rushingFirstDown) {
@@ -24,8 +29,6 @@ private Integer rushingFirstDown;
 		this.rushingLong = rushingLong;
 		this.rushingFirstDown = rushingFirstDown;
 	}
-
-
 
 	/**
 	 * @return the playerName
@@ -97,16 +100,12 @@ private Integer rushingFirstDown;
 		this.rushingLong = rushingLong;
 	}
 
-
-
 	/**
 	 * @return the rushingFirstDown
 	 */
 	public Integer getRushingFirstDown() {
 		return rushingFirstDown;
 	}
-
-
 
 	/**
 	 * @param rushingFirstDown the rushingFirstDown to set
@@ -115,84 +114,32 @@ private Integer rushingFirstDown;
 		this.rushingFirstDown = rushingFirstDown;
 	}
 
-
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((playerName == null) ? 0 : playerName.hashCode());
-		result = prime * result + ((rushingAttempt == null) ? 0 : rushingAttempt.hashCode());
-		result = prime * result + ((rushingFirstDown == null) ? 0 : rushingFirstDown.hashCode());
-		result = prime * result + ((rushingLong == null) ? 0 : rushingLong.hashCode());
-		result = prime * result + ((rushingTouchdown == null) ? 0 : rushingTouchdown.hashCode());
-		result = prime * result + ((rushingYard == null) ? 0 : rushingYard.hashCode());
-		return result;
+	/**
+	 * @return the rushingFumble
+	 */
+	public Integer getRushingFumble() {
+		return rushingFumble;
 	}
 
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof PlayerStatRushingPojo)) {
-			return false;
-		}
-		PlayerStatRushingPojo other = (PlayerStatRushingPojo) obj;
-		if (playerName == null) {
-			if (other.playerName != null) {
-				return false;
-			}
-		} else if (!playerName.equals(other.playerName)) {
-			return false;
-		}
-		if (rushingAttempt == null) {
-			if (other.rushingAttempt != null) {
-				return false;
-			}
-		} else if (!rushingAttempt.equals(other.rushingAttempt)) {
-			return false;
-		}
-		if (rushingFirstDown == null) {
-			if (other.rushingFirstDown != null) {
-				return false;
-			}
-		} else if (!rushingFirstDown.equals(other.rushingFirstDown)) {
-			return false;
-		}
-		if (rushingLong == null) {
-			if (other.rushingLong != null) {
-				return false;
-			}
-		} else if (!rushingLong.equals(other.rushingLong)) {
-			return false;
-		}
-		if (rushingTouchdown == null) {
-			if (other.rushingTouchdown != null) {
-				return false;
-			}
-		} else if (!rushingTouchdown.equals(other.rushingTouchdown)) {
-			return false;
-		}
-		if (rushingYard == null) {
-			if (other.rushingYard != null) {
-				return false;
-			}
-		} else if (!rushingYard.equals(other.rushingYard)) {
-			return false;
-		}
-		return true;
+	/**
+	 * @param rushingFumble the rushingFumble to set
+	 */
+	public void setRushingFumble(Integer rushingFumble) {
+		this.rushingFumble = rushingFumble;
 	}
 
+	/**
+	 * @return the rushingFumbleLost
+	 */
+	public Integer getRushingFumbleLost() {
+		return rushingFumbleLost;
+	}
 
-
-	@Override
-	public String toString() {
-		return "PlayerStatRushingPojo [playerName=" + playerName + ", rushingAttempt=" + rushingAttempt
-				+ ", rushingYard=" + rushingYard + ", rushingTouchdown=" + rushingTouchdown + ", rushingLong="
-				+ rushingLong + ", rushingFirstDown=" + rushingFirstDown + "]";
+	/**
+	 * @param rushingFumbleLost the rushingFumbleLost to set
+	 */
+	public void setRushingFumbleLost(Integer rushingFumbleLost) {
+		this.rushingFumbleLost = rushingFumbleLost;
 	}
 
 

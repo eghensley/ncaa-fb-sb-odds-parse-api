@@ -2,15 +2,16 @@ package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStat
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.offense.PlayerStatPassingPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.offense.PlayerStatReceivingPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.offense.PlayerStatRushingPojo;
 
 public class PlayerStatOffensePojo {
-	private Collection<PlayerStatRushingPojo> rushingStat;
-	private Collection<PlayerStatPassingPojo> passingStat;
-	private Collection<PlayerStatReceivingPojo> receivingStat;
+	private List<PlayerStatRushingPojo> rushingStat;
+	private List<PlayerStatPassingPojo> passingStat;
+	private List<PlayerStatReceivingPojo> receivingStat;
 
 	public PlayerStatOffensePojo() {
 		this.rushingStat = new ArrayList<PlayerStatRushingPojo>();
@@ -18,8 +19,8 @@ public class PlayerStatOffensePojo {
 		this.receivingStat = new ArrayList<PlayerStatReceivingPojo>();
 	}
 
-	public PlayerStatOffensePojo(Collection<PlayerStatRushingPojo> rushingStat,
-			Collection<PlayerStatPassingPojo> passingStat, Collection<PlayerStatReceivingPojo> receivingStat) {
+	public PlayerStatOffensePojo(List<PlayerStatRushingPojo> rushingStat,
+			List<PlayerStatPassingPojo> passingStat, List<PlayerStatReceivingPojo> receivingStat) {
 		super();
 		this.rushingStat = rushingStat;
 		this.passingStat = passingStat;
@@ -29,42 +30,42 @@ public class PlayerStatOffensePojo {
 	/**
 	 * @return the rushingStat
 	 */
-	public Collection<PlayerStatRushingPojo> getRushingStat() {
+	public List<PlayerStatRushingPojo> getRushingStat() {
 		return rushingStat;
 	}
 
 	/**
 	 * @param rushingStat the rushingStat to set
 	 */
-	public void setRushingStat(Collection<PlayerStatRushingPojo> rushingStat) {
+	public void setRushingStat(List<PlayerStatRushingPojo> rushingStat) {
 		this.rushingStat = rushingStat;
 	}
 
 	/**
 	 * @return the passingStat
 	 */
-	public Collection<PlayerStatPassingPojo> getPassingStat() {
+	public List<PlayerStatPassingPojo> getPassingStat() {
 		return passingStat;
 	}
 
 	/**
 	 * @param passingStat the passingStat to set
 	 */
-	public void setPassingStat(Collection<PlayerStatPassingPojo> passingStat) {
+	public void setPassingStat(List<PlayerStatPassingPojo> passingStat) {
 		this.passingStat = passingStat;
 	}
 
 	/**
 	 * @return the receivingStat
 	 */
-	public Collection<PlayerStatReceivingPojo> getReceivingStat() {
+	public List<PlayerStatReceivingPojo> getReceivingStat() {
 		return receivingStat;
 	}
 
 	/**
 	 * @param receivingStat the receivingStat to set
 	 */
-	public void setReceivingStat(Collection<PlayerStatReceivingPojo> receivingStat) {
+	public void setReceivingStat(List<PlayerStatReceivingPojo> receivingStat) {
 		this.receivingStat = receivingStat;
 	}
 

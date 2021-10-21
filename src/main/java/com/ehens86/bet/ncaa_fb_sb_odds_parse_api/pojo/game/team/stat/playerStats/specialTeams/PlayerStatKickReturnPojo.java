@@ -8,10 +8,16 @@ public class PlayerStatKickReturnPojo {
 	private Integer kickReturnTouchdown;
 	private Integer kickReturnFairCatch;
 	private Integer kickReturnStartYard;
-private Integer kickReturnFumble;
-private Integer kickReturnFumbleLost;
+	private Integer kickReturnFumble;
+	private Integer kickReturnFumbleLost;
 
 	public PlayerStatKickReturnPojo() {
+		this.kickReturnTouchdown = 0;
+	}
+
+	public PlayerStatKickReturnPojo(String playerName) {
+		this.playerName = playerName;
+		this.kickReturn = 1;
 		this.kickReturnTouchdown = 0;
 	}
 
@@ -148,6 +154,17 @@ private Integer kickReturnFumbleLost;
 		this.kickReturnFumbleLost = kickReturnFumbleLost;
 	}
 
+	public void applyReturnFairCatch(Integer kickLandYard) {
+		this.kickReturnFairCatch = 1;
+		this.kickReturnStartYard = 100 - kickLandYard;
+		this.kickReturnYard = 25 - this.kickReturnStartYard;
+	}
+
+	public void applyReturnMuff() {
+		this.kickReturnYard = 0;
+		this.kickReturnFumble = 1;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

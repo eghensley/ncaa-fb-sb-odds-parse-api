@@ -9,6 +9,7 @@ public class PlayerStatPuntReturnPojo {
 	private Integer puntReturnFairCatch;
 	private Integer puntReturnStartYard;
 	private Integer puntReturnFumble;
+	private Integer puntReturnFumbleLost;
 	private Integer puntReturnBlock;
 
 	public PlayerStatPuntReturnPojo() {
@@ -163,4 +164,20 @@ public class PlayerStatPuntReturnPojo {
 		this.puntReturnYard = 0;
 		this.puntReturnFumble = 1;
 	}
+
+	/**
+	 * @return the puntReturnFumbleLost
+	 */
+	public Integer getPuntReturnFumbleLost() {
+		return puntReturnFumbleLost;
+	}
+
+	/**
+	 * @param puntReturnFumbleLost the puntReturnFumbleLost to set
+	 */
+	public void setPuntReturnFumbleLost(Integer puntReturnFumbleLost) {
+		this.puntReturnFumbleLost = puntReturnFumbleLost;
+	}
+	
+	
 }

@@ -40,11 +40,9 @@ public class PlayerStatSpecialTeamPojo {
 
 	}
 
-
-	public PlayerStatSpecialTeamPojo(List<PlayerStatKickingPojo> kicking,
-			List<PlayerStatPuntingPojo> punting, List<PlayerStatPuntReturnPojo> puntReturn,
-			List<PlayerStatKickReturnPojo> kickReturn, List<PlayerStatDefenseProductionPojo> kickCoverage,
-			List<PlayerStatKickoffPojo> kickoff) {
+	public PlayerStatSpecialTeamPojo(List<PlayerStatKickingPojo> kicking, List<PlayerStatPuntingPojo> punting,
+			List<PlayerStatPuntReturnPojo> puntReturn, List<PlayerStatKickReturnPojo> kickReturn,
+			List<PlayerStatDefenseProductionPojo> kickCoverage, List<PlayerStatKickoffPojo> kickoff) {
 		super();
 		this.kicking = kicking;
 		this.punting = punting;
@@ -53,7 +51,6 @@ public class PlayerStatSpecialTeamPojo {
 		this.kickCoverage = kickCoverage;
 		this.kickoff = kickoff;
 	}
-
 
 	/**
 	 * @return the kicking
@@ -89,22 +86,52 @@ public class PlayerStatSpecialTeamPojo {
 	public List<PlayerStatPuntReturnPojo> getPuntReturn() {
 		return puntReturn;
 	}
-	
-	public PlayerStatPuntReturnPojo getPuntReturnByName(String playerName) {
-		if (puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName())).collect(Collectors.toList()).isEmpty()) {
-			this.puntReturn.add(new PlayerStatPuntReturnPojo(playerName));
-//			return this.puntReturn.get(0);
+
+	public PlayerStatKickReturnPojo findKickReturnByName(String playerName) {
+		if (this.kickReturn.stream()
+				.filter(name -> playerName.equals(name.getPlayerName()) && name.getKickReturn() == 1)
+				.collect(Collectors.toList()).isEmpty()) {
+			this.kickReturn.add(new PlayerStatKickReturnPojo(playerName));
 		}
-			return puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName())).collect(Collectors.toList()).get(0);
-//		}
+		return this.kickReturn.stream().filter(name -> playerName.equals(name.getPlayerName()))
+				.collect(Collectors.toList()).get(0);
 	}
-	
+
+	public PlayerStatDefenseProductionPojo findKickCoverageByName(String playerName) {
+		if (this.kickCoverage.stream().filter(name -> playerName.equals(name.getPlayerName()))
+				.collect(Collectors.toList()).isEmpty()) {
+			PlayerStatDefenseProductionPojo newCoverage = new PlayerStatDefenseProductionPojo();
+			newCoverage.applyRushSpecialTeamsBase(playerName);
+			this.kickCoverage.add(newCoverage);
+		}
+		return this.kickCoverage.stream().filter(name -> playerName.equals(name.getPlayerName()))
+				.collect(Collectors.toList()).get(0);
+	}
+
+	public PlayerStatPuntReturnPojo findPuntReturnByName(String playerName) {
+		if (puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName()) && name.getPuntReturn() == 1)
+				.collect(Collectors.toList()).isEmpty()) {
+			this.puntReturn.add(new PlayerStatPuntReturnPojo(playerName));
+		}
+		return puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName())).collect(Collectors.toList())
+				.get(0);
+	}
+
+	public List<PlayerStatPuntReturnPojo> findPuntReturnWithFumble() {
+		return puntReturn.stream().filter(name -> name.getPuntReturnFumble() == 1).collect(Collectors.toList());
+	}
+
+	public List<PlayerStatKickReturnPojo> findKickReturnWithFumble() {
+		return this.kickReturn.stream().filter(name -> name.getKickReturnFumble() == 1).collect(Collectors.toList());
+	}
+
 	public void applyPuntBlock(String playerName) {
-		if (puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName())).collect(Collectors.toList()).isEmpty()) {
+		if (puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName())).collect(Collectors.toList())
+				.isEmpty()) {
 			if (!this.puntReturn.isEmpty() && this.puntReturn.size() == 1) {
 				this.puntReturn.get(0).setPuntReturnBlock(0);
 			}
-			
+
 			PlayerStatPuntReturnPojo block = new PlayerStatPuntReturnPojo(playerName);
 			block.setPuntReturn(0);
 			block.setPuntReturnBlock(1);
@@ -114,7 +141,8 @@ public class PlayerStatSpecialTeamPojo {
 			block.setPuntReturnYard(0);
 			this.puntReturn.add(block);
 		} else {
-			puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName())).collect(Collectors.toList()).get(0).setPuntReturnBlock(1);
+			puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName())).collect(Collectors.toList())
+					.get(0).setPuntReturnBlock(1);
 		}
 	}
 
@@ -146,6 +174,16 @@ public class PlayerStatSpecialTeamPojo {
 		return puntCoverage;
 	}
 
+	public PlayerStatDefenseProductionPojo findPuntCoverageByName(String playerName) {
+		if (this.puntCoverage.stream().filter(name -> playerName.equals(name.getPlayerName()))
+				.collect(Collectors.toList()).isEmpty()) {
+			PlayerStatDefenseProductionPojo newCoverage = new PlayerStatDefenseProductionPojo();
+			newCoverage.applyRushSpecialTeamsBase(playerName);
+			this.puntCoverage.add(newCoverage);
+		}
+		return this.puntCoverage.stream().filter(name -> playerName.equals(name.getPlayerName()))
+				.collect(Collectors.toList()).get(0);
+	}
 
 	/**
 	 * @param puntCoverage the puntCoverage to set
@@ -153,7 +191,6 @@ public class PlayerStatSpecialTeamPojo {
 	public void setPuntCoverage(List<PlayerStatDefenseProductionPojo> puntCoverage) {
 		this.puntCoverage = puntCoverage;
 	}
-
 
 	public PlayerStatPuntReturnPojo findPuntReturnByPlayerName(String rawPlayerName) {
 
@@ -209,8 +246,8 @@ public class PlayerStatSpecialTeamPojo {
 			Integer bestMatchScore = 1000;
 			PlayerStatKickReturnPojo bestMatch = new PlayerStatKickReturnPojo();
 			for (PlayerStatKickReturnPojo potentialMatch : this.kickReturn) {
-				Integer potentialMatchScore = StringUtils.getLevenshteinDistance(potentialMatch.getPlayerName().toUpperCase(),
-						playerName.toUpperCase());
+				Integer potentialMatchScore = StringUtils
+						.getLevenshteinDistance(potentialMatch.getPlayerName().toUpperCase(), playerName.toUpperCase());
 				if (potentialMatchScore < bestMatchScore) {
 					bestMatch = potentialMatch;
 					bestMatchScore = potentialMatchScore;
@@ -221,15 +258,16 @@ public class PlayerStatSpecialTeamPojo {
 				throw new IllegalArgumentException(String.format("ERROR: No match found for player %s", playerName));
 			}
 			if (bestMatchScore > NcaaConstants.fuzzyThreshold) {
-				throw new IllegalArgumentException(
-						String.format("ERROR: Match failed for %s - score of %s above confidence threshold.  Best match: %s", playerName,
-								bestMatchScore, bestMatch.getPlayerName()));
+				throw new IllegalArgumentException(String.format(
+						"ERROR: Match failed for %s - score of %s above confidence threshold.  Best match: %s",
+						playerName, bestMatchScore, bestMatch.getPlayerName()));
 			}
-			System.out.println(String.format("INFO: Matched %s -> %s with score of %s", playerName, bestMatch.getPlayerName(), bestMatchScore));
+			System.out.println(String.format("INFO: Matched %s -> %s with score of %s", playerName,
+					bestMatch.getPlayerName(), bestMatchScore));
 			return bestMatch;
 		} catch (Exception e) {
 			LOG.log(Level.SEVERE, e.toString());
-			//e.printStackTrace();
+			// e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
 
@@ -249,7 +287,6 @@ public class PlayerStatSpecialTeamPojo {
 		this.kickCoverage = kickCoverage;
 	}
 
-
 	/**
 	 * @return the kickoff
 	 */
@@ -257,14 +294,12 @@ public class PlayerStatSpecialTeamPojo {
 		return kickoff;
 	}
 
-
 	/**
 	 * @param kickoff the kickoff to set
 	 */
 	public void setKickoff(List<PlayerStatKickoffPojo> kickoff) {
 		this.kickoff = kickoff;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -278,7 +313,6 @@ public class PlayerStatSpecialTeamPojo {
 		result = prime * result + ((punting == null) ? 0 : punting.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -334,13 +368,10 @@ public class PlayerStatSpecialTeamPojo {
 		return true;
 	}
 
-
 	@Override
 	public String toString() {
 		return "PlayerStatSpecialTeamPojo [kicking=" + kicking + ", punting=" + punting + ", puntReturn=" + puntReturn
 				+ ", kickReturn=" + kickReturn + ", kickCoverage=" + kickCoverage + ", kickoff=" + kickoff + "]";
 	}
-
-
 
 }

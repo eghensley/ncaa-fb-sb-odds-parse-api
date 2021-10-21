@@ -92,29 +92,36 @@ public class PbpParsingUtils {
 	public String[] extractTackle(String inputStr) {
 		try {
 //		String regex = "([aA-zZ]+, [aA-zZ][a-z]+)";
-			String regex = "(\\([aA-zZ].+\\))";
-			Pattern pattern = Pattern.compile(regex);
-			Matcher matcher = pattern.matcher(inputStr);
+			String tackleRegex = "\\((.+)\\)"; // (\\([aA-zZ].+\\))
+			Pattern tacklePattern = Pattern.compile(tackleRegex);
+			Matcher tackleMatcher = tacklePattern.matcher(inputStr.replace("(Scoring play confirmed)", ""));
 
-			StringBuilder result = new StringBuilder();
-			while (matcher.find()) {
-				result.append(matcher.group(1));
-				result.append("|");
-			}
+			boolean match = tackleMatcher.find();
+			Integer tackleCount = tackleMatcher.groupCount();
 
-			// System.out.println(result.toString());
-			String[] resultRawSplit = result.toString().split("\\|");
-			if (resultRawSplit.length > 1) {
-				throw new IllegalArgumentException(
-						String.format("%s tackling blocks found.  Value greater than 1.", resultRawSplit.length));
-			} else if ("".equals(resultRawSplit[0])) {
+			if (!match) {
 				@SuppressWarnings("unused")
 				String warningStr = String.format("WARNING: no tackles found for string - %s", inputStr);
 				// LOG.log(Level.WARNING, warningStr);
-				return resultRawSplit;
+				return null; // new String[] {""};
+			} else if (tackleCount > 1) {
+				throw new IllegalArgumentException(
+						String.format("%s tackling blocks found.  Value greater than 1.", tackleCount));
+			} else {
+				String rawTackles = tackleMatcher.group(1);
+				String[] rawTackleNames = rawTackles.split(" ?; ?");
+				StringBuilder rawResult = new StringBuilder();
+
+				for (String rawTackleName : rawTackleNames) {
+					if (!rawTackleName.isBlank()) {
+						rawResult.append(formatName(rawTackleName));
+						rawResult.append("|");
+					}
+				}
+				String rawResultString = rawResult.toString();
+				String[] result = rawResultString.split("\\|");
+				return result;
 			}
-			String[] resultCleanedSplit = resultRawSplit[0].substring(1, resultRawSplit[0].length() - 1).split("; ");
-			return resultCleanedSplit;
 		} catch (Exception e) {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
@@ -140,8 +147,8 @@ public class PbpParsingUtils {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s.  Regex = %s",
 					ste[1].getMethodName(), e.toString(), inputStr, regex);
-			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
+//			LOG.log(Level.SEVERE, errorStr);
+			// e.printStackTrace();
 			throw new IllegalArgumentException(errorStr);
 		}
 	}
@@ -172,7 +179,7 @@ public class PbpParsingUtils {
 			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s.  Regex = %s",
 					ste[1].getMethodName(), e.toString(), inputStr, regex);
 			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new IllegalArgumentException(errorStr);
 		}
 	}
@@ -207,7 +214,7 @@ public class PbpParsingUtils {
 				throw new IllegalArgumentException(String.format("%s cannot be parsed to down enum", downRaw));
 			}
 			resultRawSplit[0] = down;
-			resultRawSplit[2] = resultRawSplit[2].toUpperCase();			
+			resultRawSplit[2] = resultRawSplit[2].toUpperCase();
 			// System.out.println(result.toString());
 			return resultRawSplit;
 		} catch (Exception e) {
@@ -220,33 +227,46 @@ public class PbpParsingUtils {
 		}
 	}
 
-	public String formatName(String inputStr) {
+	public String formatName(String inputStrRaw) {
 		try {
+			if ("null".equals(inputStrRaw)) {
+				throw new IllegalArgumentException("Name == null");
+			}
 			String name;
 			String[] splitNameRaw;
+			String inputStr = inputStrRaw.replaceAll("\\W$", "");
 			if (inputStr.contains(",")) {
 				splitNameRaw = inputStr.split(",");
 				name = splitNameRaw[1].toUpperCase() + " " + splitNameRaw[0].toUpperCase();
 			} else if (inputStr.contains(".")) {
 				splitNameRaw = inputStr.split("\\.");
 				name = splitNameRaw[0].toUpperCase() + " " + splitNameRaw[1].toUpperCase();
-			} else if (inputStr.contains(" ")){
+			} else if (inputStr.contains(" ")) {
 				splitNameRaw = inputStr.split(" ");
 				name = splitNameRaw[0].toUpperCase() + " " + splitNameRaw[1].toUpperCase();
 			} else if ("".equals(inputStr)) {
 				throw new IllegalArgumentException("Empty String");
 //				return inputStr.toUpperCase();
 			} else {
-				name = inputStr.toUpperCase();
+				splitNameRaw = inputStr.split("(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])");
+				if (splitNameRaw.length == 2) {
+					name = splitNameRaw[0].toUpperCase() + " " + splitNameRaw[1].toUpperCase();
+				} else {
+					name = inputStr.toUpperCase();
+					if (!"TEAM".equals(name)) {
+						LOG.log(Level.WARNING, String.format("SINGLE NAME: %s", name));
+						// throw new IllegalArgumentException("Invalid single name");
+					}
+				}
 			}
 
 			return name;
 		} catch (Exception e) {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), inputStr);
+					e.toString(), inputStrRaw);
 			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new IllegalArgumentException(errorStr);
 		}
 	}
@@ -254,47 +274,16 @@ public class PbpParsingUtils {
 	public boolean resolvePossesionTeam(String abbrev, String possTeam, String defTeam,
 			Map<String, PlayByPlayTeamPojo> teamAbbrevDict) {
 		try {
-
-			if ((NcaaConstants.teamIdYardAbbrevDict.containsKey(possTeam)
-					&& NcaaConstants.teamIdYardAbbrevDict.get(possTeam).contains(abbrev))
-					|| ((!NcaaConstants.teamIdYardAbbrevDict.containsKey(possTeam)
-							&& teamAbbrevDict.get(possTeam).getSeoName().toUpperCase().contains(abbrev)))
-					|| ((!NcaaConstants.teamIdYardAbbrevDict.containsKey(defTeam)
-							&& teamAbbrevDict.get(possTeam).getSeoName().contains("-")
-							&& abbrev.equals(String.format("%s%sU",
-									teamAbbrevDict.get(possTeam).getSeoName().split("-")[0].substring(0, 1)
-											.toUpperCase(),
-									teamAbbrevDict.get(possTeam).getSeoName().split("-")[1].substring(0, 1)
-											.toUpperCase()))))
-					|| ((!NcaaConstants.teamIdYardAbbrevDict.containsKey(defTeam)
-							&& !teamAbbrevDict.get(possTeam).getSeoName().contains("-")
-							&& abbrev.equals(String.format("U%s",
-									teamAbbrevDict.get(possTeam).getSeoName().split("-")[0].substring(0, 1)
-											.toUpperCase())))
-							|| (!NcaaConstants.teamIdYardAbbrevDict.containsKey(defTeam)
-									&& !teamAbbrevDict.get(possTeam).getSixCharAbbr().contains(abbrev))
-					)) {
+			if (NcaaConstants.teamIdYardAbbrevDict.containsKey(possTeam)
+					&& NcaaConstants.teamIdYardAbbrevDict.get(possTeam).contains(abbrev.toUpperCase())
+					&& NcaaConstants.teamIdYardAbbrevDict.containsKey(defTeam)
+					&& NcaaConstants.teamIdYardAbbrevDict.get(defTeam).contains(abbrev.toUpperCase())) {
+				throw new IllegalArgumentException(String.format("Double match found for %s", abbrev));
+			} else if (NcaaConstants.teamIdYardAbbrevDict.containsKey(possTeam)
+					&& NcaaConstants.teamIdYardAbbrevDict.get(possTeam).contains(abbrev.toUpperCase())) {
 				return true;
-			} else if ((NcaaConstants.teamIdYardAbbrevDict.containsKey(defTeam)
-					&& NcaaConstants.teamIdYardAbbrevDict.get(defTeam).contains(abbrev))
-					|| ((!NcaaConstants.teamIdYardAbbrevDict.containsKey(defTeam)
-							&& teamAbbrevDict.get(defTeam).getSeoName().toUpperCase().contains(abbrev)))
-					|| ((!NcaaConstants.teamIdYardAbbrevDict.containsKey(possTeam)
-							&& teamAbbrevDict.get(defTeam).getSeoName().contains("-")
-							&& abbrev.equals(String.format("%s%sU",
-									teamAbbrevDict.get(defTeam).getSeoName().split("-")[0].substring(0, 1)
-											.toUpperCase(),
-									teamAbbrevDict.get(defTeam).getSeoName().split("-")[1].substring(0, 1)
-											.toUpperCase()))))
-					|| ((!NcaaConstants.teamIdYardAbbrevDict.containsKey(possTeam)
-							&& !teamAbbrevDict.get(defTeam).getSeoName().contains("-")
-							&& abbrev.equals(String.format("U%s",
-									teamAbbrevDict.get(defTeam).getSeoName().split("-")[0].substring(0, 1)
-											.toUpperCase())))
-							|| (!NcaaConstants.teamIdYardAbbrevDict.containsKey(possTeam)
-									&& !teamAbbrevDict.get(defTeam).getSixCharAbbr().contains(abbrev))
-
-					)) {
+			} else if (NcaaConstants.teamIdYardAbbrevDict.containsKey(defTeam)
+					&& NcaaConstants.teamIdYardAbbrevDict.get(defTeam).contains(abbrev.toUpperCase())) {
 				return false;
 			} else {
 				throw new IllegalArgumentException(String.format("No match found for %s", abbrev));
@@ -303,11 +292,13 @@ public class PbpParsingUtils {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
 					e.toString(), abbrev);
-			LOG.log(Level.SEVERE, errorStr);
-			System.out.println(possTeam);
-			System.out.println(defTeam);
-			System.out.println(teamAbbrevDict);
-			e.printStackTrace();
+//			LOG.log(Level.SEVERE, errorStr);
+			System.out.println(abbrev);
+			// System.out.println(possTeam);
+			System.out.println(teamAbbrevDict.get(possTeam));
+			// System.out.println(defTeam);
+			System.out.println(teamAbbrevDict.get(defTeam));
+			// e.printStackTrace();
 			throw new IllegalArgumentException(errorStr);
 		}
 	}
@@ -341,7 +332,7 @@ public class PbpParsingUtils {
 			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
 					e.toString(), inputStr);
 			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new IllegalArgumentException(errorStr);
 		}
 	}

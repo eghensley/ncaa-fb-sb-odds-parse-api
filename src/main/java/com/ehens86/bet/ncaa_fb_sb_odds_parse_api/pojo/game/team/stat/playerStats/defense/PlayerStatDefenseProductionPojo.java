@@ -17,8 +17,25 @@ public class PlayerStatDefenseProductionPojo {
 	private Integer interceptionYard;
 
 	public PlayerStatDefenseProductionPojo() {
-		this.fumbleTouchdown = 0;
-		this.fumbleYard = 0;
+//		this.fumbleTouchdown = 0;
+//		this.fumbleYard = 0;
+//		this.interceptionTouchdown = 0;
+//		this.interceptionYard = 0;
+	}
+
+	public PlayerStatDefenseProductionPojo(String playerName) {
+		this.playerName = playerName;
+//		this.fumbleTouchdown = 0;
+//		this.fumbleYard = 0;
+//		this.interceptionTouchdown = 0;
+//		this.interceptionYard = 0;
+	}
+
+	public void applyRushSpecialTeamsBase(String name) {
+		this.playerName = name;
+		this.sack = 0.0;
+		this.passBreakUp = 0;
+		this.interception = 0;
 		this.interceptionTouchdown = 0;
 		this.interceptionYard = 0;
 	}
@@ -269,6 +286,11 @@ public class PlayerStatDefenseProductionPojo {
 		this.fumbleYard = returnYards;
 	}
 
+	public void applyFumbleRecovery(Integer returnYards) {
+		this.fumbleRecovered = 1;
+		this.fumbleYard = returnYards;
+	}
+
 	public void applyTackleSolo(String playerName, boolean forLoss) {
 		this.playerName = playerName;
 		this.tackleSolo = 1.0;
@@ -280,8 +302,28 @@ public class PlayerStatDefenseProductionPojo {
 		}
 	}
 
+	public void applyTackleSolo(boolean forLoss) {
+		this.tackleSolo = 1.0;
+		this.tackleTotal = 1;
+		if (forLoss) {
+			this.tackleForLoss = 1;
+		} else {
+			this.tackleForLoss = 0;
+		}
+	}
+
 	public void applyTackle(String playerName, boolean forLoss) {
 		this.playerName = playerName;
+		this.tackleSolo = 0.0;
+		this.tackleTotal = 1;
+		if (forLoss) {
+			this.tackleForLoss = 1;
+		} else {
+			this.tackleForLoss = 0;
+		}
+	}
+
+	public void applyTackle(boolean forLoss) {
 		this.tackleSolo = 0.0;
 		this.tackleTotal = 1;
 		if (forLoss) {

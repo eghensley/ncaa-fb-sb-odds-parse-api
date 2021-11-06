@@ -1,13 +1,23 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.specialTeams;
 
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.KickMissReasonEnum;
+
 public class PlayerStatKickingPojo {
 	private String playerName;
 	private Integer fieldGoal;
 	private Integer fieldGoalAttempt;
 	private Integer fieldGoalLong;
 	private Integer extraPoint;
+	private Integer extraPointAttempt;
 	private Integer totalPoint;
-
+	private Integer fieldGoalBlock;
+	private Integer fieldGoalYard;
+	private Integer fieldGoalMiss;
+	private Integer extraPointBlock;
+	private Integer extraPointYard;
+	private Integer extraPointMiss;	
+	private KickMissReasonEnum kickMissReason;
+	
 	public PlayerStatKickingPojo() {
 
 	}
@@ -107,79 +117,116 @@ public class PlayerStatKickingPojo {
 		this.totalPoint = totalPoint;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((extraPoint == null) ? 0 : extraPoint.hashCode());
-		result = prime * result + ((fieldGoal == null) ? 0 : fieldGoal.hashCode());
-		result = prime * result + ((fieldGoalAttempt == null) ? 0 : fieldGoalAttempt.hashCode());
-		result = prime * result + ((fieldGoalLong == null) ? 0 : fieldGoalLong.hashCode());
-		result = prime * result + ((playerName == null) ? 0 : playerName.hashCode());
-		result = prime * result + ((totalPoint == null) ? 0 : totalPoint.hashCode());
-		return result;
+	/**
+	 * @return the fieldGoalBlock
+	 */
+	public Integer getFieldGoalBlock() {
+		return fieldGoalBlock;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof PlayerStatKickingPojo)) {
-			return false;
-		}
-		PlayerStatKickingPojo other = (PlayerStatKickingPojo) obj;
-		if (extraPoint == null) {
-			if (other.extraPoint != null) {
-				return false;
-			}
-		} else if (!extraPoint.equals(other.extraPoint)) {
-			return false;
-		}
-		if (fieldGoal == null) {
-			if (other.fieldGoal != null) {
-				return false;
-			}
-		} else if (!fieldGoal.equals(other.fieldGoal)) {
-			return false;
-		}
-		if (fieldGoalAttempt == null) {
-			if (other.fieldGoalAttempt != null) {
-				return false;
-			}
-		} else if (!fieldGoalAttempt.equals(other.fieldGoalAttempt)) {
-			return false;
-		}
-		if (fieldGoalLong == null) {
-			if (other.fieldGoalLong != null) {
-				return false;
-			}
-		} else if (!fieldGoalLong.equals(other.fieldGoalLong)) {
-			return false;
-		}
-		if (playerName == null) {
-			if (other.playerName != null) {
-				return false;
-			}
-		} else if (!playerName.equals(other.playerName)) {
-			return false;
-		}
-		if (totalPoint == null) {
-			if (other.totalPoint != null) {
-				return false;
-			}
-		} else if (!totalPoint.equals(other.totalPoint)) {
-			return false;
-		}
-		return true;
+	/**
+	 * @param fieldGoalBlock the fieldGoalBlock to set
+	 */
+	public void setFieldGoalBlock(Integer fieldGoalBlock) {
+		this.fieldGoalBlock = fieldGoalBlock;
 	}
 
-	@Override
-	public String toString() {
-		return "PlayerStatKickingPojo [playerName=" + playerName + ", fieldGoal=" + fieldGoal + ", fieldGoalAttempt="
-				+ fieldGoalAttempt + ", fieldGoalLong=" + fieldGoalLong + ", extraPoint=" + extraPoint + ", totalPoint="
-				+ totalPoint + "]";
+	/**
+	 * @return the fieldGoalYard
+	 */
+	public Integer getFieldGoalYard() {
+		return fieldGoalYard;
 	}
 
+	/**
+	 * @param fieldGoalYard the fieldGoalYard to set
+	 */
+	public void setFieldGoalYard(Integer fieldGoalYard) {
+		this.fieldGoalYard = fieldGoalYard;
+	}
+
+	/**
+	 * @return the fieldGoalMiss
+	 */
+	public Integer getFieldGoalMiss() {
+		return fieldGoalMiss;
+	}
+
+	/**
+	 * @param fieldGoalMiss the fieldGoalMiss to set
+	 */
+	public void setFieldGoalMiss(Integer fieldGoalMiss) {
+		this.fieldGoalMiss = fieldGoalMiss;
+	}
+
+	/**
+	 * @return the kickMissReason
+	 */
+	public KickMissReasonEnum getKickMissReason() {
+		return kickMissReason;
+	}
+
+	/**
+	 * @param kickMissReason the kickMissReason to set
+	 */
+	public void setKickMissReason(KickMissReasonEnum kickMissReason) {
+		this.kickMissReason = kickMissReason;
+	}
+
+	/**
+	 * @return the extraPointAttempt
+	 */
+	public Integer getExtraPointAttempt() {
+		return extraPointAttempt;
+	}
+
+	/**
+	 * @param extraPointAttempt the extraPointAttempt to set
+	 */
+	public void setExtraPointAttempt(Integer extraPointAttempt) {
+		this.extraPointAttempt = extraPointAttempt;
+	}
+
+	/**
+	 * @return the extraPointBlock
+	 */
+	public Integer getExtraPointBlock() {
+		return extraPointBlock;
+	}
+
+	/**
+	 * @param extraPointBlock the extraPointBlock to set
+	 */
+	public void setExtraPointBlock(Integer extraPointBlock) {
+		this.extraPointBlock = extraPointBlock;
+	}
+
+	/**
+	 * @return the extraPointYard
+	 */
+	public Integer getExtraPointYard() {
+		return extraPointYard;
+	}
+
+	/**
+	 * @param extraPointYard the extraPointYard to set
+	 */
+	public void setExtraPointYard(Integer extraPointYard) {
+		this.extraPointYard = extraPointYard;
+	}
+
+	/**
+	 * @return the extraPointMiss
+	 */
+	public Integer getExtraPointMiss() {
+		return extraPointMiss;
+	}
+
+	/**
+	 * @param extraPointMiss the extraPointMiss to set
+	 */
+	public void setExtraPointMiss(Integer extraPointMiss) {
+		this.extraPointMiss = extraPointMiss;
+	}
 
 }

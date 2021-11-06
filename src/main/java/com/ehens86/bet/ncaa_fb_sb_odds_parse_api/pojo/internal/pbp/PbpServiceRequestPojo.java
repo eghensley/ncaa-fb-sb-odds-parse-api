@@ -1,6 +1,7 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.pbp;
 
 import java.util.Map;
+import java.util.Objects;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.HomeAwayEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.plays.DrivePojo;
@@ -18,6 +19,10 @@ public class PbpServiceRequestPojo {
 	private Map<String, PlayByPlayTeamPojo> teamAbbrevDict;
 	private String possessionTeam;
 	private String defenseTeam;
+	private String puntTeam;
+	private String puntReturnTeam;
+	private String kickoffTeam;
+	private String kickoffReturnTeam;
 
 	public PbpServiceRequestPojo(DrivePojo drive, PlayPojo play, PlayByPlayPlayPojo playRaw, String playRawText,
 			String[] playTackles, Map<String, HomeAwayEnum> teamDict, Map<String, PlayByPlayTeamPojo> teamAbbrevDict,
@@ -136,7 +141,13 @@ public class PbpServiceRequestPojo {
 	 * @return the possessionTeam
 	 */
 	public String getPossessionTeam() {
-		return possessionTeam;
+		if (Objects.nonNull(this.puntReturnTeam)) {
+			return this.puntReturnTeam;
+		} else if (Objects.nonNull(this.kickoffReturnTeam)) {
+			return this.kickoffReturnTeam;
+		} else {
+			return possessionTeam;
+		}
 	}
 
 	/**
@@ -150,7 +161,13 @@ public class PbpServiceRequestPojo {
 	 * @return the defenseTeam
 	 */
 	public String getDefenseTeam() {
-		return defenseTeam;
+		if (Objects.nonNull(this.puntTeam)) {
+			return this.puntTeam;
+		} else if (Objects.nonNull(this.kickoffTeam)) {
+			return this.kickoffTeam;
+		} else {
+			return defenseTeam;
+		}
 	}
 
 	/**
@@ -160,4 +177,40 @@ public class PbpServiceRequestPojo {
 		this.defenseTeam = defenseTeam;
 	}
 
+	/**
+	 * @param puntTeam the puntTeam to set
+	 */
+	public void setPuntTeam(String puntTeam) {
+		this.puntTeam = puntTeam;
+	}
+
+	/**
+	 * @param puntReturnTeam the puntReturnTeam to set
+	 */
+	public void setPuntReturnTeam(String puntReturnTeam) {
+		this.puntReturnTeam = puntReturnTeam;
+	}
+
+	/**
+	 * @param kickoffTeam the kickoffTeam to set
+	 */
+	public void setKickoffTeam(String kickoffTeam) {
+		this.kickoffTeam = kickoffTeam;
+	}
+
+	/**
+	 * @param kickoffReturnTeam the kickoffReturnTeam to set
+	 */
+	public void setKickoffReturnTeam(String kickoffReturnTeam) {
+		this.kickoffReturnTeam = kickoffReturnTeam;
+	}
+
+	public boolean evalIfHasPenalty() {
+		if (this.getPlay().getPlayerStat().get(this.getPossessionTeam()).getPenalty().isEmpty()
+				&& this.getPlay().getPlayerStat().get(this.defenseTeam).getPenalty().isEmpty()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }

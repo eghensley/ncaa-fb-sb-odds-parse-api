@@ -1,9 +1,12 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.specialTeams;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class PlayerStatPuntingPojo {
 	private String playerName;
 	private Integer punt;
 	private Integer puntYard;
+	@JsonIgnore
 	private Integer puntLong;
 	private Integer puntBlocked;
 	private Integer puntReturnYard;

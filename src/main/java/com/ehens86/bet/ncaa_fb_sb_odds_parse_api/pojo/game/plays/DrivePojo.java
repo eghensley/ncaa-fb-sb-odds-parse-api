@@ -6,14 +6,18 @@ import java.util.stream.Collectors;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayPeriodEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayTypeEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DrivePojo {
 	private String possessionTeamId;
 	private boolean kickoff;
 	private Integer driveStartTime;
+	@JsonIgnore
 	private String driveEndTime;
+	@JsonIgnore
 	private String driveTotalTime;
 	private PlayPeriodEnum driveStartPeriod;
+	@JsonIgnore
 	private PlayPeriodEnum driveEndPeriod;
 	private List<PlayPojo> drivePlays;
 

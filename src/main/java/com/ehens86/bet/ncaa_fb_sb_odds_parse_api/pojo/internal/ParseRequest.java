@@ -1,102 +1,66 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal;
 
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.ParseTargetEnum;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.DivisionEnum;
 
 public class ParseRequest {
 
-	private ParseTargetEnum target;
-	private String fightId;
-	private String boutId;
-	private String fighterId;
-	private String fighterBoutXrefOid;
+	private DivisionEnum target;
+	private Integer year;
+	private Integer week;
 	
 	public ParseRequest() {
 		
 	}
-	
-	public ParseRequest(ParseTargetEnum target, String fightId, String boutId, String fighterId) {
+
+	public ParseRequest(DivisionEnum target, Integer year, Integer week) {
+		super();
 		this.target = target;
-		this.fightId = fightId;
-		this.boutId = boutId;
-		this.fighterId = fighterId;
+		this.year = year;
+		this.week = week;
 	}
 
-	public ParseRequest(ParseTargetEnum target, String fightId, String boutId, String fighterId, String fighterBoutXrefOid) {
-		this.target = target;
-		this.fightId = fightId;
-		this.boutId = boutId;
-		this.fighterId = fighterId;
-		this.fighterBoutXrefOid = fighterBoutXrefOid;
-	}
-	
 	/**
 	 * @return the target
 	 */
-	public ParseTargetEnum getTarget() {
+	public DivisionEnum getTarget() {
 		return target;
 	}
 
 	/**
 	 * @param target the target to set
 	 */
-	public void setTarget(ParseTargetEnum target) {
+	public void setTarget(DivisionEnum target) {
 		this.target = target;
 	}
 
 	/**
-	 * @return the fightId
+	 * @return the year
 	 */
-	public String getFightId() {
-		return fightId;
+	public Integer getYear() {
+		return year;
 	}
 
 	/**
-	 * @param fightId the fightId to set
+	 * @param year the year to set
 	 */
-	public void setFightId(String fightId) {
-		this.fightId = fightId;
+	public void setYear(Integer year) {
+		this.year = year;
 	}
 
 	/**
-	 * @return the boutId
+	 * @return the week
 	 */
-	public String getBoutId() {
-		return boutId;
+	public Integer getWeek() {
+		return week;
 	}
 
 	/**
-	 * @param boutId the boutId to set
+	 * @param week the week to set
 	 */
-	public void setBoutId(String boutId) {
-		this.boutId = boutId;
+	public void setWeek(Integer week) {
+		this.week = week;
 	}
+	
 
-	/**
-	 * @return the fighterId
-	 */
-	public String getFighterId() {
-		return fighterId;
-	}
-
-	/**
-	 * @param fighterId the fighterId to set
-	 */
-	public void setFighterId(String fighterId) {
-		this.fighterId = fighterId;
-	}
-
-	/**
-	 * @return the fighterBoutXrefOid
-	 */
-	public String getFighterBoutXrefOid() {
-		return fighterBoutXrefOid;
-	}
-
-	/**
-	 * @param fighterBoutXrefOid the fighterBoutXrefOid to set
-	 */
-	public void setFighterBoutXrefOid(String fighterBoutXrefOid) {
-		this.fighterBoutXrefOid = fighterBoutXrefOid;
-	}
 
 }

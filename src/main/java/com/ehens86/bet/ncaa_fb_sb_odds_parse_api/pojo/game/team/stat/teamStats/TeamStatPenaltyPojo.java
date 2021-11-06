@@ -1,13 +1,23 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamStats;
 
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PenaltyEnum;
+
 public class TeamStatPenaltyPojo {
 	private Integer penalty;
 	private Integer penaltyYards;
+	private Integer penaltyFirstDown;
+	private String playerName;
+	private PenaltyEnum penaltyName;
 	
 	public TeamStatPenaltyPojo() {
 		
 	}
 
+	public TeamStatPenaltyPojo(String name) {
+		this.playerName = name;
+		this.penalty = 1;
+	}
+	
 	public TeamStatPenaltyPojo(Integer penalty, Integer penaltyYards) {
 		super();
 		this.penalty = penalty;
@@ -42,45 +52,46 @@ public class TeamStatPenaltyPojo {
 		this.penaltyYards = penaltyYards;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((penalty == null) ? 0 : penalty.hashCode());
-		result = prime * result + ((penaltyYards == null) ? 0 : penaltyYards.hashCode());
-		return result;
+	/**
+	 * @return the playerName
+	 */
+	public String getPlayerName() {
+		return playerName;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof TeamStatPenaltyPojo)) {
-			return false;
-		}
-		TeamStatPenaltyPojo other = (TeamStatPenaltyPojo) obj;
-		if (penalty == null) {
-			if (other.penalty != null) {
-				return false;
-			}
-		} else if (!penalty.equals(other.penalty)) {
-			return false;
-		}
-		if (penaltyYards == null) {
-			if (other.penaltyYards != null) {
-				return false;
-			}
-		} else if (!penaltyYards.equals(other.penaltyYards)) {
-			return false;
-		}
-		return true;
+	/**
+	 * @param playerName the playerName to set
+	 */
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
 	}
 
-	@Override
-	public String toString() {
-		return "TeamStatPenaltyPojo [penalty=" + penalty + ", penaltyYards=" + penaltyYards + "]";
+	/**
+	 * @return the penaltyName
+	 */
+	public PenaltyEnum getPenaltyName() {
+		return penaltyName;
 	}
-	
-	
+
+	/**
+	 * @param penaltyName the penaltyName to set
+	 */
+	public void setPenaltyName(PenaltyEnum penaltyName) {
+		this.penaltyName = penaltyName;
+	}
+
+	/**
+	 * @return the penaltyFirstDown
+	 */
+	public Integer getPenaltyFirstDown() {
+		return penaltyFirstDown;
+	}
+
+	/**
+	 * @param penaltyFirstDown the penaltyFirstDown to set
+	 */
+	public void setPenaltyFirstDown(Integer penaltyFirstDown) {
+		this.penaltyFirstDown = penaltyFirstDown;
+	}
+
 }

@@ -1,15 +1,19 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.specialTeams;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public class PlayerStatKickReturnPojo {
 	private String playerName;
 	private Integer kickReturn;
 	private Integer kickReturnYard;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Integer kickReturnLong;
 	private Integer kickReturnTouchdown;
 	private Integer kickReturnFairCatch;
 	private Integer kickReturnStartYard;
 	private Integer kickReturnFumble;
 	private Integer kickReturnFumbleLost;
+	private Integer kickReturnSafety;
 
 	public PlayerStatKickReturnPojo() {
 		this.kickReturnTouchdown = 0;
@@ -164,7 +168,37 @@ public class PlayerStatKickReturnPojo {
 		this.kickReturnYard = 0;
 		this.kickReturnFumble = 1;
 	}
+
+	public void applyNoKickReturnFumble() {
+		this.kickReturnFumble = 0;
+		this.kickReturnFumbleLost = 0;
+	}
+
+	public void applyKickReturnFumble(boolean turnover) {
+		this.kickReturnFumble = 1;
+		if (turnover) {
+			this.kickReturnFumbleLost = 1;
+		} else {
+			this.kickReturnFumbleLost = 0;
+		}
+	}
 	
+	
+
+	/**
+	 * @return the kickReturnSafety
+	 */
+	public Integer getKickReturnSafety() {
+		return kickReturnSafety;
+	}
+
+	/**
+	 * @param kickReturnSafety the kickReturnSafety to set
+	 */
+	public void setKickReturnSafety(Integer kickReturnSafety) {
+		this.kickReturnSafety = kickReturnSafety;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

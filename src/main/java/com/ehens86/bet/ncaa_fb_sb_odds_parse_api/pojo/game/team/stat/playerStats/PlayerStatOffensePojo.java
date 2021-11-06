@@ -1,7 +1,6 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.offense.PlayerStatPassingPojo;
@@ -12,15 +11,16 @@ public class PlayerStatOffensePojo {
 	private List<PlayerStatRushingPojo> rushingStat;
 	private List<PlayerStatPassingPojo> passingStat;
 	private List<PlayerStatReceivingPojo> receivingStat;
+	
 
 	public PlayerStatOffensePojo() {
-		this.rushingStat = new ArrayList<PlayerStatRushingPojo>();
-		this.passingStat = new ArrayList<PlayerStatPassingPojo>();
-		this.receivingStat = new ArrayList<PlayerStatReceivingPojo>();
+		this.rushingStat = new ArrayList<>();
+		this.passingStat = new ArrayList<>();
+		this.receivingStat = new ArrayList<>();
 	}
 
-	public PlayerStatOffensePojo(List<PlayerStatRushingPojo> rushingStat,
-			List<PlayerStatPassingPojo> passingStat, List<PlayerStatReceivingPojo> receivingStat) {
+	public PlayerStatOffensePojo(List<PlayerStatRushingPojo> rushingStat, List<PlayerStatPassingPojo> passingStat,
+			List<PlayerStatReceivingPojo> receivingStat) {
 		super();
 		this.rushingStat = rushingStat;
 		this.passingStat = passingStat;

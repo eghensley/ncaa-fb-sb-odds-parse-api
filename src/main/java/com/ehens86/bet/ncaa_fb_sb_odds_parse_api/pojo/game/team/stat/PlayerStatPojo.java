@@ -1,30 +1,33 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.PlayerStatDefensePojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.PlayerStatOffensePojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.PlayerStatSpecialTeamPojo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamStats.TeamStatPenaltyPojo;
 
 public class PlayerStatPojo {
-	@JsonIgnore
 	private PlayerStatOffensePojo offense;
-	@JsonIgnore
 	private PlayerStatDefensePojo defense;
 	private PlayerStatSpecialTeamPojo specialTeam;
-
+	private List<TeamStatPenaltyPojo> penalty;
+	
 	public PlayerStatPojo() {
 		this.offense = new PlayerStatOffensePojo();
 		this.defense = new PlayerStatDefensePojo();
 		this.specialTeam = new PlayerStatSpecialTeamPojo();
-
+		this.penalty = new ArrayList<>();
 	}
 
 	public PlayerStatPojo(PlayerStatOffensePojo offense, PlayerStatDefensePojo defense,
-			PlayerStatSpecialTeamPojo specialTeam) {
+			PlayerStatSpecialTeamPojo specialTeam, List<TeamStatPenaltyPojo> penalty) {
 		super();
 		this.offense = offense;
 		this.defense = defense;
 		this.specialTeam = specialTeam;
+		this.penalty = penalty;
 	}
 
 	/**
@@ -69,52 +72,18 @@ public class PlayerStatPojo {
 		this.specialTeam = specialTeam;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((defense == null) ? 0 : defense.hashCode());
-		result = prime * result + ((offense == null) ? 0 : offense.hashCode());
-		result = prime * result + ((specialTeam == null) ? 0 : specialTeam.hashCode());
-		return result;
+	/**
+	 * @return the penalty
+	 */
+	public List<TeamStatPenaltyPojo> getPenalty() {
+		return penalty;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof PlayerStatPojo)) {
-			return false;
-		}
-		PlayerStatPojo other = (PlayerStatPojo) obj;
-		if (defense == null) {
-			if (other.defense != null) {
-				return false;
-			}
-		} else if (!defense.equals(other.defense)) {
-			return false;
-		}
-		if (offense == null) {
-			if (other.offense != null) {
-				return false;
-			}
-		} else if (!offense.equals(other.offense)) {
-			return false;
-		}
-		if (specialTeam == null) {
-			if (other.specialTeam != null) {
-				return false;
-			}
-		} else if (!specialTeam.equals(other.specialTeam)) {
-			return false;
-		}
-		return true;
+	/**
+	 * @param penalty the penalty to set
+	 */
+	public void setPenalty(List<TeamStatPenaltyPojo> penalty) {
+		this.penalty = penalty;
 	}
-
-	@Override
-	public String toString() {
-		return "PlayerStatPojo [offense=" + offense + ", defense=" + defense + ", specialTeam=" + specialTeam + "]";
-	}
-
+	
 }

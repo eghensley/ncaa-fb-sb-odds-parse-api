@@ -1,14 +1,22 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.offense;
 
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayDirectionEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class PlayerStatRushingPojo {
 	private String playerName;
 	private Integer rushingAttempt;
 	private Integer rushingYard;
 	private Integer rushingTouchdown;
+	@JsonIgnore
 	private Integer rushingLong;
 	private Integer rushingFirstDown;
-private Integer rushingFumble;
-private Integer rushingFumbleLost;
+	private Integer rushingFumble;
+	private Integer rushingFumbleLost;
+	private PlayDirectionEnum rushingDirection;
+	private Integer rushingSafety;
+	private Integer rushingKneel;
+	private Integer rushingTwoPointConversion;
 
 	public PlayerStatRushingPojo() {
 
@@ -129,6 +137,23 @@ private Integer rushingFumbleLost;
 	}
 
 	/**
+	 * @param rushingFumble the rushingFumble to set
+	 */
+	public void applyRushingFumble(boolean turnover) {
+		this.rushingFumble = 1;
+		if (turnover) {
+			this.rushingFumbleLost = 1;
+		} else {
+			this.rushingFumbleLost = 0;
+		}
+	}
+
+	public void applyNoRushingFumble() {
+		this.rushingFumble = 0;
+		this.rushingFumbleLost = 0;
+	}
+
+	/**
 	 * @return the rushingFumbleLost
 	 */
 	public Integer getRushingFumbleLost() {
@@ -142,6 +167,62 @@ private Integer rushingFumbleLost;
 		this.rushingFumbleLost = rushingFumbleLost;
 	}
 
+	/**
+	 * @return the rushingDirection
+	 */
+	public PlayDirectionEnum getRushingDirection() {
+		return rushingDirection;
+	}
 
+	/**
+	 * @param rushingDirection the rushingDirection to set
+	 */
+	public void setRushingDirection(PlayDirectionEnum rushingDirection) {
+		this.rushingDirection = rushingDirection;
+	}
 
+	/**
+	 * @return the rushingSafety
+	 */
+	public Integer getRushingSafety() {
+		return rushingSafety;
+	}
+
+	/**
+	 * @param rushingSafety the rushingSafety to set
+	 */
+	public void setRushingSafety(Integer rushingSafety) {
+		this.rushingSafety = rushingSafety;
+	}
+
+	/**
+	 * @return the rushingKneel
+	 */
+	public Integer getRushingKneel() {
+		return rushingKneel;
+	}
+
+	/**
+	 * @param rushingKneel the rushingKneel to set
+	 */
+	public void setRushingKneel(Integer rushingKneel) {
+		this.rushingKneel = rushingKneel;
+	}
+
+	/**
+	 * @return the rushingTwoPointConversion
+	 */
+	public Integer getRushingTwoPointConversion() {
+		return rushingTwoPointConversion;
+	}
+
+	/**
+	 * @param rushingTwoPointConversion the rushingTwoPointConversion to set
+	 */
+	public void setRushingTwoPointConversion(Integer rushingTwoPointConversion) {
+		this.rushingTwoPointConversion = rushingTwoPointConversion;
+	}
+	
+	
+	
 }

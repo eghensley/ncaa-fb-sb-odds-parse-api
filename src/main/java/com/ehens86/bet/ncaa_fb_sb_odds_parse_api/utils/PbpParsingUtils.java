@@ -92,9 +92,12 @@ public class PbpParsingUtils {
 	public String[] extractTackle(String inputStr) {
 		try {
 //		String regex = "([aA-zZ]+, [aA-zZ][a-z]+)";
+			if (inputStr.toUpperCase().contains("BLOCKED BY")) {
+				return null;
+			}
 			String tackleRegex = "\\((.+)\\)"; // (\\([aA-zZ].+\\))
 			Pattern tacklePattern = Pattern.compile(tackleRegex);
-			Matcher tackleMatcher = tacklePattern.matcher(inputStr.replace("(Scoring play confirmed)", ""));
+			Matcher tackleMatcher = tacklePattern.matcher(inputStr.replace("(Scoring play confirmed)", "").replace("forced by ", "").replace("(After review, play stands as called on the field)", ""));
 
 			boolean match = tackleMatcher.find();
 			Integer tackleCount = tackleMatcher.groupCount();
@@ -113,12 +116,15 @@ public class PbpParsingUtils {
 				StringBuilder rawResult = new StringBuilder();
 
 				for (String rawTackleName : rawTackleNames) {
-					if (!rawTackleName.isBlank()) {
-						rawResult.append(formatName(rawTackleName));
+					if (!rawTackleName.isBlank() && !rawTackleName.toUpperCase().contains("BLOCKED BY") && !rawTackleName.toUpperCase().contains("PLAY STANDS")) {
+						rawResult.append(formatName(rawTackleName.replace(")", "")));
 						rawResult.append("|");
 					}
 				}
 				String rawResultString = rawResult.toString();
+				if (!rawResultString.contains("|")) {
+					System.out.println("catch");
+				}
 				String[] result = rawResultString.split("\\|");
 				return result;
 			}
@@ -237,13 +243,13 @@ public class PbpParsingUtils {
 			String inputStr = inputStrRaw.replaceAll("\\W$", "");
 			if (inputStr.contains(",")) {
 				splitNameRaw = inputStr.split(",");
-				name = splitNameRaw[1].toUpperCase() + " " + splitNameRaw[0].toUpperCase();
+				name = splitNameRaw[1].toUpperCase().strip() + " " + splitNameRaw[0].toUpperCase().strip();
 			} else if (inputStr.contains(".")) {
 				splitNameRaw = inputStr.split("\\.");
-				name = splitNameRaw[0].toUpperCase() + " " + splitNameRaw[1].toUpperCase();
+				name = splitNameRaw[0].toUpperCase().strip() + " " + splitNameRaw[1].toUpperCase().strip();
 			} else if (inputStr.contains(" ")) {
 				splitNameRaw = inputStr.split(" ");
-				name = splitNameRaw[0].toUpperCase() + " " + splitNameRaw[1].toUpperCase();
+				name = splitNameRaw[0].toUpperCase().strip() + " " + splitNameRaw[1].toUpperCase().strip();
 			} else if ("".equals(inputStr)) {
 				throw new IllegalArgumentException("Empty String");
 //				return inputStr.toUpperCase();
@@ -255,7 +261,7 @@ public class PbpParsingUtils {
 					name = inputStr.toUpperCase();
 					if (!"TEAM".equals(name)) {
 						LOG.log(Level.WARNING, String.format("SINGLE NAME: %s", name));
-						// throw new IllegalArgumentException("Invalid single name");
+						throw new IllegalArgumentException("Invalid single name");
 					}
 				}
 			}
@@ -307,7 +313,7 @@ public class PbpParsingUtils {
 			Map<String, PlayByPlayTeamPojo> teamAbbrevDict) {
 		try {
 			// getSixCharAbbr().substring(0, 2)
-			if ("50 yardline".equals(inputStr) || "the 50".equals(inputStr) || "50 YARDLINE".equals(inputStr)) {
+			if ("50 yardline".equals(inputStr.strip()) || "the 50".equals(inputStr.strip()) || "50 YARDLINE".equals(inputStr.strip())) {
 				return 50;
 			} else {
 

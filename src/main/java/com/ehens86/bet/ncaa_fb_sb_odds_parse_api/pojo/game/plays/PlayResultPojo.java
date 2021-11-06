@@ -1,14 +1,19 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.plays;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class PlayResultPojo {
+	@JsonIgnore
 	private Integer playResultYard;
 	private Integer playResultPoints;
 	private Boolean playResultFirstDown;
 	private Boolean playResultTurnover;
+	@JsonIgnore
 	private Integer playResultExpectedPointsAdded;
+	private Integer playResultYardLine;
 	
 	public PlayResultPojo() {
-		
+
 	}
 
 	/**
@@ -22,7 +27,26 @@ public class PlayResultPojo {
 	 * @param playResultYard the playResultYard to set
 	 */
 	public void setPlayResultYard(Integer playResultYard) {
-		this.playResultYard = playResultYard;
+		if (this.playResultYard != null && this.playResultYard != 0 && playResultYard != 0) {
+			if (this.playResultYard > 0 && playResultYard > 0) {
+				this.playResultYard += playResultYard;
+			} else if (this.playResultYard < 0 && playResultYard < 0) {
+				this.playResultYard += playResultYard;
+			} else if (this.playResultYard < 0 && playResultYard > 0) {
+				this.playResultYard += playResultYard;
+			} else {
+				this.playResultYard = playResultYard;
+			}
+		} else {
+			this.playResultYard = playResultYard;
+		}
+	}
+
+	public void updatePenaltyPlayResultYard(Integer playResultYard) {
+		if (this.playResultYard == null) {
+			this.playResultYard = 0;
+		}
+		this.playResultYard += playResultYard;
 	}
 
 	/**
@@ -50,7 +74,14 @@ public class PlayResultPojo {
 	 * @param playResultFirstDown the playResultFirstDown to set
 	 */
 	public void setPlayResultFirstDown(Boolean playResultFirstDown) {
-		this.playResultFirstDown = playResultFirstDown;
+		if (this.playResultFirstDown != null && this.playResultFirstDown != playResultFirstDown) {
+			if (playResultFirstDown) {
+				this.playResultFirstDown = playResultFirstDown;
+			}
+//			throw new IllegalArgumentException("Handle this - first down");
+		} else {
+			this.playResultFirstDown = playResultFirstDown;
+		}
 	}
 
 	/**
@@ -80,6 +111,20 @@ public class PlayResultPojo {
 	public void setPlayResultExpectedPointsAdded(Integer playResultExpectedPointsAdded) {
 		this.playResultExpectedPointsAdded = playResultExpectedPointsAdded;
 	}
-	
+
+	/**
+	 * @return the playResultYardLine
+	 */
+	public Integer getPlayResultYardLine() {
+		return playResultYardLine;
+	}
+
+	/**
+	 * @param playResultYardLine the playResultYardLine to set
+	 */
+	public void setPlayResultYardLine(Integer playResultYardLine) {
+		this.playResultYardLine = playResultYardLine;
+	}
+
 	
 }

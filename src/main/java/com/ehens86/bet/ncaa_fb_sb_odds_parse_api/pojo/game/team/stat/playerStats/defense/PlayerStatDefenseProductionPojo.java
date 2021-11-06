@@ -1,5 +1,7 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.defense;
 
+import java.util.Objects;
+
 public class PlayerStatDefenseProductionPojo {
 	private String playerName;
 	private Integer tackleTotal;
@@ -15,6 +17,10 @@ public class PlayerStatDefenseProductionPojo {
 	private Integer fumbleTouchdown;
 	private Integer interceptionTouchdown;
 	private Integer interceptionYard;
+	private Integer quarterbackHurry;
+	private Integer tackleYard;
+	private Integer safety;
+	private Integer kickBlock;
 
 	public PlayerStatDefenseProductionPojo() {
 //		this.fumbleTouchdown = 0;
@@ -31,14 +37,40 @@ public class PlayerStatDefenseProductionPojo {
 //		this.interceptionYard = 0;
 	}
 
-	public void applyRushSpecialTeamsBase(String name) {
+//	public void applyRushSpecialTeamsBase(String name) {
+//		this.playerName = name;
+//		this.sack = 0.0;
+//		this.passBreakUp = 0;
+//		this.interception = 0;
+//		this.interceptionTouchdown = 0;
+//		this.interceptionYard = 0;
+//		this.quarterbackHurry = 0;
+//	}
+
+	public void applyBase(String name) {
 		this.playerName = name;
+		this.tackleTotal = 0;
+		this.tackleSolo = 0.0;
+		this.tackleAssist = 0.0;
 		this.sack = 0.0;
 		this.passBreakUp = 0;
+		this.tackleForLoss = 0;
 		this.interception = 0;
+		this.fumbleForced = 0;
+		this.fumbleRecovered = 0;
+		this.fumbleYard = 0;
+		this.fumbleTouchdown = 0;
 		this.interceptionTouchdown = 0;
 		this.interceptionYard = 0;
+		this.quarterbackHurry = 0;
+		this.tackleYard = 0;
+		this.kickBlock = 0;
 	}
+
+//	public void applyPassBase(String name) {
+//		this.playerName = name;
+//		this.quarterbackHurry = 0;
+//	}
 
 	public PlayerStatDefenseProductionPojo(String playerName, Integer tackleTotal, Double tackleSolo,
 			Double tackleAssist, Double sack, Integer passBreakUp, Integer tackleForLoss, Integer interception,
@@ -291,6 +323,34 @@ public class PlayerStatDefenseProductionPojo {
 		this.fumbleYard = returnYards;
 	}
 
+	public void applyReturnYards(Integer returnYards) {
+		if (this.interception == 1) {
+			this.interceptionYard = returnYards;
+		} else if (this.fumbleRecovered == 1) {
+			this.fumbleYard = returnYards;
+		} else {
+			throw new IllegalArgumentException("No turnover!");
+		}
+	}
+
+	public void applyReturnTouchdown() {
+		if (this.interception == 1) {
+			this.interceptionTouchdown = 1;
+		} else if (this.fumbleRecovered == 1) {
+			this.fumbleTouchdown = 1;
+		} else {
+			throw new IllegalArgumentException("No turnover!");
+		}
+	}
+
+	public void clearTackles() {
+		this.tackleAssist = 0.0;
+		this.tackleForLoss = 0;
+		this.tackleSolo = 0.0;
+		this.tackleTotal = 0;
+		this.tackleYard = 0;
+	}
+	
 	public void applyTackleSolo(String playerName, boolean forLoss) {
 		this.playerName = playerName;
 		this.tackleSolo = 1.0;
@@ -301,7 +361,33 @@ public class PlayerStatDefenseProductionPojo {
 			this.tackleForLoss = 0;
 		}
 	}
+	
+	public void applyTackleSolo(String playerName, Integer yards) {
+		this.playerName = playerName;
+		this.tackleSolo = 1.0;
+		this.tackleAssist = 0.0;
+		this.tackleTotal = 1;
+		this.tackleYard = yards;
+		if (Objects.nonNull(yards) && yards <= 0) {
+			this.tackleForLoss = 1;
+		} else {
+			this.tackleForLoss = 0;
+		}
+	}
 
+	public void applyTackle(String playerName, Integer yards) {
+		this.playerName = playerName;
+		this.tackleSolo = 0.0;
+		this.tackleAssist = 1.0;
+		this.tackleTotal = 1;
+		this.tackleYard = yards;
+		if (Objects.nonNull(yards) && yards <= 0) {
+			this.tackleForLoss = 1;
+		} else {
+			this.tackleForLoss = 0;
+		}
+	}
+	
 	public void applyTackleSolo(boolean forLoss) {
 		this.tackleSolo = 1.0;
 		this.tackleTotal = 1;
@@ -333,145 +419,83 @@ public class PlayerStatDefenseProductionPojo {
 		}
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((fumbleForced == null) ? 0 : fumbleForced.hashCode());
-		result = prime * result + ((fumbleRecovered == null) ? 0 : fumbleRecovered.hashCode());
-		result = prime * result + ((fumbleTouchdown == null) ? 0 : fumbleTouchdown.hashCode());
-		result = prime * result + ((fumbleYard == null) ? 0 : fumbleYard.hashCode());
-		result = prime * result + ((interception == null) ? 0 : interception.hashCode());
-		result = prime * result + ((interceptionTouchdown == null) ? 0 : interceptionTouchdown.hashCode());
-		result = prime * result + ((interceptionYard == null) ? 0 : interceptionYard.hashCode());
-		result = prime * result + ((passBreakUp == null) ? 0 : passBreakUp.hashCode());
-		result = prime * result + ((playerName == null) ? 0 : playerName.hashCode());
-		result = prime * result + ((sack == null) ? 0 : sack.hashCode());
-		result = prime * result + ((tackleAssist == null) ? 0 : tackleAssist.hashCode());
-		result = prime * result + ((tackleForLoss == null) ? 0 : tackleForLoss.hashCode());
-		result = prime * result + ((tackleSolo == null) ? 0 : tackleSolo.hashCode());
-		result = prime * result + ((tackleTotal == null) ? 0 : tackleTotal.hashCode());
-		return result;
+	/**
+	 * @return the quarterbackHurry
+	 */
+	public Integer getQuarterbackHurry() {
+		return quarterbackHurry;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
+	/**
+	 * @param quarterbackHurry the quarterbackHurry to set
+	 */
+	public void setQuarterbackHurry(Integer quarterbackHurry) {
+		this.quarterbackHurry = quarterbackHurry;
+	}
+
+	public boolean resolveDefenseScore() {
+		if (this.fumbleTouchdown == 1 || this.interceptionTouchdown == 1 || this.safety == 1) {
 			return true;
-		}
-		if (!(obj instanceof PlayerStatDefenseProductionPojo)) {
+		} else {
 			return false;
 		}
-		PlayerStatDefenseProductionPojo other = (PlayerStatDefenseProductionPojo) obj;
-		if (fumbleForced == null) {
-			if (other.fumbleForced != null) {
-				return false;
-			}
-		} else if (!fumbleForced.equals(other.fumbleForced)) {
-			return false;
-		}
-		if (fumbleRecovered == null) {
-			if (other.fumbleRecovered != null) {
-				return false;
-			}
-		} else if (!fumbleRecovered.equals(other.fumbleRecovered)) {
-			return false;
-		}
-		if (fumbleTouchdown == null) {
-			if (other.fumbleTouchdown != null) {
-				return false;
-			}
-		} else if (!fumbleTouchdown.equals(other.fumbleTouchdown)) {
-			return false;
-		}
-		if (fumbleYard == null) {
-			if (other.fumbleYard != null) {
-				return false;
-			}
-		} else if (!fumbleYard.equals(other.fumbleYard)) {
-			return false;
-		}
-		if (interception == null) {
-			if (other.interception != null) {
-				return false;
-			}
-		} else if (!interception.equals(other.interception)) {
-			return false;
-		}
-		if (interceptionTouchdown == null) {
-			if (other.interceptionTouchdown != null) {
-				return false;
-			}
-		} else if (!interceptionTouchdown.equals(other.interceptionTouchdown)) {
-			return false;
-		}
-		if (interceptionYard == null) {
-			if (other.interceptionYard != null) {
-				return false;
-			}
-		} else if (!interceptionYard.equals(other.interceptionYard)) {
-			return false;
-		}
-		if (passBreakUp == null) {
-			if (other.passBreakUp != null) {
-				return false;
-			}
-		} else if (!passBreakUp.equals(other.passBreakUp)) {
-			return false;
-		}
-		if (playerName == null) {
-			if (other.playerName != null) {
-				return false;
-			}
-		} else if (!playerName.equals(other.playerName)) {
-			return false;
-		}
-		if (sack == null) {
-			if (other.sack != null) {
-				return false;
-			}
-		} else if (!sack.equals(other.sack)) {
-			return false;
-		}
-		if (tackleAssist == null) {
-			if (other.tackleAssist != null) {
-				return false;
-			}
-		} else if (!tackleAssist.equals(other.tackleAssist)) {
-			return false;
-		}
-		if (tackleForLoss == null) {
-			if (other.tackleForLoss != null) {
-				return false;
-			}
-		} else if (!tackleForLoss.equals(other.tackleForLoss)) {
-			return false;
-		}
-		if (tackleSolo == null) {
-			if (other.tackleSolo != null) {
-				return false;
-			}
-		} else if (!tackleSolo.equals(other.tackleSolo)) {
-			return false;
-		}
-		if (tackleTotal == null) {
-			if (other.tackleTotal != null) {
-				return false;
-			}
-		} else if (!tackleTotal.equals(other.tackleTotal)) {
-			return false;
-		}
-		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "PlayerStatDefenseProductionPojo [playerName=" + playerName + ", tackleTotal=" + tackleTotal
-				+ ", tackleSolo=" + tackleSolo + ", tackleAssist=" + tackleAssist + ", sack=" + sack + ", passBreakUp="
-				+ passBreakUp + ", tackleForLoss=" + tackleForLoss + ", interception=" + interception
-				+ ", fumbleForced=" + fumbleForced + ", fumbleRecovered=" + fumbleRecovered + ", fumbleYard="
-				+ fumbleYard + ", fumbleTouchdown=" + fumbleTouchdown + ", interceptionTouchdown="
-				+ interceptionTouchdown + ", interceptionYard=" + interceptionYard + "]";
+	public boolean resolveTurnover() {
+		if (this.fumbleRecovered == 1 || this.interception == 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
+	/**
+	 * @return the tackleYard
+	 */
+	public Integer getTackleYard() {
+		return tackleYard;
+	}
+
+	/**
+	 * @param tackleYard the tackleYard to set
+	 */
+	public void setTackleYard(Integer tackleYard) {
+		this.tackleYard = tackleYard;
+	}
+	
+	public void addForcedFumbleTackle() {
+		this.fumbleForced = 1;
+		this.tackleTotal += 1;
+		this.tackleSolo += 1;
+	}
+
+	/**
+	 * @return the safety
+	 */
+	public Integer getSafety() {
+		return safety;
+	}
+
+	/**
+	 * @param safety the safety to set
+	 */
+	public void setSafety(Integer safety) {
+		this.safety = safety;
+	}
+
+	/**
+	 * @return the kickBlock
+	 */
+	public Integer getKickBlock() {
+		return kickBlock;
+	}
+
+	/**
+	 * @param kickBlock the kickBlock to set
+	 */
+	public void setKickBlock(Integer kickBlock) {
+		this.kickBlock = kickBlock;
+	}
+
+	
 }

@@ -6,7 +6,10 @@ import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayCallTypeEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayDownEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayPeriodEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayTypeEnum;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.TempoTypeEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.PlayerStatPojo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class PlayPojo {
 	private String playText;
@@ -15,14 +18,16 @@ public class PlayPojo {
 	private PlayTypeEnum playType;
 	private PlayDownEnum playStartDown;
 	private Integer playStartYard;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Integer playYardToGain;
+	@JsonIgnore
 	private Integer playExpectedPoints;
-
 	private PlayCallTypeEnum playCallType;
-
 	private PlayResultPojo playResult;
 	private HashMap<String, PlayerStatPojo> playerStat;
-
+	private Boolean noPlayPenalty;
+	private TempoTypeEnum playTempo;
+	
 	public PlayPojo() {
 		this.playResult = new PlayResultPojo();
 		this.playerStat = new HashMap<String, PlayerStatPojo>();
@@ -180,6 +185,34 @@ public class PlayPojo {
 	 */
 	public void setDriveText(String driveText) {
 		this.driveText = driveText;
+	}
+
+	/**
+	 * @return the noPlayPenalty
+	 */
+	public Boolean getNoPlayPenalty() {
+		return noPlayPenalty;
+	}
+
+	/**
+	 * @param noPlayPenalty the noPlayPenalty to set
+	 */
+	public void setNoPlayPenalty(Boolean noPlayPenalty) {
+		this.noPlayPenalty = noPlayPenalty;
+	}
+
+	/**
+	 * @return the playTempo
+	 */
+	public TempoTypeEnum getPlayTempo() {
+		return playTempo;
+	}
+
+	/**
+	 * @param playTempo the playTempo to set
+	 */
+	public void setPlayTempo(TempoTypeEnum playTempo) {
+		this.playTempo = playTempo;
 	}
 
 }

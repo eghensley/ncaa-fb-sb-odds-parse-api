@@ -69,9 +69,9 @@ public class GamesService {
 		this.playByPlayService = playByPlayService;
 	}
 
-	public ParseResponse parseWeekFcsGames() {
-		String url = String.format("https://www.ncaa.com/scoreboard/football/fcs/2021/01");
-		ParseRequest req = new ParseRequest();
+	public ParseResponse parseWeekFcsGames(ParseRequest req) {
+		String url = String.format("https://www.ncaa.com/scoreboard/football/%s/%s/0%s",
+				req.getTarget().toString().toLowerCase(), req.getYear(), req.getWeek());
 		UrlParseRequest urlParseRequest;
 
 		HtmlPage page;
@@ -80,7 +80,7 @@ public class GamesService {
 		String errorStr = null;
 		List<HtmlElement> dayList;
 
-		List<GamePojo> parsedGames = new ArrayList<GamePojo>();
+		List<GamePojo> parsedGames = new ArrayList<>();
 
 		try {
 			urlParseRequest = urlUtils.parse(url);
@@ -103,8 +103,9 @@ public class GamesService {
 						}
 
 						parsedGames.add(parseGame(rawGame, rawDate));
-						//break;
+						break;
 					}
+					break;
 				}
 				infoFound = parsedGames.size();
 				LOG.info(String.format("%s items found", infoFound));
@@ -112,12 +113,14 @@ public class GamesService {
 				for (GamePojo game : parsedGames) {
 					parseCasablancaInfo(game);
 					infoCompleted += 1;
-					//break;
+					break;
 				}
 
 				ParseResponse resp = new ParseResponse(req, infoFound, infoCompleted, HttpStatus.ACCEPTED, "");
-				resp.setPayload(
-						parsedGames.stream().filter(parsedGame -> parsedGame.isValid()).collect(Collectors.toList()));
+				
+				
+				List<GamePojo> responsePayload = parsedGames.stream().filter(parsedGame -> parsedGame.isValid()).collect(Collectors.toList());
+				resp.setPayload(responsePayload.get(0).getPlays());
 				return resp;
 			} else {
 				LOG.log(Level.WARNING, errorStr);
@@ -164,7 +167,7 @@ public class GamesService {
 				game.setValid(false);
 				return;
 			}
-			
+
 			if ("5851674".equals(gameInfoRaw.getId())) {
 				gameInfoRaw.getChampionship().setDivision("FCS");
 			}
@@ -209,7 +212,7 @@ public class GamesService {
 			errorStr = String.format("ERROR: Casablanca parse failed for %s vs %s - game ID %s",
 					game.getTeamHome().getTeamName(), game.getTeamAway().getTeamName(), game.getStatsUrl());
 			LOG.log(Level.SEVERE, errorStr);
-			//e.printStackTrace();
+			// e.printStackTrace();
 			throw new IllegalArgumentException(errorStr);
 		}
 

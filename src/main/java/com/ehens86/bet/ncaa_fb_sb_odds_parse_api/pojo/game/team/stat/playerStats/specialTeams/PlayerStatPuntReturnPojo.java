@@ -1,9 +1,14 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.specialTeams;
 
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class PlayerStatPuntReturnPojo {
 	private String playerName;
 	private Integer puntReturn;
 	private Integer puntReturnYard;
+	@JsonIgnore
 	private Integer puntReturnLong;
 	private Integer puntReturnTouchdown;
 	private Integer puntReturnFairCatch;
@@ -11,6 +16,7 @@ public class PlayerStatPuntReturnPojo {
 	private Integer puntReturnFumble;
 	private Integer puntReturnFumbleLost;
 	private Integer puntReturnBlock;
+	private Integer puntReturnSafety;
 
 	public PlayerStatPuntReturnPojo() {
 		this.puntReturnTouchdown = 0;
@@ -21,7 +27,7 @@ public class PlayerStatPuntReturnPojo {
 		this.puntReturn = 1;
 		this.puntReturnTouchdown = 0;
 	}
-	
+
 	/**
 	 * @return the playerName
 	 */
@@ -140,7 +146,7 @@ public class PlayerStatPuntReturnPojo {
 	public void setPuntReturnFumble(Integer puntReturnFumble) {
 		this.puntReturnFumble = puntReturnFumble;
 	}
-	
+
 	/**
 	 * @return the puntReturnBlock
 	 */
@@ -178,6 +184,42 @@ public class PlayerStatPuntReturnPojo {
 	public void setPuntReturnFumbleLost(Integer puntReturnFumbleLost) {
 		this.puntReturnFumbleLost = puntReturnFumbleLost;
 	}
-	
-	
+
+	public void applyNoPuntReturnFumble() {
+		this.puntReturnFumble = 0;
+		this.puntReturnFumbleLost = 0;
+	}
+
+	public void applyPuntReturnFumble(boolean turnover) {
+		this.puntReturnFumble = 1;
+		if (turnover) {
+			this.puntReturnFumbleLost = 1;
+		} else {
+			this.puntReturnFumbleLost = 0;
+		}
+	}
+
+	public void applyBlockReturn(Integer puntReturnYard, Integer startYard) {
+		this.puntReturnYard = puntReturnYard;
+		if (Objects.isNull(this.puntReturnBlock)) {
+			this.puntReturnBlock = 0;
+		}
+		this.puntReturnFairCatch = 0;
+		this.puntReturnStartYard = startYard;
+	}
+
+	/**
+	 * @return the puntReturnSafety
+	 */
+	public Integer getPuntReturnSafety() {
+		return puntReturnSafety;
+	}
+
+	/**
+	 * @param puntReturnSafety the puntReturnSafety to set
+	 */
+	public void setPuntReturnSafety(Integer puntReturnSafety) {
+		this.puntReturnSafety = puntReturnSafety;
+	}
+
 }

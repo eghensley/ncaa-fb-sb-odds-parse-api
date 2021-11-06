@@ -15,34 +15,32 @@ import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.specialTeams.PlayerStatKickoffPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.specialTeams.PlayerStatPuntReturnPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.specialTeams.PlayerStatPuntingPojo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PlayerStatSpecialTeamPojo {
 	private static final Logger LOG = Logger.getLogger(PlayerStatSpecialTeamPojo.class.toString());
-	@JsonIgnore
+
 	private List<PlayerStatKickingPojo> kicking;
 	private List<PlayerStatPuntingPojo> punting;
 	private List<PlayerStatPuntReturnPojo> puntReturn;
 	private List<PlayerStatKickReturnPojo> kickReturn;
 	private List<PlayerStatDefenseProductionPojo> kickCoverage;
 	private List<PlayerStatDefenseProductionPojo> puntCoverage;
-
 	private List<PlayerStatKickoffPojo> kickoff;
 
 	public PlayerStatSpecialTeamPojo() {
-		this.kicking = new ArrayList<PlayerStatKickingPojo>();
-		this.punting = new ArrayList<PlayerStatPuntingPojo>();
-		this.puntReturn = new ArrayList<PlayerStatPuntReturnPojo>();
-		this.kickReturn = new ArrayList<PlayerStatKickReturnPojo>();
-		this.kickCoverage = new ArrayList<PlayerStatDefenseProductionPojo>();
-		this.kickoff = new ArrayList<PlayerStatKickoffPojo>();
-		this.puntCoverage = new ArrayList<PlayerStatDefenseProductionPojo>();
-
+		this.kicking = new ArrayList<>();
+		this.punting = new ArrayList<>();
+		this.puntReturn = new ArrayList<>();
+		this.kickReturn = new ArrayList<>();
+		this.kickCoverage = new ArrayList<>();
+		this.kickoff = new ArrayList<>();
+		this.puntCoverage = new ArrayList<>();
 	}
 
 	public PlayerStatSpecialTeamPojo(List<PlayerStatKickingPojo> kicking, List<PlayerStatPuntingPojo> punting,
 			List<PlayerStatPuntReturnPojo> puntReturn, List<PlayerStatKickReturnPojo> kickReturn,
-			List<PlayerStatDefenseProductionPojo> kickCoverage, List<PlayerStatKickoffPojo> kickoff) {
+			List<PlayerStatDefenseProductionPojo> kickCoverage, List<PlayerStatKickoffPojo> kickoff
+			) {
 		super();
 		this.kicking = kicking;
 		this.punting = punting;
@@ -101,17 +99,46 @@ public class PlayerStatSpecialTeamPojo {
 		if (this.kickCoverage.stream().filter(name -> playerName.equals(name.getPlayerName()))
 				.collect(Collectors.toList()).isEmpty()) {
 			PlayerStatDefenseProductionPojo newCoverage = new PlayerStatDefenseProductionPojo();
-			newCoverage.applyRushSpecialTeamsBase(playerName);
+			newCoverage.applyBase(playerName);
 			this.kickCoverage.add(newCoverage);
 		}
 		return this.kickCoverage.stream().filter(name -> playerName.equals(name.getPlayerName()))
 				.collect(Collectors.toList()).get(0);
 	}
 
+	public PlayerStatPuntReturnPojo findPuntReturner() {
+		if (puntReturn.stream().filter(returner -> returner.getPuntReturn() == 1).collect(Collectors.toList())
+				.size() != 1) {
+			if (puntReturn.stream().filter(returner -> returner.getPuntReturnBlock() == 1).collect(Collectors.toList())
+					.size() == 1) {
+				return null;
+			} else {
+				throw new IllegalArgumentException("Number of returners != 1");
+			}
+		}
+		return puntReturn.stream().filter(returner -> returner.getPuntReturn() == 1).collect(Collectors.toList())
+				.get(0);
+	}
+
+	public PlayerStatKickReturnPojo findKickoffReturner() {
+		if (kickReturn.stream().filter(returner -> returner.getKickReturn() == 1).collect(Collectors.toList())
+				.size() != 1) {
+			throw new IllegalArgumentException("Number of returners != 1");
+		}
+		return kickReturn.stream().filter(returner -> returner.getKickReturn() == 1).collect(Collectors.toList())
+				.get(0);
+	}
+
 	public PlayerStatPuntReturnPojo findPuntReturnByName(String playerName) {
 		if (puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName()) && name.getPuntReturn() == 1)
 				.collect(Collectors.toList()).isEmpty()) {
-			this.puntReturn.add(new PlayerStatPuntReturnPojo(playerName));
+			if (!puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName()))
+					.collect(Collectors.toList()).isEmpty()) {
+				puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName())).collect(Collectors.toList())
+						.get(0).setPuntReturn(1);
+			} else {
+				this.puntReturn.add(new PlayerStatPuntReturnPojo(playerName));
+			}
 		}
 		return puntReturn.stream().filter(name -> playerName.equals(name.getPlayerName())).collect(Collectors.toList())
 				.get(0);
@@ -146,6 +173,14 @@ public class PlayerStatSpecialTeamPojo {
 		}
 	}
 
+	public PlayerStatDefenseProductionPojo findPuntCoverageWithTurnover() {
+		return this.puntCoverage.stream().filter(name -> name.resolveTurnover()).collect(Collectors.toList()).get(0);
+	}
+
+	public PlayerStatDefenseProductionPojo findKickCoverageWithTurnover() {
+		return this.kickCoverage.stream().filter(name -> name.resolveTurnover()).collect(Collectors.toList()).get(0);
+	}
+
 	/**
 	 * @param puntReturn the puntReturn to set
 	 */
@@ -178,7 +213,7 @@ public class PlayerStatSpecialTeamPojo {
 		if (this.puntCoverage.stream().filter(name -> playerName.equals(name.getPlayerName()))
 				.collect(Collectors.toList()).isEmpty()) {
 			PlayerStatDefenseProductionPojo newCoverage = new PlayerStatDefenseProductionPojo();
-			newCoverage.applyRushSpecialTeamsBase(playerName);
+			newCoverage.applyBase(playerName);
 			this.puntCoverage.add(newCoverage);
 		}
 		return this.puntCoverage.stream().filter(name -> playerName.equals(name.getPlayerName()))

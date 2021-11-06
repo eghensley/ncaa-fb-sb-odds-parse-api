@@ -1,5 +1,7 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.controller;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,10 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.ParseRequest;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.ParseResponse;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service.GamesService;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service.OddsService;
@@ -23,13 +27,14 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("parse")
 @Api(value = "Parsing System")
 public class ParseController {
+	private static final Logger LOG = Logger.getLogger(ParseController.class.toString());
 
 	@Autowired
 	OddsService oddsService;
 
 	@Autowired
 	GamesService gamesService;
-	
+
 	@Value("${credentials.admin.password}")
 	private String loginKey;
 
@@ -51,15 +56,22 @@ public class ParseController {
 
 	@ApiOperation(value = "Parse week FCS games")
 	@PostMapping("games/fcs")
-	public ResponseEntity<ParseResponse> parseFcsGames (
-			@RequestHeader(value = "password", required = true) String attemptedPassword) {
-		if (loginKey.equals(attemptedPassword)) {
-			ParseResponse response = gamesService.parseWeekFcsGames();
-			return new ResponseEntity<ParseResponse>(response, response.getStatus());
-		} else {
-			String errorMsg = loginFailed;
-			ParseResponse response = new ParseResponse(null, 1, 0, HttpStatus.FORBIDDEN, errorMsg);
-			return new ResponseEntity<ParseResponse>(response, response.getStatus());
+	public ResponseEntity<ParseResponse> parseFcsGames(
+			@RequestHeader(value = "password", required = true) String attemptedPassword,
+			@RequestBody ParseRequest request) {
+		try {
+			if (loginKey.equals(attemptedPassword)) {
+				ParseResponse response = gamesService.parseWeekFcsGames(request);
+				return new ResponseEntity<ParseResponse>(response, response.getStatus());
+			} else {
+				String errorMsg = loginFailed;
+				ParseResponse response = new ParseResponse(null, 1, 0, HttpStatus.FORBIDDEN, errorMsg);
+				return new ResponseEntity<ParseResponse>(response, response.getStatus());
+			}
+		} catch (Exception e) {
+			String errorStr = e.getLocalizedMessage();
+			LOG.log(Level.SEVERE, errorStr);
+			throw new IllegalArgumentException(errorStr);
 		}
 	}
 

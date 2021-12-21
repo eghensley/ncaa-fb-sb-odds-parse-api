@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +37,8 @@ public class EntityManagerUtils {
 		}
 	}
 	
-	private Object getEntityId(@NotNull Object dto) {
-		for (Field field : dto.getClass().getSuperclass().getDeclaredFields()) {
+	private Object getEntityId(Object dto) {
+		for (Field field : dto.getClass().getDeclaredFields()) { // getSuperclass
 			if(field.getAnnotation(Id.class) != null) {
 				try {
 					field.setAccessible(true);
@@ -62,8 +61,8 @@ public class EntityManagerUtils {
 		}
 	}
 	
-	private Object getModelId(@NotNull Object dto) {
-		for (Field field : dto.getClass().getSuperclass().getDeclaredFields()) {
+	private Object getModelId(Object dto) {
+		for (Field field : dto.getClass().getDeclaredFields()) { // getSuperclass
 			if(field.getAnnotation(Id.class) != null) {
 				try {
 					field.setAccessible(true);

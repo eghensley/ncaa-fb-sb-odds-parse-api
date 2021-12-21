@@ -2,17 +2,18 @@ package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.PlayerStatDefensePojo;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.PlayerStatOffensePojo;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.PlayerStatSpecialTeamPojo;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamStats.TeamStatPenaltyPojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerstats.PlayerStatDefensePojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerstats.PlayerStatOffensePojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerstats.PlayerStatPenaltyPojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerstats.PlayerStatSpecialTeamPojo;
 
 public class PlayerStatPojo {
 	private PlayerStatOffensePojo offense;
 	private PlayerStatDefensePojo defense;
 	private PlayerStatSpecialTeamPojo specialTeam;
-	private List<TeamStatPenaltyPojo> penalty;
+	private List<PlayerStatPenaltyPojo> penalty;
 	
 	public PlayerStatPojo() {
 		this.offense = new PlayerStatOffensePojo();
@@ -22,7 +23,7 @@ public class PlayerStatPojo {
 	}
 
 	public PlayerStatPojo(PlayerStatOffensePojo offense, PlayerStatDefensePojo defense,
-			PlayerStatSpecialTeamPojo specialTeam, List<TeamStatPenaltyPojo> penalty) {
+			PlayerStatSpecialTeamPojo specialTeam, List<PlayerStatPenaltyPojo> penalty) {
 		super();
 		this.offense = offense;
 		this.defense = defense;
@@ -75,15 +76,39 @@ public class PlayerStatPojo {
 	/**
 	 * @return the penalty
 	 */
-	public List<TeamStatPenaltyPojo> getPenalty() {
+	public List<PlayerStatPenaltyPojo> getPenalty() {
 		return penalty;
 	}
 
 	/**
 	 * @param penalty the penalty to set
 	 */
-	public void setPenalty(List<TeamStatPenaltyPojo> penalty) {
+	public void setPenalty(List<PlayerStatPenaltyPojo> penalty) {
 		this.penalty = penalty;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(defense, offense, penalty, specialTeam);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof PlayerStatPojo)) {
+			return false;
+		}
+		PlayerStatPojo other = (PlayerStatPojo) obj;
+		return Objects.equals(defense, other.defense) && Objects.equals(offense, other.offense)
+				&& Objects.equals(penalty, other.penalty) && Objects.equals(specialTeam, other.specialTeam);
+	}
+
+	@Override
+	public String toString() {
+		return "PlayerStatPojo [offense=" + offense + ", defense=" + defense + ", specialTeam=" + specialTeam
+				+ ", penalty=" + penalty + "]";
 	}
 	
 }

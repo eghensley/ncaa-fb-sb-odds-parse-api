@@ -1,19 +1,25 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.plays;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Objects;
+
 
 public class PlayResultPojo {
-	@JsonIgnore
-	private Integer playResultYard;
-	private Integer playResultPoints;
-	private Boolean playResultFirstDown;
-	private Boolean playResultTurnover;
-	@JsonIgnore
-	private Integer playResultExpectedPointsAdded;
-	private Integer playResultYardLine;
+	protected Integer playResultYard;
+	protected Integer playResultPoints;
+	protected Boolean playResultFirstDown;
+	protected Boolean playResultTurnover;
+	protected Integer playResultYardLine;
+	protected String playResultPossessionTeamId;
+	protected Boolean playResultSuccess;
+
+	protected Integer playResultHomeScore;
+	protected Integer playResultAwayScore;
+	
+	
+	
 	
 	public PlayResultPojo() {
-
+		// constructor
 	}
 
 	/**
@@ -74,11 +80,10 @@ public class PlayResultPojo {
 	 * @param playResultFirstDown the playResultFirstDown to set
 	 */
 	public void setPlayResultFirstDown(Boolean playResultFirstDown) {
-		if (this.playResultFirstDown != null && this.playResultFirstDown != playResultFirstDown) {
-			if (playResultFirstDown) {
+		if (this.playResultFirstDown != null && !this.playResultFirstDown.equals(playResultFirstDown)) {
+			if (Boolean.TRUE.equals(playResultFirstDown)) {
 				this.playResultFirstDown = playResultFirstDown;
 			}
-//			throw new IllegalArgumentException("Handle this - first down");
 		} else {
 			this.playResultFirstDown = playResultFirstDown;
 		}
@@ -99,20 +104,6 @@ public class PlayResultPojo {
 	}
 
 	/**
-	 * @return the playResultExpectedPointsAdded
-	 */
-	public Integer getPlayResultExpectedPointsAdded() {
-		return playResultExpectedPointsAdded;
-	}
-
-	/**
-	 * @param playResultExpectedPointsAdded the playResultExpectedPointsAdded to set
-	 */
-	public void setPlayResultExpectedPointsAdded(Integer playResultExpectedPointsAdded) {
-		this.playResultExpectedPointsAdded = playResultExpectedPointsAdded;
-	}
-
-	/**
 	 * @return the playResultYardLine
 	 */
 	public Integer getPlayResultYardLine() {
@@ -126,5 +117,97 @@ public class PlayResultPojo {
 		this.playResultYardLine = playResultYardLine;
 	}
 
-	
+	/**
+	 * @return the playResultPossessionTeamId
+	 */
+	public String getPlayResultPossessionTeamId() {
+		return playResultPossessionTeamId;
+	}
+
+	/**
+	 * @param playResultPossessionTeamId the playResultPossessionTeamId to set
+	 */
+	public void setPlayResultPossessionTeamId(String playResultPossessionTeamId) {
+		this.playResultPossessionTeamId = playResultPossessionTeamId;
+	}
+
+	/**
+	 * @return the playResultHomeScore
+	 */
+	public Integer getPlayResultHomeScore() {
+		return playResultHomeScore;
+	}
+
+	/**
+	 * @param playResultHomeScore the playResultHomeScore to set
+	 */
+	public void setPlayResultHomeScore(Integer playResultHomeScore) {
+		this.playResultHomeScore = playResultHomeScore;
+	}
+
+	/**
+	 * @return the playResultAwayScore
+	 */
+	public Integer getPlayResultAwayScore() {
+		return playResultAwayScore;
+	}
+
+	/**
+	 * @param playResultAwayScore the playResultAwayScore to set
+	 */
+	public void setPlayResultAwayScore(Integer playResultAwayScore) {
+		this.playResultAwayScore = playResultAwayScore;
+	}
+
+	/**
+	 * @return the playResultSuccess
+	 */
+	public Boolean getPlayResultSuccess() {
+		return playResultSuccess;
+	}
+
+	/**
+	 * @param playResultSuccess the playResultSuccess to set
+	 */
+	public void setPlayResultSuccess(Boolean playResultSuccess) {
+		this.playResultSuccess = playResultSuccess;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(playResultAwayScore, playResultFirstDown, playResultHomeScore, playResultPoints,
+				playResultPossessionTeamId, playResultSuccess, playResultTurnover, playResultYard, playResultYardLine);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof PlayResultPojo)) {
+			return false;
+		}
+		PlayResultPojo other = (PlayResultPojo) obj;
+		return Objects.equals(playResultAwayScore, other.playResultAwayScore)
+				&& Objects.equals(playResultFirstDown, other.playResultFirstDown)
+				&& Objects.equals(playResultHomeScore, other.playResultHomeScore)
+				&& Objects.equals(playResultPoints, other.playResultPoints)
+				&& Objects.equals(playResultPossessionTeamId, other.playResultPossessionTeamId)
+				&& Objects.equals(playResultSuccess, other.playResultSuccess)
+				&& Objects.equals(playResultTurnover, other.playResultTurnover)
+				&& Objects.equals(playResultYard, other.playResultYard)
+				&& Objects.equals(playResultYardLine, other.playResultYardLine);
+	}
+
+	@Override
+	public String toString() {
+		return "PlayResultPojo [playResultYard=" + playResultYard + ", playResultPoints=" + playResultPoints
+				+ ", playResultFirstDown=" + playResultFirstDown + ", playResultTurnover=" + playResultTurnover
+				+ ", playResultYardLine=" + playResultYardLine + ", playResultPossessionTeamId="
+				+ playResultPossessionTeamId + ", playResultSuccess=" + playResultSuccess + ", playResultHomeScore="
+				+ playResultHomeScore + ", playResultAwayScore=" + playResultAwayScore + "]";
+	}
+
+
+
 }

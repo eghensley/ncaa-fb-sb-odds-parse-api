@@ -1,5 +1,9 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team;
 
+import java.util.Objects;
+
+import javax.persistence.Id;
+
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.PlayerStatPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.TeamStatPojo;
 
@@ -9,12 +13,14 @@ public class TeamPojo {
 	private String teamNameShort;
 	private String teamNameSixChar;
 	private String teamNameSeo;
+	private String teamNickname;
 	private String teamColor;
 	private String logoLink;
 	private TeamStatPojo teamStat;
-	private boolean home;
+	@Id
 	private String ncaaTeamId;
 	private PlayerStatPojo playerStat;
+	private Integer score;
 
 	public TeamPojo() {
 		this.teamStat = new TeamStatPojo();
@@ -22,7 +28,7 @@ public class TeamPojo {
 	}
 
 	public TeamPojo(String teamName, String teamNameShort, String teamNameSixChar, String teamNameSeo, String teamColor,
-			String logoLink, TeamStatPojo teamStat, boolean home, String ncaaTeamId, PlayerStatPojo playerStat) {
+			String logoLink, TeamStatPojo teamStat, String ncaaTeamId, PlayerStatPojo playerStat, String teamNickname, Integer score) {
 		super();
 		this.teamName = teamName;
 		this.teamNameShort = teamNameShort;
@@ -31,9 +37,10 @@ public class TeamPojo {
 		this.teamColor = teamColor;
 		this.logoLink = logoLink;
 		this.teamStat = teamStat;
-		this.home = home;
 		this.ncaaTeamId = ncaaTeamId;
 		this.playerStat = playerStat;
+		this.teamNickname = teamNickname;
+		this.score = score;
 	}
 
 	/**
@@ -137,20 +144,6 @@ public class TeamPojo {
 	}
 
 	/**
-	 * @return the home
-	 */
-	public boolean isHome() {
-		return home;
-	}
-
-	/**
-	 * @param home the home to set
-	 */
-	public void setHome(boolean home) {
-		this.home = home;
-	}
-
-	/**
 	 * @return the ncaaTeamId
 	 */
 	public String getNcaaTeamId() {
@@ -178,21 +171,39 @@ public class TeamPojo {
 		this.playerStat = playerStat;
 	}
 
+	/**
+	 * @return the teamNickname
+	 */
+	public String getTeamNickname() {
+		return teamNickname;
+	}
+
+	/**
+	 * @param teamNickname the teamNickname to set
+	 */
+	public void setTeamNickname(String teamNickname) {
+		this.teamNickname = teamNickname;
+	}
+
+	
+	/**
+	 * @return the score
+	 */
+	public Integer getScore() {
+		return score;
+	}
+
+	/**
+	 * @param score the score to set
+	 */
+	public void setScore(Integer score) {
+		this.score = score;
+	}
+
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (home ? 1231 : 1237);
-		result = prime * result + ((logoLink == null) ? 0 : logoLink.hashCode());
-		result = prime * result + ((ncaaTeamId == null) ? 0 : ncaaTeamId.hashCode());
-		result = prime * result + ((playerStat == null) ? 0 : playerStat.hashCode());
-		result = prime * result + ((teamColor == null) ? 0 : teamColor.hashCode());
-		result = prime * result + ((teamName == null) ? 0 : teamName.hashCode());
-		result = prime * result + ((teamNameSeo == null) ? 0 : teamNameSeo.hashCode());
-		result = prime * result + ((teamNameShort == null) ? 0 : teamNameShort.hashCode());
-		result = prime * result + ((teamNameSixChar == null) ? 0 : teamNameSixChar.hashCode());
-		result = prime * result + ((teamStat == null) ? 0 : teamStat.hashCode());
-		return result;
+		return Objects.hash(logoLink, ncaaTeamId, playerStat, score, teamColor, teamName, teamNameSeo,
+				teamNameShort, teamNameSixChar, teamNickname, teamStat);
 	}
 
 	@Override
@@ -204,81 +215,23 @@ public class TeamPojo {
 			return false;
 		}
 		TeamPojo other = (TeamPojo) obj;
-		if (home != other.home) {
-			return false;
-		}
-		if (logoLink == null) {
-			if (other.logoLink != null) {
-				return false;
-			}
-		} else if (!logoLink.equals(other.logoLink)) {
-			return false;
-		}
-		if (ncaaTeamId == null) {
-			if (other.ncaaTeamId != null) {
-				return false;
-			}
-		} else if (!ncaaTeamId.equals(other.ncaaTeamId)) {
-			return false;
-		}
-		if (playerStat == null) {
-			if (other.playerStat != null) {
-				return false;
-			}
-		} else if (!playerStat.equals(other.playerStat)) {
-			return false;
-		}
-		if (teamColor == null) {
-			if (other.teamColor != null) {
-				return false;
-			}
-		} else if (!teamColor.equals(other.teamColor)) {
-			return false;
-		}
-		if (teamName == null) {
-			if (other.teamName != null) {
-				return false;
-			}
-		} else if (!teamName.equals(other.teamName)) {
-			return false;
-		}
-		if (teamNameSeo == null) {
-			if (other.teamNameSeo != null) {
-				return false;
-			}
-		} else if (!teamNameSeo.equals(other.teamNameSeo)) {
-			return false;
-		}
-		if (teamNameShort == null) {
-			if (other.teamNameShort != null) {
-				return false;
-			}
-		} else if (!teamNameShort.equals(other.teamNameShort)) {
-			return false;
-		}
-		if (teamNameSixChar == null) {
-			if (other.teamNameSixChar != null) {
-				return false;
-			}
-		} else if (!teamNameSixChar.equals(other.teamNameSixChar)) {
-			return false;
-		}
-		if (teamStat == null) {
-			if (other.teamStat != null) {
-				return false;
-			}
-		} else if (!teamStat.equals(other.teamStat)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(logoLink, other.logoLink)
+				&& Objects.equals(ncaaTeamId, other.ncaaTeamId) && Objects.equals(playerStat, other.playerStat)
+				&& Objects.equals(score, other.score) && Objects.equals(teamColor, other.teamColor)
+				&& Objects.equals(teamName, other.teamName) && Objects.equals(teamNameSeo, other.teamNameSeo)
+				&& Objects.equals(teamNameShort, other.teamNameShort)
+				&& Objects.equals(teamNameSixChar, other.teamNameSixChar)
+				&& Objects.equals(teamNickname, other.teamNickname) && Objects.equals(teamStat, other.teamStat);
 	}
 
 	@Override
 	public String toString() {
 		return "TeamPojo [teamName=" + teamName + ", teamNameShort=" + teamNameShort + ", teamNameSixChar="
-				+ teamNameSixChar + ", teamNameSeo=" + teamNameSeo + ", teamColor=" + teamColor + ", logoLink="
-				+ logoLink + ", teamStat=" + teamStat + ", home=" + home + ", ncaaTeamId=" + ncaaTeamId
-				+ ", playerStat=" + playerStat + "]";
+				+ teamNameSixChar + ", teamNameSeo=" + teamNameSeo + ", teamNickname=" + teamNickname + ", teamColor="
+				+ teamColor + ", logoLink=" + logoLink + ", teamStat=" + teamStat + ", ncaaTeamId="
+				+ ncaaTeamId + ", playerStat=" + playerStat + ", score=" + score + "]";
 	}
+
+
 
 }

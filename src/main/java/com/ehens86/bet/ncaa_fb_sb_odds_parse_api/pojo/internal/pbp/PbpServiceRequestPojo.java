@@ -1,13 +1,14 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.pbp;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.HomeAwayEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.plays.DrivePojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.plays.PlayPojo;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requestTemplate.pbp.PlayByPlayPlayPojo;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requestTemplate.pbp.PlayByPlayTeamPojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.pbp.PlayByPlayPlayPojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.pbp.PlayByPlayTeamPojo;
 
 public class PbpServiceRequestPojo {
 	private DrivePojo drive;
@@ -206,11 +207,46 @@ public class PbpServiceRequestPojo {
 	}
 
 	public boolean evalIfHasPenalty() {
-		if (this.getPlay().getPlayerStat().get(this.getPossessionTeam()).getPenalty().isEmpty()
-				&& this.getPlay().getPlayerStat().get(this.defenseTeam).getPenalty().isEmpty()) {
-			return false;
-		} else {
+		return !(this.getPlay().getPlayerStat().get(this.getPossessionTeam()).getPenalty().isEmpty()
+				&& this.getPlay().getPlayerStat().get(this.defenseTeam).getPenalty().isEmpty());
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(playTackles);
+		result = prime * result + Objects.hash(defenseTeam, drive, kickoffReturnTeam, kickoffTeam, play, playRaw,
+				playRawText, possessionTeam, puntReturnTeam, puntTeam, teamAbbrevDict, teamDict);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
 			return true;
 		}
+		if (!(obj instanceof PbpServiceRequestPojo)) {
+			return false;
+		}
+		PbpServiceRequestPojo other = (PbpServiceRequestPojo) obj;
+		return Objects.equals(defenseTeam, other.defenseTeam) && Objects.equals(drive, other.drive)
+				&& Objects.equals(kickoffReturnTeam, other.kickoffReturnTeam)
+				&& Objects.equals(kickoffTeam, other.kickoffTeam) && Objects.equals(play, other.play)
+				&& Objects.equals(playRaw, other.playRaw) && Objects.equals(playRawText, other.playRawText)
+				&& Arrays.equals(playTackles, other.playTackles) && Objects.equals(possessionTeam, other.possessionTeam)
+				&& Objects.equals(puntReturnTeam, other.puntReturnTeam) && Objects.equals(puntTeam, other.puntTeam)
+				&& Objects.equals(teamAbbrevDict, other.teamAbbrevDict) && Objects.equals(teamDict, other.teamDict);
 	}
+
+	@Override
+	public String toString() {
+		return "PbpServiceRequestPojo [drive=" + drive + ", play=" + play + ", playRaw=" + playRaw + ", playRawText="
+				+ playRawText + ", playTackles=" + Arrays.toString(playTackles) + ", teamDict=" + teamDict
+				+ ", teamAbbrevDict=" + teamAbbrevDict + ", possessionTeam=" + possessionTeam + ", defenseTeam="
+				+ defenseTeam + ", puntTeam=" + puntTeam + ", puntReturnTeam=" + puntReturnTeam + ", kickoffTeam="
+				+ kickoffTeam + ", kickoffReturnTeam=" + kickoffReturnTeam + "]";
+	}
+	
+	
 }

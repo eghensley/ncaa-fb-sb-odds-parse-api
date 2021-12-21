@@ -16,8 +16,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 @Service
 public class UrlUtils {
 
-	private Logger LOG = Logger.getLogger(UrlUtils.class.toString());
-
+	private static final String S_URL_PARSING_ERROR_S = "%s url parsing error: %s";
+	private Logger logger = Logger.getLogger(UrlUtils.class.toString());
 
 	public UrlParseRequest parse(String baseUrl) {
 		HtmlPage page = null;
@@ -29,37 +29,37 @@ public class UrlUtils {
 		try {
 			page = client.getPage(baseUrl);
 		} catch (FailingHttpStatusCodeException e) {
-			LOG.log(Level.WARNING, String.format("%s url parsing error: %s", FailingHttpStatusCodeException.class, e.getLocalizedMessage()));
+			logger.log(Level.WARNING, String.format(S_URL_PARSING_ERROR_S, FailingHttpStatusCodeException.class,
+					e.getLocalizedMessage()));
 			client.close();
 			return new UrlParseRequest(page, e.getLocalizedMessage(), false);
 		} catch (MalformedURLException e) {
-			LOG.log(Level.WARNING, String.format("%s url parsing error: %s", MalformedURLException.class, e.getLocalizedMessage()));
+			logger.log(Level.WARNING,
+					String.format(S_URL_PARSING_ERROR_S, MalformedURLException.class, e.getLocalizedMessage()));
 			client.close();
 			return new UrlParseRequest(page, e.getLocalizedMessage(), false);
 		} catch (IOException e) {
-			LOG.log(Level.WARNING, String.format("%s url parsing error: %s", IOException.class, e.getLocalizedMessage()));
+			logger.log(Level.WARNING,
+					String.format(S_URL_PARSING_ERROR_S, IOException.class, e.getLocalizedMessage()));
 			client.close();
 			return new UrlParseRequest(page, e.getLocalizedMessage(), false);
 		}
-		// System.out.println(page.asXml());
 		client.close();
 		return new UrlParseRequest(page, null, true);
 	}
-	
+
 	public Object get(String uri, @SuppressWarnings("rawtypes") Class target) {
 		try {
-	    //final String uri = "http://localhost:8080/springrestexample/employees.xml";
+			RestTemplate restTemplate = new RestTemplate();
+			@SuppressWarnings("unchecked")
+			Object result = restTemplate.getForObject(uri, target);
 
-	    RestTemplate restTemplate = new RestTemplate();
-	    @SuppressWarnings("unchecked")
-		Object result = restTemplate.getForObject(uri, target);
-
-	    return result;
+			return result;
 		} catch (Exception e) {
 			String errorStr = String.format("ERROR: url parse failed for %s with %s", uri, e.getMessage());
-			LOG.log(Level.SEVERE, errorStr);
+			logger.log(Level.SEVERE, errorStr);
 			throw new IllegalArgumentException(errorStr);
 		}
 	}
 
-};
+}

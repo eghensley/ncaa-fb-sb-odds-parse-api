@@ -60,4 +60,6 @@ public class UrlParseRequest {
 		this.success = success;
 	}
 	
+	
+	
 }

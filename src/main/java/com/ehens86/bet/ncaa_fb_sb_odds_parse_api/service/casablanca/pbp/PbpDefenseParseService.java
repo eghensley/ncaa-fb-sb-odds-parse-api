@@ -2,34 +2,40 @@ package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service.casablanca.pbp;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.stereotype.Service;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.constants.NcaaConstants;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayCallTypeEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayTypeEnum;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.defense.PlayerStatDefenseProductionPojo;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.specialTeams.PlayerStatKickReturnPojo;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerStats.specialTeams.PlayerStatPuntReturnPojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerstats.defense.pbp.PbpPlayerStatDefenseProductionPojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerstats.specialteams.pbp.PbpPlayerStatKickReturnPojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerstats.specialteams.pbp.PbpPlayerStatPuntReturnPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.pbp.PbpServiceRequestPojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils.LoggingUtils;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils.PbpParsingUtils;
 
 @Service
 public class PbpDefenseParseService {
-	private static final Logger LOG = Logger.getLogger(PbpDefenseParseService.class.toString());
+	private static final String PLAY_TEXT_S_REGEX_S = "Play text: %s | Regex: %s";
+	private static final String PLAY_TEXT_S_RETURN_YARDS_S = "Play text: %s | Return Yards: %s";
+	private static final String PLAY_TEXT_S = "Play text: %s";
+	private static final String MISSING_PLAY_CALL_TYPE_FOR_CONDITIONAL_EVALUATION = "Missing play call type for conditional evaluation";
+
+	private static final String PLAY_CALL_TYPE_S_PLAY_TEXT_S = "Play Call Type: %s | Play text: %s";
 
 	private final PbpParsingUtils pbpParsingUtils;
+	private final LoggingUtils loggingUtils;
 
-	public PbpDefenseParseService(PbpParsingUtils pbpParsingUtils) {
+	public PbpDefenseParseService(PbpParsingUtils pbpParsingUtils, LoggingUtils loggingUtils) {
 		this.pbpParsingUtils = pbpParsingUtils;
+		this.loggingUtils = loggingUtils;
 	}
 
 	public void parseDefense(PbpServiceRequestPojo params) {
 		try {
-			// TODO handle offense tackles on turnovers
 			parseTackles(params);
 			if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PASS) {
 				parseSack(params);
@@ -38,72 +44,91 @@ public class PbpDefenseParseService {
 				parseQbHurry(params);
 			}
 			parseFumbleRecovery(params);
-			parseFumble(params); // TODO tests
+			parseFumble(params);
 			parseFumbleForced(params);
 			parseTurnoverReturn(params);
 			parseSafety(params);
 			removeTurnoverTackles(params);
+
+			if (NcaaConstants.CONTEXT_DEBUG_VALUE_TRUE.equals(ThreadContext.get(NcaaConstants.CONTEXT_DEBUG_KEY))) {
+				String defTeam = params.getDefenseTeam();
+				List<PbpPlayerStatDefenseProductionPojo> defenseInfo = params.getPlay().getPlayerStat().get(defTeam)
+						.getDefense().getDefenseProduction();
+
+				loggingUtils.logInfo(
+						String.format("Defense Team: %s", params.getTeamAbbrevDict().get(defTeam).getShortname()));
+				if (!defenseInfo.isEmpty()) {
+					for (PbpPlayerStatDefenseProductionPojo def : defenseInfo) {
+//						loggingUtils.logInfo( String.format("Defense Name: %s", def.getPlayerName()));
+//						loggingUtils.logInfo( String.format("Defense Forced Fumble: %s", def.getFumbleForced()));
+//						loggingUtils.logInfo( String.format("Defense Tackle: %s", def.getTackleTotal()));
+//						loggingUtils.logInfo( String.format("Defense Interception: %s", def.getInterception()));
+						loggingUtils.logInfo(String.format("Defense Info: %s", def.toString()));
+					}
+				} else {
+					loggingUtils.logInfo("Defense: None");
+				}
+			}
+
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+			throw new IllegalArgumentException(e.toString());
 		}
 	}
 
 	private void parseTackles(PbpServiceRequestPojo params) {
 		try {
-			Integer yards;
 			boolean solo = false;
-			if (Objects.isNull(params.getPlayTackles())) {
-				return;
-			} else {
-
+			if (params.getPlayTackles().length != 0) {
 				if (params.getPlayTackles().length == 1) {
 					solo = true;
 				}
 				for (String tackleName : params.getPlayTackles()) {
-					if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
-						yards = params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
-								.findPuntReturner().getPuntReturnYard();
-						if (solo) {
-							params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-									.findPuntCoverageByName(tackleName).applyTackleSolo(tackleName, yards);
-						} else {
-							params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-									.findPuntCoverageByName(tackleName).applyTackleSolo(tackleName, yards);
-						}
-					} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
-						yards = params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
-								.findKickoffReturner().getKickReturnYard();
-						if (solo) {
-							params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-									.findKickCoverageByName(tackleName).applyTackleSolo(tackleName, yards);
-						} else {
-							params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-									.findKickCoverageByName(tackleName).applyTackleSolo(tackleName, yards);
-						}
-					} else {
-						yards = params.getPlay().getPlayResult().getPlayResultYard();
-						if (solo) {
-							params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
-									.findDefenseProductionByName(tackleName).applyTackleSolo(tackleName, yards);
-						} else {
-							params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
-									.findDefenseProductionByName(tackleName).applyTackle(tackleName, yards);
-						}
-					}
+					parseTacklesHelper(params, tackleName, solo);
 				}
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseTacklesHelper(PbpServiceRequestPojo params, String tackleName, boolean solo) {
+		try {
+			Integer yards;
+			if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
+				yards = params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
+						.findPuntReturner().getPuntReturnYard();
+				if (solo) {
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+							.findPuntCoverageByName(tackleName).applyTackleSolo(tackleName, yards);
+				} else {
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+							.findPuntCoverageByName(tackleName).applyTackle(tackleName, yards);
+				}
+			} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
+				yards = params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
+						.findKickoffReturner().getKickReturnYard();
+				if (solo) {
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+							.findKickCoverageByName(tackleName).applyTackleSolo(tackleName, yards);
+				} else {
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+							.findKickCoverageByName(tackleName).applyTackle(tackleName, yards);
+				}
+			} else {
+				yards = params.getPlay().getPlayResult().getPlayResultYard();
+				if (solo) {
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
+							.findDefenseProductionByName(tackleName).applyTackleSolo(tackleName, yards);
+				} else {
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
+							.findDefenseProductionByName(tackleName).applyTackle(tackleName, yards);
+				}
+			}
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 
@@ -111,11 +136,9 @@ public class PbpDefenseParseService {
 		try {
 			if (params.getPlayRawText().toUpperCase().contains("DEFENDED")
 					|| params.getPlayRawText().toUpperCase().contains("BROKEN UP")) {
-				if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
-						String.format("broken up by %s", NcaaConstants.playerNameRegex))) {
-					// TODO add yards thrown to
-					String pbuString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-							String.format("broken up by %s", NcaaConstants.playerNameRegex), 7);
+				String matchStr = String.format("broken up by %s", NcaaConstants.PLAYER_NAME_REGEX);
+				if (pbpParsingUtils.evalMatch(params.getPlayRawText(), matchStr)) {
+					String pbuString = pbpParsingUtils.extractCustom(params.getPlayRawText(), matchStr, 7);
 					String[] pbuStringArray = pbuString.split("\\|")[0].split("\\~");
 					String pbuName = pbpParsingUtils.formatName(pbuStringArray[0]);
 					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
@@ -123,7 +146,9 @@ public class PbpDefenseParseService {
 					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
 							.get(0).setPassingBreakup(1);
 				} else {
-					throw new IllegalArgumentException("HANDLE PBU CASE");
+					String logInfo = String.format(PLAY_TEXT_S_REGEX_S, params.getPlayRawText(), matchStr);
+					loggingUtils.logInfo(logInfo);
+					throw new IllegalArgumentException("Pass breakup did not evaluate regex");
 				}
 			} else if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
 					.get(0).getPassingCompletion() != 1
@@ -131,13 +156,11 @@ public class PbpDefenseParseService {
 							.get(0).getPassingInterception() != 1
 					&& params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
 							.get(0).getPassingSack() != 1
-					&& Objects.nonNull(params.getPlayTackles())) {
-//				System.out.println("catch");
+					&& params.getPlayTackles().length > 0) {
 				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
 						.setPassingBreakup(1);
-				for (PlayerStatDefenseProductionPojo def : params.getPlay().getPlayerStat().get(params.getDefenseTeam())
-						.getDefense().getDefenseProduction()) {
-//					System.out.println("catch");
+				for (PbpPlayerStatDefenseProductionPojo def : params.getPlay().getPlayerStat()
+						.get(params.getDefenseTeam()).getDefense().getDefenseProduction()) {
 					def.clearTackles();
 					def.setPassBreakUp(1);
 				}
@@ -147,12 +170,8 @@ public class PbpDefenseParseService {
 						.setPassingBreakup(0);
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-//			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 
@@ -160,10 +179,9 @@ public class PbpDefenseParseService {
 		try {
 			if (params.getPlayRawText().toUpperCase().contains("HURRY")
 					|| params.getPlayRawText().toUpperCase().contains("HURRIED")) {
-				if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
-						String.format("QB hurr(?:(?:y)|(?:ied)) by %s", NcaaConstants.playerNameRegex))) {
-					String hurryString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-							String.format("QB hurr(?:(?:y)|(?:ied)) by %s", NcaaConstants.playerNameRegex), 7);
+				String matchStr = String.format("QB hurr(?:(?:y)|(?:ied)) by %s", NcaaConstants.PLAYER_NAME_REGEX);
+				if (pbpParsingUtils.evalMatch(params.getPlayRawText(), matchStr)) {
+					String hurryString = pbpParsingUtils.extractCustom(params.getPlayRawText(), matchStr, 7);
 					String[] hurryStringArray = hurryString.split("\\|")[0].split("\\~");
 					String hurryName = pbpParsingUtils.formatName(hurryStringArray[0]);
 					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
@@ -171,29 +189,27 @@ public class PbpDefenseParseService {
 					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
 							.get(0).setPassingHurry(1);
 				} else {
-					throw new IllegalArgumentException("HANDLE QB HURRY CASE");
+					String logInfo = String.format(PLAY_TEXT_S_REGEX_S, params.getPlayRawText(), matchStr);
+					loggingUtils.logInfo(logInfo);
+					throw new IllegalArgumentException("QB hurry did not evaluate");
 				}
 			} else {
 				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
 						.setPassingHurry(0);
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-//			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 
 	private void parseSack(PbpServiceRequestPojo params) {
 		try {
 			if (params.getPlayRawText().toUpperCase().contains("SACK")) {
-				if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
-						String.format("%s sacked for (?:(?:(?:a )?loss of \\d{1,3} yards?)|(?:no gain))",
-								NcaaConstants.playerNameRegex))) {
-					for (PlayerStatDefenseProductionPojo tackle : params.getPlay().getPlayerStat()
+				String matchStr = String.format("%s sacked for (?:(?:(?:a )?loss of \\d{1,3} yards?)|(?:no gain))",
+						NcaaConstants.PLAYER_NAME_REGEX);
+				if (pbpParsingUtils.evalMatch(params.getPlayRawText(), matchStr)) {
+					for (PbpPlayerStatDefenseProductionPojo tackle : params.getPlay().getPlayerStat()
 							.get(params.getDefenseTeam()).getDefense().getDefenseProduction()) {
 						if (tackle.getTackleTotal() == 0) {
 							continue;
@@ -201,33 +217,28 @@ public class PbpDefenseParseService {
 						tackle.setSack(1.0);
 					}
 				} else {
-					throw new IllegalArgumentException("HANDLE SACK CASE");
+					String logInfo = String.format(PLAY_TEXT_S_REGEX_S, params.getPlayRawText(), matchStr);
+					loggingUtils.logInfo(logInfo);
+					throw new IllegalArgumentException("Sack did not evaluate");
 				}
 			} else {
 				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
 						.setPassingSack(0);
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-//			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 
 	private void parseInterception(PbpServiceRequestPojo params) {
 		try {
 			if (params.getPlayRawText().toUpperCase().contains("INTERCEPT")) {
-				if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
-						String.format("intercepted by %s at(?: the)?(%s|( , Touchback))", NcaaConstants.playerNameRegex,
-								NcaaConstants.teamYardRegex))) {
+				String matchStr = String.format("intercepted by %s at(?: the)?(%s|( , Touchback))",
+						NcaaConstants.PLAYER_NAME_REGEX, NcaaConstants.TEAM_YARD_REGEX);
+				if (pbpParsingUtils.evalMatch(params.getPlayRawText(), matchStr)) {
 					Integer formattedThrownYard;
-					String interceptionString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-							String.format("intercepted by %s at(?: the)?(%s|( , Touchback))",
-									NcaaConstants.playerNameRegex, NcaaConstants.teamYardRegex),
-							10);
+					String interceptionString = pbpParsingUtils.extractCustom(params.getPlayRawText(), matchStr, 10);
 					String[] interceptionStringArray = interceptionString.split("\\|")[0].split("\\~");
 					String interceptionName = pbpParsingUtils.formatName(interceptionStringArray[0]);
 					if (" , Touchback".equals(interceptionStringArray[7])) {
@@ -243,9 +254,15 @@ public class PbpDefenseParseService {
 							.get(0).setPassingInterception(1);
 					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
 							.get(0).setPassingYardThrownTo(formattedThrownYard);
+					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
+					.get(0).setPassingAirLessNeeded(formattedThrownYard - params.getPlay().getPlayYardToGain());
+					
 					params.getPlay().getPlayResult().setPlayResultTurnover(true);
+					params.getPlay().getPlayResult().setPlayResultPossessionTeamId(params.getDefenseTeam());
 				} else {
-					throw new IllegalArgumentException("HANDLE INTERCEPTION CASE");
+					String logInfo = String.format(PLAY_TEXT_S_REGEX_S, params.getPlayRawText(), matchStr);
+					loggingUtils.logInfo(logInfo);
+					throw new IllegalArgumentException("Interception did not evaluate");
 				}
 			} else {
 				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
@@ -256,78 +273,78 @@ public class PbpDefenseParseService {
 						.setPassingInterceptionYard(0);
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-//			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 
 	private void parseFumbleForced(PbpServiceRequestPojo params) {
 		try {
 			if (params.getPlayRawText().toUpperCase().contains("FORCED")) {
-				if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
-						String.format(" (to the|at)%s,? (fumble )?forced by %s", NcaaConstants.teamYardRegex,
-								NcaaConstants.playerNameRegex))) {
-					String fumbleForceString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-							String.format(" (to the|at)%s,? (fumble )?forced by %s", NcaaConstants.teamYardRegex,
-									NcaaConstants.playerNameRegex),
-							10);
-					String[] fumbleForceStringArray = fumbleForceString.split("\\|")[0].split("\\~");
-					String formatedFumbleName = pbpParsingUtils.formatName(fumbleForceStringArray[3]);
-					if (Objects.isNull(params.getPlayTackles())
-							|| params.getPlay().getPlayResult().isPlayResultTurnover()) {
-						params.setPlayTackles(new String[] { formatedFumbleName });
-						parseTackles(params);
-						if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
-							params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-									.findPuntCoverageByName(formatedFumbleName).setFumbleForced(1);
-						} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
-							params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-									.findKickCoverageByName(formatedFumbleName).setFumbleForced(1);
-						} else {
-							params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
-									.findDefenseProductionByName(formatedFumbleName).setFumbleForced(1);
-						}
-					} else {
-						params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
-								.findDefenseProductionByName(formatedFumbleName).addForcedFumbleTackle();
-					}
-				} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
-						String.format("fumble on the sack \\(forced by %s\\)", NcaaConstants.playerNameRegex))) {
-					String fumbleForceString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-							String.format("fumble on the sack \\(forced by %s\\)", NcaaConstants.playerNameRegex), 7);
+				String firstMatchStr = String.format(" (to the|at)%s,? (fumble )?forced by %s",
+						NcaaConstants.TEAM_YARD_REGEX, NcaaConstants.PLAYER_NAME_REGEX);
+				String secondMatchStr = String.format("fumble on the sack \\(forced by %s\\)",
+						NcaaConstants.PLAYER_NAME_REGEX);
+				if (pbpParsingUtils.evalMatch(params.getPlayRawText(), firstMatchStr)) {
+					parseFumbleForcedHelper(params, firstMatchStr);
+				} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(), secondMatchStr)) {
+					String fumbleForceString = pbpParsingUtils.extractCustom(params.getPlayRawText(), secondMatchStr,
+							7);
 					String[] fumbleForceStringArray = fumbleForceString.split("\\|")[0].split("\\~");
 					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
 							.findDefenseProductionByName(pbpParsingUtils.formatName(fumbleForceStringArray[0]))
 							.setFumbleForced(1);
 				} else {
-					throw new IllegalArgumentException("HANDLE FORCED FUMBLE");
+					String logInfo = String.format("Play text: %s | First Regex: %s | Second Regex: %s",
+							params.getPlayRawText(), firstMatchStr, secondMatchStr);
+					loggingUtils.logInfo(logInfo);
+					throw new IllegalArgumentException("Forced Fumble did not evaluate");
 				}
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			// e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseFumbleForcedHelper(PbpServiceRequestPojo params, String firstMatchStr) {
+		try {
+			String fumbleForceString = pbpParsingUtils.extractCustom(params.getPlayRawText(), firstMatchStr, 10);
+			String[] fumbleForceStringArray = fumbleForceString.split("\\|")[0].split("\\~");
+			String formatedFumbleName = pbpParsingUtils.formatName(fumbleForceStringArray[3]);
+			if (Objects.isNull(params.getPlayTackles())
+					|| Boolean.TRUE.equals(params.getPlay().getPlayResult().isPlayResultTurnover())) {
+				params.setPlayTackles(new String[] { formatedFumbleName });
+				parseTackles(params);
+				if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
+					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
+							.findPuntCoverageByName(formatedFumbleName).setFumbleForced(1);
+				} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
+					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
+							.findKickCoverageByName(formatedFumbleName).setFumbleForced(1);
+				} else {
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
+							.findDefenseProductionByName(formatedFumbleName).setFumbleForced(1);
+				}
+			} else {
+				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
+						.findDefenseProductionByName(formatedFumbleName).addForcedFumbleTackle();
+			}
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 
 	private void parseFumbleRecovery(PbpServiceRequestPojo params) {
 		try {
 			if (params.getPlayRawText().toUpperCase().contains("RECOVER")) {
-				if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
-						String.format("recovered by ([A-Z]*?-?[aA-zZ]{2,3}).? %s(?: at)?(?: the)?(%s)?",
-								NcaaConstants.playerNameRegex, NcaaConstants.teamYardRegex))) {
+				String matchStr = String.format("recovered by ([A-Z]*?-?[aA-zZ]{2,3}).? %s(?: at)?(?: the)?(%s)?",
+						NcaaConstants.PLAYER_NAME_REGEX, NcaaConstants.TEAM_YARD_REGEX);
+				if (pbpParsingUtils.evalMatch(params.getPlayRawText(), matchStr)) {
 
 					String returnerFumbleRecoverString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-							String.format("recovered by ([A-Z]*?-?[aA-zZ]{2,3}).? %s(?: at)?(?: the)?(%s)?",
-									NcaaConstants.playerNameRegex, NcaaConstants.teamYardRegex),
-							10);
+							matchStr, 10);
 					String[] returnerFumbleRecoverStringArray = returnerFumbleRecoverString.split("\\|");
 					String[] returnerFumbleInfo = returnerFumbleRecoverStringArray[returnerFumbleRecoverStringArray.length
 							- 1].split("\\~");
@@ -342,58 +359,84 @@ public class PbpDefenseParseService {
 								+ params.getPlay().getPlayResult().getPlayResultYard());
 						params.getPlay().getPlayResult().updatePenaltyPlayResultYard(yardDiff);
 					}
-					boolean turnover = !pbpParsingUtils.resolvePossesionTeam(abbrev, params.getPossessionTeam(),
-							params.getDefenseTeam(), params.getTeamAbbrevDict());
-
-					if (turnover) {
-						if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
-							params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-									.findPuntCoverageByName(recoverName).setFumbleRecovered(1);
-						} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
-							params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-									.findKickCoverageByName(recoverName).setFumbleRecovered(1);
-						} else {
-							params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
-									.findDefenseProductionByName(recoverName).setFumbleRecovered(1);
-							if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
-									.findDefenseProductionByName(recoverName).getSack() == 1) {
-								params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
-										.findDefenseProductionByName(recoverName).setFumbleForced(1);
-							}
-						}
-					} else if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT
-							&& params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-									.getPunting().get(0).getPuntBlocked() == 1) {
-						params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
-								.findPuntReturnByName(recoverName).applyNoPuntReturnFumble();
-						String blockRecoverString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-								String.format("recovered by ([A-Z]*?-?[aA-zZ]{2,3}).? %s at the%s",
-										NcaaConstants.playerNameRegex, NcaaConstants.teamYardRegex),
-								9);
-						String[] blockRecoverStringArray = blockRecoverString.split("\\~");
-						Integer puntReturnStartYard = pbpParsingUtils.formatYardLine(blockRecoverStringArray[8],
-								params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict());
-						params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
-								.findPuntReturnByName(recoverName).setPuntReturnStartYard(puntReturnStartYard);
-					} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
-
-					}
-					params.getPlay().getPlayResult().setPlayResultTurnover(turnover);
+					parseFumbleRecoveryHelper(params, recoverName, abbrev);
 
 				} else {
-					throw new IllegalArgumentException("HANDLE NEW RECOVERY");
-
+					String logInfo = String.format(PLAY_TEXT_S_REGEX_S, params.getPlayRawText(), matchStr);
+					loggingUtils.logInfo(logInfo);
+					throw new IllegalArgumentException("Fumble recovery did not evaluate");
 				}
 			} else {
-
+				// Nothing needed here for now
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseFumbleRecoveryHelper(PbpServiceRequestPojo params, String recoverName, String abbrev) {
+		try {
+			boolean turnover = !pbpParsingUtils.resolvePossesionTeam(abbrev, params.getPossessionTeam(),
+					params.getDefenseTeam(), params.getTeamAbbrevDict());
+
+			if (turnover) {
+				parseFumbleRecoveryTurnoverHelper(params, recoverName);
+			} else if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT && params.getPlay().getPlayerStat()
+					.get(params.getPossessionTeam()).getSpecialTeam().getPunting().get(0).getPuntBlocked() == 1) {
+				parseFumbleRecoveryPuntBlockHelper(params, recoverName);
+			} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
+				// Nothing needed here for now
+			}
+			params.getPlay().getPlayResult().setPlayResultTurnover(turnover);
+			if (Boolean.TRUE.equals(turnover)) {
+				params.getPlay().getPlayResult().setPlayResultPossessionTeamId(params.getDefenseTeam());
+			}
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseFumbleRecoveryTurnoverHelper(PbpServiceRequestPojo params, String recoverName) {
+		try {
+			if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
+						.findPuntCoverageByName(recoverName).setFumbleRecovered(1);
+			} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
+						.findKickCoverageByName(recoverName).setFumbleRecovered(1);
+			} else {
+				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
+						.findDefenseProductionByName(recoverName).setFumbleRecovered(1);
+				if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
+						.findDefenseProductionByName(recoverName).getSack() == 1) {
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
+							.findDefenseProductionByName(recoverName).setFumbleForced(1);
+				}
+			}
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseFumbleRecoveryPuntBlockHelper(PbpServiceRequestPojo params, String recoverName) {
+		try {
+			params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+					.findPuntReturnByName(recoverName).applyNoPuntReturnFumble();
+			String blockRecoverString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
+					String.format("recovered by ([A-Z]*?-?[aA-zZ]{2,3}).? %s at the%s", NcaaConstants.PLAYER_NAME_REGEX,
+							NcaaConstants.TEAM_YARD_REGEX),
+					9);
+			String[] blockRecoverStringArray = blockRecoverString.split("\\~");
+			Integer puntReturnStartYard = pbpParsingUtils.formatYardLine(blockRecoverStringArray[8],
+					params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict());
+			params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+					.findPuntReturnByName(recoverName).setPuntReturnStartYard(puntReturnStartYard);
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 
@@ -403,123 +446,184 @@ public class PbpDefenseParseService {
 					|| params.getPlayRawText().toUpperCase().contains(" MUFFED")) {
 				String formatFumbleName;
 
-				if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
-						String.format("((?:(?:fumbled? by %s ?)| %s fumbled at)|((fumble on the sack)|(fumbled snap)))",
-								NcaaConstants.playerNameRegex, NcaaConstants.playerNameRegex))) {
-					String fumbleString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-							String.format(
-									"((?:(?:fumbled? by %s ?)| %s fumbled at)|((fumble on the sack)|(fumbled snap)))",
-									NcaaConstants.playerNameRegex, NcaaConstants.playerNameRegex),
-							18);
-					String[] fumbleStringArray = fumbleString.split("\\|")[0].split("\\~");
-					fumbleStringArray[1] = fumbleStringArray[1].replace(" recovered", "");
-					fumbleStringArray[1] = fumbleStringArray[1].replace(" at", "");
-
-//				if (fumbleStringArray[0].endsWith(" at")) {
-//					fumbleStringArray[0] = fumbleStringArray[0].replace(" at", "");
-//				}
-					String fumbleName;
-					if (!"null".equals(fumbleStringArray[1])) {
-						fumbleName = fumbleStringArray[1];
-						formatFumbleName = pbpParsingUtils.formatName(fumbleName);
-					} else if (!"null".equals(fumbleStringArray[8])) {
-						fumbleName = fumbleStringArray[8];
-						formatFumbleName = pbpParsingUtils.formatName(fumbleName);
-					} else if ("fumble on the sack".equals(fumbleStringArray[15])) {
-						formatFumbleName = params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense()
-								.getPassingStat().get(0).getPlayerName();
-					} else if ("fumbled snap".equals(fumbleStringArray[15])) {
-						formatFumbleName = params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense()
-								.getRushingStat().get(0).getPlayerName();
-					} else {
-						throw new IllegalArgumentException("Cannot resolve fumble player");
-					}
-				} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
-						String.format("(?:return)? muffed by %s at(?: the)?%s", NcaaConstants.playerNameRegex,
-								NcaaConstants.teamYardRegex))) {
-					String returnerMuffString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-							String.format("(?:return)? muffed by %s at(?: the)?%s", NcaaConstants.playerNameRegex,
-									NcaaConstants.teamYardRegex),
+				String firstMatchStr = String.format(
+						"((?:(?:fumbled? by %s ?)| %s fumbled at)|((fumble on the sack)|(fumbled snap)))",
+						NcaaConstants.PLAYER_NAME_REGEX, NcaaConstants.PLAYER_NAME_REGEX);
+				String secondMatchStr = String.format("(?:return)? muffed by %s at(?: the)?%s",
+						NcaaConstants.PLAYER_NAME_REGEX, NcaaConstants.TEAM_YARD_REGEX);
+				if (pbpParsingUtils.evalMatch(params.getPlayRawText(), firstMatchStr)) {
+					formatFumbleName = parseFumbleFirstMatchHelper(params, firstMatchStr);
+				} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(), secondMatchStr)) {
+					String returnerMuffString = pbpParsingUtils.extractCustom(params.getPlayRawText(), secondMatchStr,
 							8);
 					formatFumbleName = pbpParsingUtils.formatName(returnerMuffString.split("\\~")[0]);
 				} else {
-					throw new IllegalArgumentException("Handle Case");
+					String logInfo = String.format("Play text: %s | Regex1: %s | Regex2: %s", params.getPlayRawText(),
+							firstMatchStr, secondMatchStr);
+					loggingUtils.logInfo(logInfo);
+					throw new IllegalArgumentException("Fumble did not evaluate");
 
 				}
 
 				parseFumbleHelper(params, formatFumbleName);
 				if (pbpParsingUtils.evalMatch(params.getPlay().getPlayText(), "Touchback.$")) {
 					params.getPlay().getPlayResult().setPlayResultTurnover(true);
+					params.getPlay().getPlayResult().setPlayResultPossessionTeamId(params.getDefenseTeam());
 				}
 
 			} else {
 				parseNoFumbleHelper(params);
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private String parseFumbleFirstMatchHelper(PbpServiceRequestPojo params, String firstMatchStr) {
+		try {
+			String fumbleString = pbpParsingUtils.extractCustom(params.getPlayRawText(), firstMatchStr, 18);
+			String[] fumbleStringArray = fumbleString.split("\\|")[0].split("\\~");
+			fumbleStringArray[1] = fumbleStringArray[1].replace(" recovered", "");
+			fumbleStringArray[1] = fumbleStringArray[1].replace(" at", "");
+
+			String formatFumbleName;
+			String fumbleName;
+			if (!"null".equals(fumbleStringArray[1])) {
+				fumbleName = fumbleStringArray[1];
+				formatFumbleName = pbpParsingUtils.formatName(fumbleName);
+			} else if (!"null".equals(fumbleStringArray[8])) {
+				fumbleName = fumbleStringArray[8];
+				formatFumbleName = pbpParsingUtils.formatName(fumbleName);
+			} else if ("fumble on the sack".equals(fumbleStringArray[15])) {
+				formatFumbleName = params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense()
+						.getPassingStat().get(0).getPlayerName();
+			} else if ("fumbled snap".equals(fumbleStringArray[15])) {
+				formatFumbleName = params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense()
+						.getRushingStat().get(0).getPlayerName();
+			} else {
+				String logInfo = String.format(PLAY_TEXT_S, params.getPlayRawText());
+				loggingUtils.logInfo(logInfo);
+				throw new IllegalArgumentException("Fumble matched regex but failed conditional processing");
+			}
+			return formatFumbleName;
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+			throw new IllegalArgumentException(e.toString());
+
 		}
 	}
 
 	private void parseFumbleHelper(PbpServiceRequestPojo params, String formatFumbleName) {
 		try {
 			if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PASS) {
-				if (formatFumbleName.equals(params.getPlay().getPlayerStat().get(params.getPossessionTeam())
-						.getOffense().getPassingStat().get(0).getPlayerName())) {
-					if (!params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense()
-							.getReceivingStat().isEmpty()) {
-						params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat()
-								.get(0).applyNoReceivingFumble();
-					}
-					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
-							.get(0).applyPassingFumble(params.getPlay().getPlayResult().isPlayResultTurnover());
-				} else if (formatFumbleName.equals(params.getPlay().getPlayerStat().get(params.getPossessionTeam())
-						.getOffense().getReceivingStat().get(0).getPlayerName())) {
-					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
-							.get(0).applyNoPassingFumble();
-					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat()
-							.get(0).applyReceivingFumble(params.getPlay().getPlayResult().isPlayResultTurnover());
-				} else {
-					throw new IllegalArgumentException("PASSING FUMBLE - Name Mismatch");
-				}
+				parseFumbleHelperPass(params, formatFumbleName);
 			} else if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.RUN) {
-				if (!formatFumbleName.equals(params.getPlay().getPlayerStat().get(params.getPossessionTeam())
-						.getOffense().getRushingStat().get(0).getPlayerName())) {
-					throw new IllegalArgumentException("RUSHING FUMBLE - Name Mismatch");
-				}
-				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getRushingStat().get(0)
-						.applyRushingFumble(params.getPlay().getPlayResult().isPlayResultTurnover());
+				parseFumbleHelperRun(params, formatFumbleName);
 			} else if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
-				if (!formatFumbleName.equals(params.getPlay().getPlayerStat().get(params.getDefenseTeam())
-						.getSpecialTeam().findPuntReturner().getPlayerName())) {
-					throw new IllegalArgumentException("PUNT RETURN FUMBLE - Name Mismatch");
-				}
-				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().findPuntReturner()
-						.applyPuntReturnFumble(params.getPlay().getPlayResult().isPlayResultTurnover());
+				parseFumbleHelperPunt(params, formatFumbleName);
 			} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
-				if (!formatFumbleName.equals(params.getPlay().getPlayerStat().get(params.getDefenseTeam())
-						.getSpecialTeam().findKickoffReturner().getPlayerName())) {
-					throw new IllegalArgumentException("KICKOFF FUMBLE - Name Mismatch");
-				}
-				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().findKickoffReturner()
-						.applyKickReturnFumble(params.getPlay().getPlayResult().isPlayResultTurnover());
+				parseFumbleHelperKickoff(params, formatFumbleName);
 			} else if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.FG
 					|| params.getPlay().getPlayCallType() == PlayCallTypeEnum.PAT) {
-
+				// Nothing needed here for now
 			} else {
-				throw new IllegalArgumentException("MISSING PLAY TYPE FOR PLAY");
+				String logInfo = String.format(PLAY_CALL_TYPE_S_PLAY_TEXT_S, params.getPlay().getPlayCallType(),
+						params.getPlayRawText());
+				loggingUtils.logInfo(logInfo);
+				throw new IllegalArgumentException(MISSING_PLAY_CALL_TYPE_FOR_CONDITIONAL_EVALUATION);
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseFumbleHelperPass(PbpServiceRequestPojo params, String formatFumbleName) {
+		try {
+			if (formatFumbleName.equals(params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense()
+					.getPassingStat().get(0).getPlayerName())) {
+				if (!params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat()
+						.isEmpty()) {
+					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat()
+							.get(0).applyNoReceivingFumble();
+				}
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
+						.applyPassingFumble(params.getPlay().getPlayResult().isPlayResultTurnover());
+			} else if (formatFumbleName.equals(params.getPlay().getPlayerStat().get(params.getPossessionTeam())
+					.getOffense().getReceivingStat().get(0).getPlayerName())) {
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
+						.applyNoPassingFumble();
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat().get(0)
+						.applyReceivingFumble(params.getPlay().getPlayResult().isPlayResultTurnover());
+			} else {
+				String logInfo = String.format(
+						"Play text: %s | Fumble Player: %s | Passing Player: %s | Receiving Player: %s",
+						params.getPlayRawText(), formatFumbleName,
+						params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
+								.get(0).getPlayerName(),
+						params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat()
+								.get(0).getPlayerName());
+				loggingUtils.logInfo(logInfo);
+				throw new IllegalArgumentException("Passing fumble does not match passing player");
+			}
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseFumbleHelperRun(PbpServiceRequestPojo params, String formatFumbleName) {
+		try {
+			if (!formatFumbleName.equals(params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense()
+					.getRushingStat().get(0).getPlayerName())) {
+				String logInfo = String.format("Play text: %s | Fumble Player: %s | Rushing Player: %s",
+						params.getPlayRawText(), formatFumbleName, params.getPlay().getPlayerStat()
+								.get(params.getPossessionTeam()).getOffense().getRushingStat().get(0).getPlayerName());
+				loggingUtils.logInfo(logInfo);
+				throw new IllegalArgumentException("Rushing fumble does not match rushing player");
+			}
+			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getRushingStat().get(0)
+					.applyRushingFumble(params.getPlay().getPlayResult().isPlayResultTurnover());
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseFumbleHelperPunt(PbpServiceRequestPojo params, String formatFumbleName) {
+		try {
+			if (!formatFumbleName.equals(params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+					.findPuntReturner().getPlayerName())) {
+				String logInfo = String.format("Play text: %s | Fumble Player: %s | Punt Return Player: %s",
+						params.getPlayRawText(), formatFumbleName, params.getPlay().getPlayerStat()
+								.get(params.getDefenseTeam()).getSpecialTeam().findPuntReturner().getPlayerName());
+				loggingUtils.logInfo(logInfo);
+				throw new IllegalArgumentException("Punt fumble does not match punt return player");
+			}
+			params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().findPuntReturner()
+					.applyPuntReturnFumble(params.getPlay().getPlayResult().isPlayResultTurnover());
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseFumbleHelperKickoff(PbpServiceRequestPojo params, String formatFumbleName) {
+		try {
+			if (!formatFumbleName.equals(params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+					.findKickoffReturner().getPlayerName())) {
+				String logInfo = String.format("Play text: %s | Fumble Player: %s | Kick Return Player: %s",
+						params.getPlayRawText(), formatFumbleName, params.getPlay().getPlayerStat()
+								.get(params.getDefenseTeam()).getSpecialTeam().findKickoffReturner().getPlayerName());
+				loggingUtils.logInfo(logInfo);
+				throw new IllegalArgumentException("Kickoff fumble does not match kick return player");
+			}
+			params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().findKickoffReturner()
+					.applyKickReturnFumble(params.getPlay().getPlayResult().isPlayResultTurnover());
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 
@@ -537,56 +641,50 @@ public class PbpDefenseParseService {
 							.get(0).applyNoReceivingFumble();
 				}
 			} else if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
-				for (PlayerStatPuntReturnPojo puntReturner : params.getPlay().getPlayerStat()
-						.get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()) {
+				for (PbpPlayerStatPuntReturnPojo puntReturner : params.getPlay().getPlayerStat()
+						.get(params.getPossessionTeam()).getSpecialTeam().getPuntReturn()) {
 					puntReturner.applyNoPuntReturnFumble();
 				}
 			} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
-				for (PlayerStatKickReturnPojo kickReturner : params.getPlay().getPlayerStat()
-						.get(params.getDefenseTeam()).getSpecialTeam().getKickReturn()) {
+				for (PbpPlayerStatKickReturnPojo kickReturner : params.getPlay().getPlayerStat()
+						.get(params.getPossessionTeam()).getSpecialTeam().getKickReturn()) {
 					kickReturner.applyNoKickReturnFumble();
 				}
 			} else if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.FG
 					|| params.getPlay().getPlayCallType() == PlayCallTypeEnum.PAT) {
-
+				// Nothing needed here for now
 			} else {
-				throw new IllegalArgumentException("MISSING PLAY TYPE FOR PLAY");
+				String logInfo = String.format(PLAY_CALL_TYPE_S_PLAY_TEXT_S, params.getPlay().getPlayCallType(),
+						params.getPlayRawText());
+				loggingUtils.logInfo(logInfo);
+				throw new IllegalArgumentException(MISSING_PLAY_CALL_TYPE_FOR_CONDITIONAL_EVALUATION);
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 
 	private void parseTurnoverReturn(PbpServiceRequestPojo params) {
 		try {
 			if (params.getPlayRawText().toUpperCase().contains("RETURN")) {
-				// TODO resolve reason for return (fumble vs interception)
 				String turnoverReturnString;
 				Integer turnoverReturnYards;
 				Integer returnStartYard;
-				if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
-						String.format("at(?: the)?%s,?.+ return(?:ed)?(?: for)? (-?\\d+) yards? to the%s",
-								NcaaConstants.teamYardRegex, NcaaConstants.teamYardRegex))) {
 
-					turnoverReturnString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-							String.format("at(?: the)?%s,?.+ return(?:ed)?(?: for)? (-?\\d+) yards? to the%s",
-									NcaaConstants.teamYardRegex, NcaaConstants.teamYardRegex),
-							3);
+				String firstMatchStr = String.format(
+						"at(?: the)?%s,?.+ return(?:ed)?(?: for)? (-?\\d+) yards? to the%s",
+						NcaaConstants.TEAM_YARD_REGEX, NcaaConstants.TEAM_YARD_REGEX);
+				String secondMatchStr = String.format("at%s, return(?:ed)? by %s (\\d{1,3}) yards? to the ",
+						NcaaConstants.TEAM_YARD_REGEX, NcaaConstants.PLAYER_NAME_REGEX);
+				if (pbpParsingUtils.evalMatch(params.getPlayRawText(), firstMatchStr)) {
+
+					turnoverReturnString = pbpParsingUtils.extractCustom(params.getPlayRawText(), firstMatchStr, 3);
 					turnoverReturnYards = Integer.valueOf(turnoverReturnString.split("\\~")[1]);
 					returnStartYard = pbpParsingUtils.formatYardLine(turnoverReturnString.split("\\~")[0],
 							params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict());
-				} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
-						String.format("at%s, return(?:ed)? by %s (\\d{1,3}) yards? to the ",
-								NcaaConstants.teamYardRegex, NcaaConstants.playerNameRegex))) {
-					turnoverReturnString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-							String.format("at%s, return(?:ed)? by %s (\\d{1,3}) yards? to the ",
-									NcaaConstants.teamYardRegex, NcaaConstants.playerNameRegex),
-							9);
+				} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(), secondMatchStr)) {
+					turnoverReturnString = pbpParsingUtils.extractCustom(params.getPlayRawText(), secondMatchStr, 9);
 					turnoverReturnYards = Integer.valueOf(turnoverReturnString.split("\\~")[8]);
 					returnStartYard = pbpParsingUtils.formatYardLine(turnoverReturnString.split("\\~")[0],
 							params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict());
@@ -595,83 +693,114 @@ public class PbpDefenseParseService {
 					returnStartYard = 0;
 				}
 
-				if (params.getPlay().getPlayResult().isPlayResultTurnover()) {
-					if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
-						params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-								.findPuntCoverageWithTurnover().applyReturnYards(turnoverReturnYards);
-					} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
-						params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-								.findKickCoverageWithTurnover().applyReturnYards(turnoverReturnYards);
-					} else {
-						params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
-								.findDefenseWithTurnover().applyReturnYards(turnoverReturnYards);
-						if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
-								.findDefenseWithTurnover().getInterception() == 1) {
-							params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense()
-									.getPassingStat().get(0).setPassingInterceptionYard(returnStartYard);
-						}
-					}
+				if (Boolean.TRUE.equals(params.getPlay().getPlayResult().isPlayResultTurnover())) {
+					parseTurnoverReturnTurnoverHelper(params, turnoverReturnYards, returnStartYard);
 				} else {
-
-					if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
-						if (!params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
-								.findPuntReturnWithFumble().isEmpty() && turnoverReturnYards > 0) {
-							throw new IllegalArgumentException("Handle return fumble recover");
-						} else if (params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-								.getPunting().get(0).getPuntBlocked() == 1) {
-							params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
-									.findPuntReturner().applyBlockReturn(turnoverReturnYards, returnStartYard);
-						}
-					} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
-						if (!params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
-								.findKickReturnWithFumble().isEmpty() && turnoverReturnYards > 0) {
-							throw new IllegalArgumentException("Handle return fumble recover");
-						}
-					} else {
-						if (turnoverReturnYards > 0) {
-							LOG.log(Level.WARNING, "Validate offense fumble recovery yards");
-//							throw new IllegalArgumentException("Handle offense fumble recover");
-						}
-					}
+					parseTurnoverReturnNoTurnoverHelper(params, turnoverReturnYards, returnStartYard);
 				}
-
 			} else {
-				if (params.getPlay().getPlayResult().isPlayResultTurnover()) {
-					if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
-						params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-								.findPuntCoverageWithTurnover().applyReturnYards(0);
-					} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
-						params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-								.findKickCoverageWithTurnover().applyReturnYards(0);
-					} else {
-						params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
-								.findDefenseWithTurnover().applyReturnYards(0);
-						if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
-								.findDefenseWithTurnover().getInterception() == 1) {
-							params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense()
-									.getPassingStat().get(0).setPassingInterceptionYard(0);
-						}
+				parseTurnoverReturnNoReturnHelper(params);
+			}
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseTurnoverReturnTurnoverHelper(PbpServiceRequestPojo params, Integer turnoverReturnYards,
+			Integer returnStartYard) {
+		try {
+			if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
+				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+						.findPuntCoverageWithTurnover().applyReturnYards(turnoverReturnYards);
+			} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
+				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+						.findKickCoverageWithTurnover().applyReturnYards(turnoverReturnYards);
+			} else {
+				params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense().findDefenseWithTurnover()
+						.applyReturnYards(turnoverReturnYards);
+				if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense().findDefenseWithTurnover()
+						.getInterception() == 1) {
+					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
+							.get(0).setPassingInterceptionYard(returnStartYard);
+				}
+			}
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseTurnoverReturnNoTurnoverHelper(PbpServiceRequestPojo params, Integer turnoverReturnYards,
+			Integer returnStartYard) {
+		try {
+			if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
+				if (!params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
+						.findPuntReturnWithFumble().isEmpty() && turnoverReturnYards > 0) {
+					String logInfo = String.format(PLAY_TEXT_S_RETURN_YARDS_S, params.getPlayRawText(),
+							turnoverReturnYards);
+					loggingUtils.logInfo(logInfo);
+					throw new IllegalArgumentException("Punt return fumble, recovery, advancement not supported");
+				} else if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getPunting()
+						.get(0).getPuntBlocked() == 1) {
+					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().findPuntReturner()
+							.applyBlockReturn(turnoverReturnYards, returnStartYard);
+				}
+			} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
+				if (!params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
+						.findKickReturnWithFumble().isEmpty() && turnoverReturnYards > 0) {
+					String logInfo = String.format(PLAY_TEXT_S_RETURN_YARDS_S, params.getPlayRawText(),
+							turnoverReturnYards);
+					loggingUtils.logInfo(logInfo);
+					throw new IllegalArgumentException("Kick return fumble, recovery, advancement not supported");
+				}
+			} else {
+				if (turnoverReturnYards > 0) {
+					String logInfo = String.format(PLAY_TEXT_S_RETURN_YARDS_S, params.getPlayRawText(),
+							turnoverReturnYards);
+					loggingUtils.logInfo(logInfo);
+					throw new IllegalArgumentException(
+							"Conditions for fumble recovery but not a turnover not supported");
+				}
+			}
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseTurnoverReturnNoReturnHelper(PbpServiceRequestPojo params) {
+		try {
+			if (Boolean.TRUE.equals(params.getPlay().getPlayResult().isPlayResultTurnover())) {
+				if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+							.findPuntCoverageWithTurnover().applyReturnYards(0);
+				} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+							.findKickCoverageWithTurnover().applyReturnYards(0);
+				} else {
+					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense().findDefenseWithTurnover()
+							.applyReturnYards(0);
+					if (params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getDefense()
+							.findDefenseWithTurnover().getInterception() == 1) {
+						params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
+								.get(0).setPassingInterceptionYard(0);
 					}
 				}
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 
 	private void parseSafety(PbpServiceRequestPojo params) {
 		try {
 			if (params.getPlayRawText().toUpperCase().contains("SAFETY")) {
-				if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
-						String.format("([A-Z]*?-?[aA-zZ]{2,3}).? (?i)safety( |,|$)"))) {
+				String matchStr = "([A-Z]*?-?[aA-zZ]{2,3}).? (?i)safety( |,|$)";
+				if (pbpParsingUtils.evalMatch(params.getPlayRawText(), matchStr)) {
 					params.getPlay().getPlayResult().setPlayResultPoints(-2);
-					String safetyString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
-							String.format("([A-Z]*?-?[aA-zZ]{2,3}).? (?i)safety( |,|$)"), 2);
+					String safetyString = pbpParsingUtils.extractCustom(params.getPlayRawText(), matchStr, 2);
 					String[] safetyStringArray = safetyString.split("\\|")[0].split("\\~");
 
 					if (Objects.isNull(params.getPlayTackles())) {
@@ -680,92 +809,128 @@ public class PbpDefenseParseService {
 						parseTackles(params);
 					}
 					parseSafetyHelper(params, 1);
-//					throw new IllegalArgumentException("HANDLE");
-				} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(), String.format("(?i)safety\\)"))) {
+				} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(), "(?i)safety\\)")) {
 					parseSafetyHelper(params, 0);
 				} else {
-					throw new IllegalArgumentException("HANDLE");
+					String logInfo = String.format(PLAY_TEXT_S_REGEX_S, params.getPlayRawText(), matchStr);
+					loggingUtils.logInfo(logInfo);
+					throw new IllegalArgumentException("Safety did not evaluate");
 				}
 			} else {
 				parseSafetyHelper(params, 0);
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 
 	private void parseSafetyHelper(PbpServiceRequestPojo params, Integer safety) {
 		try {
 			if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.PUNT) {
-				if (safety == 1 && params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam()
-						.getPunting().get(0).getPuntBlocked() == 1) {
-					throw new IllegalArgumentException("HANDLE THIS");
-				}
-				for (PlayerStatDefenseProductionPojo puntCov : params.getPlay().getPlayerStat()
-						.get(params.getPossessionTeam()).getSpecialTeam().getPuntCoverage()) {
-					parseSafetyDefenseHelper(params, puntCov, safety);
-				}
-				for (PlayerStatPuntReturnPojo puntReturner : params.getPlay().getPlayerStat()
-						.get(params.getDefenseTeam()).getSpecialTeam().getPuntReturn()) {
-					puntReturner.setPuntReturnSafety(safety);
-				}
+				parseSafetyHelperPunt(params, safety);
 			} else if (params.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
-				for (PlayerStatDefenseProductionPojo kickCov : params.getPlay().getPlayerStat()
-						.get(params.getPossessionTeam()).getSpecialTeam().getKickCoverage()) {
-					parseSafetyDefenseHelper(params, kickCov, safety);
-				}
-				if (!params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getKickReturn()
-						.isEmpty()) {
-					params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam().getKickReturn()
-							.get(0).setKickReturnSafety(safety);
-				}
+				parseSafetyHelperKickoff(params, safety);
 			} else if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.RUN
 					|| params.getPlay().getPlayCallType() == PlayCallTypeEnum.PASS) {
-				for (PlayerStatDefenseProductionPojo def : params.getPlay().getPlayerStat().get(params.getDefenseTeam())
-						.getDefense().getDefenseProduction()) {
-					parseSafetyDefenseHelper(params, def, safety);
-				}
-				if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.RUN) {
-					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getRushingStat()
-							.get(0).setRushingSafety(safety);
-				} else {
-					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
-							.get(0).setPassingSafety(safety);
-					if (!params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense()
-							.getReceivingStat().isEmpty()) {
-						params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat()
-								.get(0).setReceivingSafety(safety);
-					}
-				}
+				parseSafetyHelperOffense(params, safety);
 			} else if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.FG
 					|| params.getPlay().getPlayCallType() == PlayCallTypeEnum.PAT) {
-				if (safety == 1) {
-					throw new IllegalArgumentException("HANDLE THIS");
-				} else {
-					for (PlayerStatDefenseProductionPojo def : params.getPlay().getPlayerStat()
-							.get(params.getDefenseTeam()).getDefense().getDefenseProduction()) {
-						parseSafetyDefenseHelper(params, def, safety);
-					}
-				}
+				parseSafetyHelperPatFieldGoal(params, safety);
 			} else {
-				throw new IllegalArgumentException("HANDLE THIS");
+				String logInfo = String.format(PLAY_CALL_TYPE_S_PLAY_TEXT_S, params.getPlay().getPlayCallType(),
+						params.getPlayRawText());
+				loggingUtils.logInfo(logInfo);
+				throw new IllegalArgumentException(MISSING_PLAY_CALL_TYPE_FOR_CONDITIONAL_EVALUATION);
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 
-	private void parseSafetyDefenseHelper(PbpServiceRequestPojo params, PlayerStatDefenseProductionPojo def,
+	private void parseSafetyHelperPunt(PbpServiceRequestPojo params, Integer safety) {
+		try {
+			if (safety == 1 && params.getPlay().getPlayerStat().get(params.getDefenseTeam()).getSpecialTeam()
+					.getPunting().get(0).getPuntBlocked() == 1) {
+				String logInfo = String.format(PLAY_TEXT_S, params.getPlayRawText());
+				loggingUtils.logInfo(logInfo);
+				throw new IllegalArgumentException("Punt safety handling not supported");
+			}
+			for (PbpPlayerStatDefenseProductionPojo puntCov : params.getPlay().getPlayerStat()
+					.get(params.getDefenseTeam()).getSpecialTeam().getPuntCoverage()) {
+				parseSafetyDefenseHelper(params, puntCov, safety);
+			}
+			for (PbpPlayerStatPuntReturnPojo puntReturner : params.getPlay().getPlayerStat()
+					.get(params.getPossessionTeam()).getSpecialTeam().getPuntReturn()) {
+				puntReturner.setPuntReturnSafety(safety);
+			}
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseSafetyHelperKickoff(PbpServiceRequestPojo params, Integer safety) {
+		try {
+			for (PbpPlayerStatDefenseProductionPojo kickCov : params.getPlay().getPlayerStat()
+					.get(params.getDefenseTeam()).getSpecialTeam().getKickCoverage()) {
+				parseSafetyDefenseHelper(params, kickCov, safety);
+			}
+			if (!params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKickReturn()
+					.isEmpty()) {
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKickReturn().get(0)
+						.setKickReturnSafety(safety);
+			}
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseSafetyHelperOffense(PbpServiceRequestPojo params, Integer safety) {
+		try {
+			for (PbpPlayerStatDefenseProductionPojo def : params.getPlay().getPlayerStat().get(params.getDefenseTeam())
+					.getDefense().getDefenseProduction()) {
+				parseSafetyDefenseHelper(params, def, safety);
+			}
+			if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.RUN) {
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getRushingStat().get(0)
+						.setRushingSafety(safety);
+			} else {
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
+						.setPassingSafety(safety);
+				if (!params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat()
+						.isEmpty()) {
+					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat()
+							.get(0).setReceivingSafety(safety);
+				}
+			}
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseSafetyHelperPatFieldGoal(PbpServiceRequestPojo params, Integer safety) {
+		try {
+			if (safety == 1) {
+				String logInfo = String.format(PLAY_TEXT_S, params.getPlayRawText());
+				loggingUtils.logInfo(logInfo);
+				throw new IllegalArgumentException("FG/PAT safety is not supported");
+			} else {
+				for (PbpPlayerStatDefenseProductionPojo def : params.getPlay().getPlayerStat()
+						.get(params.getDefenseTeam()).getDefense().getDefenseProduction()) {
+					parseSafetyDefenseHelper(params, def, safety);
+				}
+			}
+		} catch (Exception e) {
+			loggingUtils.logException(e, params.getPlayRawText());
+
+		}
+	}
+
+	private void parseSafetyDefenseHelper(PbpServiceRequestPojo params, PbpPlayerStatDefenseProductionPojo def,
 			Integer safety) {
 		try {
 			if (safety == 1) {
@@ -778,25 +943,15 @@ public class PbpDefenseParseService {
 				def.setSafety(0);
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 
 	private void removeTurnoverTackles(PbpServiceRequestPojo params) {
 		try {
-			if (params.getPlay().getPlayResult().isPlayResultTurnover()) {
-				List<PlayerStatDefenseProductionPojo> offenseTackles = params.getPlay().getPlayerStat()
-						.get(params.getDefenseTeam()).getDefense().getDefenseProduction().stream()
-						.filter(d -> d.getTackleTotal() > 0 && d.getFumbleForced() == 0).collect(Collectors.toList());
-				if (!offenseTackles.isEmpty()) {
-					System.out.println("CATCH");
-				}
-				List<PlayerStatDefenseProductionPojo> trueDefenseTackles = params.getPlay().getPlayerStat()
+			if (Boolean.TRUE.equals(params.getPlay().getPlayResult().isPlayResultTurnover())) {
+				List<PbpPlayerStatDefenseProductionPojo> trueDefenseTackles = params.getPlay().getPlayerStat()
 						.get(params.getDefenseTeam()).getDefense().getDefenseProduction().stream()
 						.filter(d -> !(d.getTackleTotal() > 0 && d.getFumbleForced() == 0))
 						.collect(Collectors.toList());
@@ -804,12 +959,8 @@ public class PbpDefenseParseService {
 						.setDefenseProduction(trueDefenseTackles);
 			}
 		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format("ERROR: [%s] failed with %s.  Input = %s", ste[1].getMethodName(),
-					e.toString(), params.getPlayRawText());
-			LOG.log(Level.SEVERE, errorStr);
-			e.printStackTrace();
-			throw new IllegalArgumentException(errorStr);
+			loggingUtils.logException(e, params.getPlayRawText());
+
 		}
 	}
 

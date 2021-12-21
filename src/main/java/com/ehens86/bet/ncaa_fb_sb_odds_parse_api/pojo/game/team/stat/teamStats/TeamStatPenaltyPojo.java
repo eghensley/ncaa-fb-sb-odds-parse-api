@@ -1,21 +1,14 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamStats;
 
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PenaltyEnum;
+import java.util.Objects;
 
 public class TeamStatPenaltyPojo {
-	private Integer penalty;
-	private Integer penaltyYards;
-	private Integer penaltyFirstDown;
-	private String playerName;
-	private PenaltyEnum penaltyName;
+	protected Integer penalty;
+	protected Integer penaltyYards;
+
 	
 	public TeamStatPenaltyPojo() {
 		
-	}
-
-	public TeamStatPenaltyPojo(String name) {
-		this.playerName = name;
-		this.penalty = 1;
 	}
 	
 	public TeamStatPenaltyPojo(Integer penalty, Integer penaltyYards) {
@@ -52,46 +45,29 @@ public class TeamStatPenaltyPojo {
 		this.penaltyYards = penaltyYards;
 	}
 
-	/**
-	 * @return the playerName
-	 */
-	public String getPlayerName() {
-		return playerName;
+	@Override
+	public int hashCode() {
+		return Objects.hash(penalty, penaltyYards);
 	}
 
-	/**
-	 * @param playerName the playerName to set
-	 */
-	public void setPlayerName(String playerName) {
-		this.playerName = playerName;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof TeamStatPenaltyPojo)) {
+			return false;
+		}
+		TeamStatPenaltyPojo other = (TeamStatPenaltyPojo) obj;
+		return Objects.equals(penalty, other.penalty) && Objects.equals(penaltyYards, other.penaltyYards);
 	}
 
-	/**
-	 * @return the penaltyName
-	 */
-	public PenaltyEnum getPenaltyName() {
-		return penaltyName;
+	@Override
+	public String toString() {
+		return "TeamStatPenaltyPojo [penalty=" + penalty + ", penaltyYards=" + penaltyYards + "]";
 	}
 
-	/**
-	 * @param penaltyName the penaltyName to set
-	 */
-	public void setPenaltyName(PenaltyEnum penaltyName) {
-		this.penaltyName = penaltyName;
-	}
 
-	/**
-	 * @return the penaltyFirstDown
-	 */
-	public Integer getPenaltyFirstDown() {
-		return penaltyFirstDown;
-	}
 
-	/**
-	 * @param penaltyFirstDown the penaltyFirstDown to set
-	 */
-	public void setPenaltyFirstDown(Integer penaltyFirstDown) {
-		this.penaltyFirstDown = penaltyFirstDown;
-	}
-
+	
 }

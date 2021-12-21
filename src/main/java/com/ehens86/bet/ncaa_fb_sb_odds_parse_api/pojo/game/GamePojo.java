@@ -1,30 +1,48 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game;
 
+import java.util.Objects;
+
+import javax.persistence.Id;
+
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.DivisionEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.HomeAwayEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.plays.PbpPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.TeamPojo;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requestTemplate.gameInfo.GameInfoVenuePojo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.gameinfo.GameInfoVenuePojo;
 
 public class GamePojo {
-	@JsonIgnore
 	private TeamPojo teamHome;
-	@JsonIgnore
 	private TeamPojo teamAway;
 	private String gameDate;
-	private String statsUrl;
+	@Id
+	private String ncaaGameId;
 	private String gameTime;
 	private DivisionEnum division;
 	private Integer season;
 	private HomeAwayEnum winner;
 	private boolean valid;
-	@JsonIgnore
 	private GameInfoVenuePojo venue;
 	private PbpPojo plays;
-	
+
 	public GamePojo() {
 		this.valid = true;
+	}
+
+	public GamePojo(TeamPojo teamHome, TeamPojo teamAway, String gameDate, String ncaaGameId, String gameTime,
+			DivisionEnum division, Integer season, HomeAwayEnum winner, boolean valid, GameInfoVenuePojo venue,
+			PbpPojo plays) {
+		super();
+		this.teamHome = teamHome;
+		this.teamAway = teamAway;
+		this.gameDate = gameDate;
+		this.ncaaGameId = ncaaGameId;
+		this.gameTime = gameTime;
+		this.division = division;
+		this.season = season;
+		this.winner = winner;
+		this.valid = valid;
+		this.venue = venue;
+		this.plays = plays;
 	}
 
 	/**
@@ -70,17 +88,17 @@ public class GamePojo {
 	}
 
 	/**
-	 * @return the statsUrl
+	 * @return the ncaaGameId
 	 */
-	public String getStatsUrl() {
-		return statsUrl;
+	public String getNcaaGameId() {
+		return ncaaGameId;
 	}
 
 	/**
-	 * @param statsUrl the statsUrl to set
+	 * @param ncaaGameId the ncaaGameId to set
 	 */
-	public void setStatsUrl(String statsUrl) {
-		this.statsUrl = statsUrl;
+	public void setNcaaGameId(String ncaaGameId) {
+		this.ncaaGameId = ncaaGameId;
 	}
 
 	/**
@@ -158,7 +176,7 @@ public class GamePojo {
 			throw new IllegalArgumentException();
 		}
 	}
-	
+
 	public void addTeamById(TeamPojo team) {
 		if (team.getNcaaTeamId().equals(this.teamHome.getNcaaTeamId())) {
 			this.teamHome = team;
@@ -211,21 +229,33 @@ public class GamePojo {
 		this.plays = plays;
 	}
 
-	public GamePojo(TeamPojo teamHome, TeamPojo teamAway, String gameDate, String statsUrl, String gameTime,
-			DivisionEnum division, Integer season, HomeAwayEnum winner, boolean valid, GameInfoVenuePojo venue,
-			PbpPojo plays) {
-		super();
-		this.teamHome = teamHome;
-		this.teamAway = teamAway;
-		this.gameDate = gameDate;
-		this.statsUrl = statsUrl;
-		this.gameTime = gameTime;
-		this.division = division;
-		this.season = season;
-		this.winner = winner;
-		this.valid = valid;
-		this.venue = venue;
-		this.plays = plays;
+	@Override
+	public int hashCode() {
+		return Objects.hash(division, gameDate, gameTime, ncaaGameId, plays, season, teamAway, teamHome, valid, venue,
+				winner);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof GamePojo)) {
+			return false;
+		}
+		GamePojo other = (GamePojo) obj;
+		return division == other.division && Objects.equals(gameDate, other.gameDate)
+				&& Objects.equals(gameTime, other.gameTime) && Objects.equals(ncaaGameId, other.ncaaGameId)
+				&& Objects.equals(plays, other.plays) && Objects.equals(season, other.season)
+				&& Objects.equals(teamAway, other.teamAway) && Objects.equals(teamHome, other.teamHome)
+				&& valid == other.valid && Objects.equals(venue, other.venue) && winner == other.winner;
+	}
+
+	@Override
+	public String toString() {
+		return "GamePojo [teamHome=" + teamHome + ", teamAway=" + teamAway + ", gameDate=" + gameDate + ", ncaaGameId="
+				+ ncaaGameId + ", gameTime=" + gameTime + ", division=" + division + ", season=" + season + ", winner="
+				+ winner + ", valid=" + valid + ", venue=" + venue + ", plays=" + plays + "]";
 	}
 
 

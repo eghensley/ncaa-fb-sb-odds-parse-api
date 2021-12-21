@@ -1,5 +1,7 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamStats;
 
+import java.util.Objects;
+
 public class TeamStatPassingPojo {
 	private Integer passingFirstDown;
 	private Integer passingYard;
@@ -9,7 +11,6 @@ public class TeamStatPassingPojo {
 	private Integer passingInterception;
 	private Integer passingInterceptionYard;
 	private Integer passingInterceptionTouchdown;
-	private Integer passingBreakUp;
 
 	public TeamStatPassingPojo() {
 		this.passingInterceptionTouchdown = 0;
@@ -18,7 +19,7 @@ public class TeamStatPassingPojo {
 
 	public TeamStatPassingPojo(Integer passingFirstDown, Integer passingYard, Integer passingAttempt,
 			Integer passingCompletion, Integer passingTouchdown, Integer passingInterception,
-			Integer passingInterceptionYard, Integer passingInterceptionTouchdown, Integer passingBreakUp) {
+			Integer passingInterceptionYard, Integer passingInterceptionTouchdown) {
 		super();
 		this.passingFirstDown = passingFirstDown;
 		this.passingYard = passingYard;
@@ -28,7 +29,6 @@ public class TeamStatPassingPojo {
 		this.passingInterception = passingInterception;
 		this.passingInterceptionYard = passingInterceptionYard;
 		this.passingInterceptionTouchdown = passingInterceptionTouchdown;
-		this.passingBreakUp = passingBreakUp;
 	}
 
 	/**
@@ -152,35 +152,10 @@ public class TeamStatPassingPojo {
 		this.passingInterceptionYard += passingInterceptionYard;
 	}
 
-	/**
-	 * @return the passingBreakUp
-	 */
-	public Integer getPassingBreakUp() {
-		return passingBreakUp;
-	}
-
-	/**
-	 * @param passingBreakUp the passingBreakUp to set
-	 */
-	public void setPassingBreakUp(Integer passingBreakUp) {
-		this.passingBreakUp = passingBreakUp;
-	}
-
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((passingAttempt == null) ? 0 : passingAttempt.hashCode());
-		result = prime * result + ((passingBreakUp == null) ? 0 : passingBreakUp.hashCode());
-		result = prime * result + ((passingCompletion == null) ? 0 : passingCompletion.hashCode());
-		result = prime * result + ((passingFirstDown == null) ? 0 : passingFirstDown.hashCode());
-		result = prime * result + ((passingInterception == null) ? 0 : passingInterception.hashCode());
-		result = prime * result
-				+ ((passingInterceptionTouchdown == null) ? 0 : passingInterceptionTouchdown.hashCode());
-		result = prime * result + ((passingInterceptionYard == null) ? 0 : passingInterceptionYard.hashCode());
-		result = prime * result + ((passingTouchdown == null) ? 0 : passingTouchdown.hashCode());
-		result = prime * result + ((passingYard == null) ? 0 : passingYard.hashCode());
-		return result;
+		return Objects.hash(passingAttempt, passingCompletion, passingFirstDown, passingInterception,
+				passingInterceptionTouchdown, passingInterceptionYard, passingTouchdown, passingYard);
 	}
 
 	@Override
@@ -192,70 +167,14 @@ public class TeamStatPassingPojo {
 			return false;
 		}
 		TeamStatPassingPojo other = (TeamStatPassingPojo) obj;
-		if (passingAttempt == null) {
-			if (other.passingAttempt != null) {
-				return false;
-			}
-		} else if (!passingAttempt.equals(other.passingAttempt)) {
-			return false;
-		}
-		if (passingBreakUp == null) {
-			if (other.passingBreakUp != null) {
-				return false;
-			}
-		} else if (!passingBreakUp.equals(other.passingBreakUp)) {
-			return false;
-		}
-		if (passingCompletion == null) {
-			if (other.passingCompletion != null) {
-				return false;
-			}
-		} else if (!passingCompletion.equals(other.passingCompletion)) {
-			return false;
-		}
-		if (passingFirstDown == null) {
-			if (other.passingFirstDown != null) {
-				return false;
-			}
-		} else if (!passingFirstDown.equals(other.passingFirstDown)) {
-			return false;
-		}
-		if (passingInterception == null) {
-			if (other.passingInterception != null) {
-				return false;
-			}
-		} else if (!passingInterception.equals(other.passingInterception)) {
-			return false;
-		}
-		if (passingInterceptionTouchdown == null) {
-			if (other.passingInterceptionTouchdown != null) {
-				return false;
-			}
-		} else if (!passingInterceptionTouchdown.equals(other.passingInterceptionTouchdown)) {
-			return false;
-		}
-		if (passingInterceptionYard == null) {
-			if (other.passingInterceptionYard != null) {
-				return false;
-			}
-		} else if (!passingInterceptionYard.equals(other.passingInterceptionYard)) {
-			return false;
-		}
-		if (passingTouchdown == null) {
-			if (other.passingTouchdown != null) {
-				return false;
-			}
-		} else if (!passingTouchdown.equals(other.passingTouchdown)) {
-			return false;
-		}
-		if (passingYard == null) {
-			if (other.passingYard != null) {
-				return false;
-			}
-		} else if (!passingYard.equals(other.passingYard)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(passingAttempt, other.passingAttempt)
+				&& Objects.equals(passingCompletion, other.passingCompletion)
+				&& Objects.equals(passingFirstDown, other.passingFirstDown)
+				&& Objects.equals(passingInterception, other.passingInterception)
+				&& Objects.equals(passingInterceptionTouchdown, other.passingInterceptionTouchdown)
+				&& Objects.equals(passingInterceptionYard, other.passingInterceptionYard)
+				&& Objects.equals(passingTouchdown, other.passingTouchdown)
+				&& Objects.equals(passingYard, other.passingYard);
 	}
 
 	@Override
@@ -264,7 +183,9 @@ public class TeamStatPassingPojo {
 				+ ", passingAttempt=" + passingAttempt + ", passingCompletion=" + passingCompletion
 				+ ", passingTouchdown=" + passingTouchdown + ", passingInterception=" + passingInterception
 				+ ", passingInterceptionYard=" + passingInterceptionYard + ", passingInterceptionTouchdown="
-				+ passingInterceptionTouchdown + ", passingBreakUp=" + passingBreakUp + "]";
+				+ passingInterceptionTouchdown + "]";
 	}
+
+
 
 }

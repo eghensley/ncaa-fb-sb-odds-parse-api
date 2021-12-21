@@ -1,36 +1,41 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.plays;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.FieldZoneEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayCallTypeEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayDownEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayPeriodEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayTypeEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.TempoTypeEnum;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.PlayerStatPojo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.PbpPlayerStatPojo;
 
 public class PlayPojo {
-	private String playText;
-	private String driveText;
-	private PlayPeriodEnum period;
-	private PlayTypeEnum playType;
-	private PlayDownEnum playStartDown;
-	private Integer playStartYard;
-	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private Integer playYardToGain;
-	@JsonIgnore
-	private Integer playExpectedPoints;
-	private PlayCallTypeEnum playCallType;
-	private PlayResultPojo playResult;
-	private HashMap<String, PlayerStatPojo> playerStat;
-	private Boolean noPlayPenalty;
-	private TempoTypeEnum playTempo;
-	
+	protected String playText;
+	protected String driveText;
+	protected PlayPeriodEnum period;
+	protected PlayTypeEnum playType;
+	protected PlayDownEnum playStartDown;
+	protected Integer playStartYard;
+	protected Integer playYardToGain;
+	protected PlayCallTypeEnum playCallType;
+	protected PlayResultPojo playResult;
+	protected Map<String, PbpPlayerStatPojo> playerStat;
+	protected Boolean noPlayPenalty;
+	protected TempoTypeEnum playTempo;
+	protected String playStartPossessionTeamId;
+	protected Integer playStartHomeScore;
+	protected Integer playStartAwayScore;
+	protected Boolean garbageTime;
+	protected Boolean passingDown;
+	protected FieldZoneEnum playFieldZone;
+	protected Boolean defeat;
+
 	public PlayPojo() {
 		this.playResult = new PlayResultPojo();
-		this.playerStat = new HashMap<String, PlayerStatPojo>();
+		this.playerStat = new HashMap<>();
 	}
 
 	/**
@@ -104,20 +109,6 @@ public class PlayPojo {
 	}
 
 	/**
-	 * @return the playExpectedPoints
-	 */
-	public Integer getPlayExpectedPoints() {
-		return playExpectedPoints;
-	}
-
-	/**
-	 * @param playExpectedPoints the playExpectedPoints to set
-	 */
-	public void setPlayExpectedPoints(Integer playExpectedPoints) {
-		this.playExpectedPoints = playExpectedPoints;
-	}
-
-	/**
 	 * @return the playCallType
 	 */
 	public PlayCallTypeEnum getPlayCallType() {
@@ -148,14 +139,14 @@ public class PlayPojo {
 	/**
 	 * @return the playerStat
 	 */
-	public HashMap<String, PlayerStatPojo> getPlayerStat() {
+	public Map<String, PbpPlayerStatPojo> getPlayerStat() {
 		return playerStat;
 	}
 
 	/**
 	 * @param playerStat the playerStat to set
 	 */
-	public void setPlayerStat(HashMap<String, PlayerStatPojo> playerStat) {
+	public void setPlayerStat(Map<String, PbpPlayerStatPojo> playerStat) {
 		this.playerStat = playerStat;
 	}
 
@@ -213,6 +204,144 @@ public class PlayPojo {
 	 */
 	public void setPlayTempo(TempoTypeEnum playTempo) {
 		this.playTempo = playTempo;
+	}
+
+	/**
+	 * @return the playStartPossessionTeamId
+	 */
+	public String getPlayStartPossessionTeamId() {
+		return playStartPossessionTeamId;
+	}
+
+	/**
+	 * @param playStartPossessionTeamId the playStartPossessionTeamId to set
+	 */
+	public void setPlayStartPossessionTeamId(String playStartPossessionTeamId) {
+		this.playStartPossessionTeamId = playStartPossessionTeamId;
+	}
+
+	/**
+	 * @return the playStartHomeScore
+	 */
+	public Integer getPlayStartHomeScore() {
+		return playStartHomeScore;
+	}
+
+	/**
+	 * @param playStartHomeScore the playStartHomeScore to set
+	 */
+	public void setPlayStartHomeScore(Integer playStartHomeScore) {
+		this.playStartHomeScore = playStartHomeScore;
+	}
+
+	/**
+	 * @return the playStartAwayScore
+	 */
+	public Integer getPlayStartAwayScore() {
+		return playStartAwayScore;
+	}
+
+	/**
+	 * @param playStartAwayScore the playStartAwayScore to set
+	 */
+	public void setPlayStartAwayScore(Integer playStartAwayScore) {
+		this.playStartAwayScore = playStartAwayScore;
+	}
+
+	/**
+	 * @return the garbageTime
+	 */
+	public Boolean getGarbageTime() {
+		return garbageTime;
+	}
+
+	/**
+	 * @param garbageTime the garbageTime to set
+	 */
+	public void setGarbageTime(Boolean garbageTime) {
+		this.garbageTime = garbageTime;
+	}
+
+	/**
+	 * @return the passingDown
+	 */
+	public Boolean getPassingDown() {
+		return passingDown;
+	}
+
+	/**
+	 * @param passingDown the passingDown to set
+	 */
+	public void setPassingDown(Boolean passingDown) {
+		this.passingDown = passingDown;
+	}
+
+	/**
+	 * @return the playFieldZone
+	 */
+	public FieldZoneEnum getPlayFieldZone() {
+		return playFieldZone;
+	}
+
+	/**
+	 * @param playFieldZone the playFieldZone to set
+	 */
+	public void setPlayFieldZone(FieldZoneEnum playFieldZone) {
+		this.playFieldZone = playFieldZone;
+	}
+
+	/**
+	 * @return the defeat
+	 */
+	public Boolean getDefeat() {
+		return defeat;
+	}
+
+	/**
+	 * @param defeat the defeat to set
+	 */
+	public void setDefeat(Boolean defeat) {
+		this.defeat = defeat;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(defeat, driveText, garbageTime, noPlayPenalty, passingDown, period, playCallType,
+				playFieldZone, playResult, playStartAwayScore, playStartDown, playStartHomeScore,
+				playStartPossessionTeamId, playStartYard, playTempo, playText, playType, playYardToGain, playerStat);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof PlayPojo)) {
+			return false;
+		}
+		PlayPojo other = (PlayPojo) obj;
+		return Objects.equals(defeat, other.defeat) && Objects.equals(driveText, other.driveText)
+				&& Objects.equals(garbageTime, other.garbageTime) && Objects.equals(noPlayPenalty, other.noPlayPenalty)
+				&& Objects.equals(passingDown, other.passingDown) && period == other.period
+				&& playCallType == other.playCallType && playFieldZone == other.playFieldZone
+				&& Objects.equals(playResult, other.playResult)
+				&& Objects.equals(playStartAwayScore, other.playStartAwayScore) && playStartDown == other.playStartDown
+				&& Objects.equals(playStartHomeScore, other.playStartHomeScore)
+				&& Objects.equals(playStartPossessionTeamId, other.playStartPossessionTeamId)
+				&& Objects.equals(playStartYard, other.playStartYard) && playTempo == other.playTempo
+				&& Objects.equals(playText, other.playText) && playType == other.playType
+				&& Objects.equals(playYardToGain, other.playYardToGain) && Objects.equals(playerStat, other.playerStat);
+	}
+
+	@Override
+	public String toString() {
+		return "PlayPojo [playText=" + playText + ", driveText=" + driveText + ", period=" + period + ", playType="
+				+ playType + ", playStartDown=" + playStartDown + ", playStartYard=" + playStartYard
+				+ ", playYardToGain=" + playYardToGain + ", playCallType=" + playCallType + ", playResult=" + playResult
+				+ ", playerStat=" + playerStat + ", noPlayPenalty=" + noPlayPenalty + ", playTempo=" + playTempo
+				+ ", playStartPossessionTeamId=" + playStartPossessionTeamId + ", playStartHomeScore="
+				+ playStartHomeScore + ", playStartAwayScore=" + playStartAwayScore + ", garbageTime=" + garbageTime
+				+ ", passingDown=" + passingDown + ", playFieldZone=" + playFieldZone + ", defeat=" + defeat + "]";
 	}
 
 }

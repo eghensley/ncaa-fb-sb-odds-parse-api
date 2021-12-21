@@ -58,27 +58,10 @@ public enum PenaltyEnum {
 	}
 
 	/**
-	 * @param noPlay the noPlay to set
-	 */
-	public void setNoPlay(boolean noPlay) {
-		this.noPlay = noPlay;
-	}
-
-	/**
 	 * @return the yards
 	 */
 	public Integer getYards() {
 		return yards;
 	}
 
-	/**
-	 * @param yards the yards to set
-	 */
-	public void setYards(Integer yards) {
-		this.yards = yards;
-	}
-	
-	
-
-	
 }

@@ -8,6 +8,8 @@ import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.constants.NcaaConstants;
+
 @Service
 public class ParsingUtils {
 	private static final Logger LOG = Logger.getLogger(ParsingUtils.class.toString());
@@ -20,9 +22,11 @@ public class ParsingUtils {
 				return Integer.valueOf(val);
 			}
 		} catch (Exception e) {
-			LOG.log(Level.SEVERE, e.toString());
-			e.printStackTrace();
-			throw new IllegalArgumentException(e.toString());
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String errorStr = String.format(NcaaConstants.ERROR_S_FAILED_WITH_S, ste[1].getMethodName(), e.toString());
+			LOG.log(Level.SEVERE, errorStr);
+			LOG.log(Level.INFO, e.getMessage(), e);
+			throw new IllegalArgumentException(errorStr);
 		}
 	}
 
@@ -34,15 +38,17 @@ public class ParsingUtils {
 				return Double.valueOf(val);
 			}
 		} catch (Exception e) {
-			LOG.log(Level.SEVERE, e.toString());
-			e.printStackTrace();
-			throw new IllegalArgumentException(e.toString());
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String errorStr = String.format(NcaaConstants.ERROR_S_FAILED_WITH_S, ste[1].getMethodName(), e.toString());
+			LOG.log(Level.SEVERE, errorStr);
+			LOG.log(Level.INFO, e.getMessage(), e);
+			throw new IllegalArgumentException(errorStr);
 		}
 	}
 	
 	public Integer splitValue(String value, String delim, Integer index) {
 		try {
-			ArrayList<Integer> mults = new ArrayList<Integer>(Arrays.asList(1, 1));
+			ArrayList<Integer> mults = new ArrayList<>(Arrays.asList(1, 1));
 
 			Integer delimCount = StringUtils.countMatches(value, delim);
 			if (Integer.valueOf("2").equals(delimCount)) {
@@ -71,10 +77,11 @@ public class ParsingUtils {
 			String indexedValue = splitValue[index];
 			return Integer.valueOf(indexedValue) * mults.get(index);
 		} catch (Exception e) {
-			LOG.log(Level.SEVERE, e.toString());
-			e.printStackTrace();
-
-			throw new IllegalArgumentException(e.toString());
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String errorStr = String.format(NcaaConstants.ERROR_S_FAILED_WITH_S, ste[1].getMethodName(), e.toString());
+			LOG.log(Level.SEVERE, errorStr);
+			LOG.log(Level.INFO, e.getMessage(), e);
+			throw new IllegalArgumentException(errorStr);
 		}
 	}
 }

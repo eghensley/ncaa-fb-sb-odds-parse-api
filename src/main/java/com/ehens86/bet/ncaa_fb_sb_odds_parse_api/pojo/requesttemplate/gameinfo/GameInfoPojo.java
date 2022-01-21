@@ -17,24 +17,7 @@ public class GameInfoPojo {
 	private GameInfoStatusPojo status;
 
 	public GameInfoPojo() {
-
-	}
-
-	public GameInfoPojo(List<Object> liveVideos, GameInfoVenuePojo venue, String inputMD5Sum, GameInfoTeamPojo away,
-			GameInfoChampionshipPojo championship, GameInfoTabsPojo tabs, String id, List<Object> gameLinks,
-			List<GameInfoLinescorePojo> linescores, GameInfoTeamPojo home, GameInfoStatusPojo status) {
-		super();
-		this.liveVideos = liveVideos;
-		this.venue = venue;
-		this.inputMD5Sum = inputMD5Sum;
-		this.away = away;
-		this.championship = championship;
-		this.tabs = tabs;
-		this.id = id;
-		this.gameLinks = gameLinks;
-		this.linescores = linescores;
-		this.home = home;
-		this.status = status;
+		// Base constructor
 	}
 
 	/**

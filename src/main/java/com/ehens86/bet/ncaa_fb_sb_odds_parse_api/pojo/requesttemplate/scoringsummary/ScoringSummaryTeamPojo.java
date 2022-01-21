@@ -1,5 +1,7 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.scoringsummary;
 
+import java.util.Objects;
+
 public class ScoringSummaryTeamPojo {
 	private String homeTeam;
 	private String id;
@@ -109,15 +111,7 @@ public class ScoringSummaryTeamPojo {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((color == null) ? 0 : color.hashCode());
-		result = prime * result + ((homeTeam == null) ? 0 : homeTeam.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((seoName == null) ? 0 : seoName.hashCode());
-		result = prime * result + ((shortname == null) ? 0 : shortname.hashCode());
-		result = prime * result + ((sixCharAbbr == null) ? 0 : sixCharAbbr.hashCode());
-		return result;
+		return Objects.hash(color, homeTeam, id, seoName, shortname, sixCharAbbr);
 	}
 
 	@Override
@@ -129,49 +123,9 @@ public class ScoringSummaryTeamPojo {
 			return false;
 		}
 		ScoringSummaryTeamPojo other = (ScoringSummaryTeamPojo) obj;
-		if (color == null) {
-			if (other.color != null) {
-				return false;
-			}
-		} else if (!color.equals(other.color)) {
-			return false;
-		}
-		if (homeTeam == null) {
-			if (other.homeTeam != null) {
-				return false;
-			}
-		} else if (!homeTeam.equals(other.homeTeam)) {
-			return false;
-		}
-		if (id == null) {
-			if (other.id != null) {
-				return false;
-			}
-		} else if (!id.equals(other.id)) {
-			return false;
-		}
-		if (seoName == null) {
-			if (other.seoName != null) {
-				return false;
-			}
-		} else if (!seoName.equals(other.seoName)) {
-			return false;
-		}
-		if (shortname == null) {
-			if (other.shortname != null) {
-				return false;
-			}
-		} else if (!shortname.equals(other.shortname)) {
-			return false;
-		}
-		if (sixCharAbbr == null) {
-			if (other.sixCharAbbr != null) {
-				return false;
-			}
-		} else if (!sixCharAbbr.equals(other.sixCharAbbr)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(color, other.color) && Objects.equals(homeTeam, other.homeTeam)
+				&& Objects.equals(id, other.id) && Objects.equals(seoName, other.seoName)
+				&& Objects.equals(shortname, other.shortname) && Objects.equals(sixCharAbbr, other.sixCharAbbr);
 	}
 
 	@Override

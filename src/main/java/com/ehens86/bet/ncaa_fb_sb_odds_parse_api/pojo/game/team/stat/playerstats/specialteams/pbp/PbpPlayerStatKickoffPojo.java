@@ -20,21 +20,6 @@ public class PbpPlayerStatKickoffPojo extends PlayerStatKickoffPojo {
 		super();
 	}
 
-	public PbpPlayerStatKickoffPojo(Integer kickoffTouchback, Integer kickoffOnsideAttempt,
-			Integer kickoffOnsideSuccess, Integer kickoffReturnYard, Integer kickoffOutOfBounds,
-			Integer kickoffReturnTouchdown, Integer kickoffFairCatch, Integer kickoff, Integer kickoffLandYard) {
-		super();
-		this.kickoffTouchback = kickoffTouchback;
-		this.kickoffOnsideAttempt = kickoffOnsideAttempt;
-		this.kickoffOnsideSuccess = kickoffOnsideSuccess;
-		this.kickoffReturnYard = kickoffReturnYard;
-		this.kickoffOutOfBounds = kickoffOutOfBounds;
-		this.kickoffReturnTouchdown = kickoffReturnTouchdown;
-		this.kickoffFairCatch = kickoffFairCatch;
-		this.kickoff = kickoff;
-		this.kickoffLandYard = kickoffLandYard;
-	}
-
 	public PbpPlayerStatKickoffPojo(String playerName) {
 		this.playerName = playerName;
 		this.kickoff = 1;

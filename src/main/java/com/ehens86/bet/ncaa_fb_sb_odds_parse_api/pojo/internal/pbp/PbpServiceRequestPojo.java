@@ -25,10 +25,13 @@ public class PbpServiceRequestPojo {
 	private String kickoffTeam;
 	private String kickoffReturnTeam;
 
+	public PbpServiceRequestPojo() {
+		// Base constructor
+	}
+	
 	public PbpServiceRequestPojo(DrivePojo drive, PlayPojo play, PlayByPlayPlayPojo playRaw, String playRawText,
-			String[] playTackles, Map<String, HomeAwayEnum> teamDict, Map<String, PlayByPlayTeamPojo> teamAbbrevDict,
-			String possessionTeam, String defenseTeam) {
-		super();
+			String[] playTackles, Map<String, HomeAwayEnum> teamDict,
+			Map<String, PlayByPlayTeamPojo> teamAbbrevDict) {
 		this.drive = drive;
 		this.play = play;
 		this.playRaw = playRaw;
@@ -36,8 +39,6 @@ public class PbpServiceRequestPojo {
 		this.playTackles = playTackles;
 		this.teamDict = teamDict;
 		this.teamAbbrevDict = teamAbbrevDict;
-		this.possessionTeam = possessionTeam;
-		this.defenseTeam = defenseTeam;
 	}
 
 	/**

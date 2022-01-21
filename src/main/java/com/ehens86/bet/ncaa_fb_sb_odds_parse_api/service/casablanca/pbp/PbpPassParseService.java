@@ -3,7 +3,6 @@ package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service.casablanca.pbp;
 import java.util.Objects;
 
 import org.apache.logging.log4j.ThreadContext;
-import org.springframework.stereotype.Service;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.constants.NcaaConstants;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayDirectionEnum;
@@ -13,17 +12,14 @@ import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.pbp.PbpServiceReq
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils.LoggingUtils;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils.PbpParsingUtils;
 
-@Service
-public class PbpPassParseService {
-	private final PbpParsingUtils pbpParsingUtils;
-	private final LoggingUtils loggingUtils;
+public final class PbpPassParseService {
 
-	public PbpPassParseService(PbpParsingUtils pbpParsingUtils, LoggingUtils loggingUtils) {
-		this.pbpParsingUtils = pbpParsingUtils;
-		this.loggingUtils = loggingUtils;
+	// private static static constructor to prevent instantiation
+	private PbpPassParseService() {
+		throw new UnsupportedOperationException();
 	}
 
-	public boolean parsePass(PbpServiceRequestPojo params, boolean update) {
+	public static boolean parsePass(PbpServiceRequestPojo params, boolean update) {
 		try {
 			if (params.getPlayRawText().contains("pass") || params.getPlayRawText().toUpperCase().contains(" SACKED ")
 					|| params.getPlayRawText().toUpperCase().contains("SPIKE")
@@ -46,24 +42,23 @@ public class PbpPassParseService {
 					PbpPlayerStatPassingPojo passingInfo = params.getPlay().getPlayerStat().get(offTeam).getOffense()
 							.getPassingStat().get(0);
 
-					loggingUtils.logInfo("- [parseRush] Results -");
-					loggingUtils.logInfo(
+					LoggingUtils.logInfo("- [parseRush] Results -");
+					LoggingUtils.logInfo(
 							String.format("Offense Team: %s", params.getTeamAbbrevDict().get(offTeam).getShortname()));
-//					loggingUtils.logInfo( String.format("Pass Yards: %s", passingInfo.getPassingYard()));
-					loggingUtils.logInfo(String.format("Pass Info: %s", passingInfo.toString()));
+					LoggingUtils.logInfo(String.format("Pass Info: %s", passingInfo.toString()));
 				}
 
 				update = true;
 			}
 			return update;
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 
 			throw new IllegalArgumentException(e.toString());
 		}
 	}
 
-	private void cleanUpPassingString(PbpServiceRequestPojo params) {
+	private static void cleanUpPassingString(PbpServiceRequestPojo params) {
 		try {
 			params.setPlayRawText(params.getPlayRawText().replace(". St. pass", " pass"));
 			params.setPlayRawText(params.getPlayRawText().replace(", pass ", " pass "));
@@ -100,7 +95,7 @@ public class PbpPassParseService {
 
 			params.setPlayRawText(params.getPlayRawText().replaceAll("complete to ([A-Z][a-z]+?) ([A-Z][a-z]+?) Jr",
 					"complete to $1 $2"));
-			params.setPlayRawText(params.getPlayRawText().replaceAll("complete to ([A-Z][a-z]+?) Jr ([A-Z][a-z]+?)",
+			params.setPlayRawText(params.getPlayRawText().replaceAll("complete to ([A-Z][a-z]+?) Jr ([A-Z][a-z]+)",
 					"complete to $1 $2"));
 
 			params.setPlayRawText(params.getPlayRawText().replaceAll(
@@ -128,21 +123,21 @@ public class PbpPassParseService {
 					"Widener,Jeff pass intercepted by Mascorro,Ysidro at Mascorro,Ysidro return 0 yards to the NAU20 (Daniels,Kevin), out of bounds",
 					"Widener,Jeff pass intercepted by Mascorro,Ysidro at the NAU20 Mascorro,Ysidro return 0 yards to the NAU20 (Daniels,Kevin), out of bounds"));
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 
 		}
 	}
 
-	private void parsePatPassing(PbpServiceRequestPojo params) {
+	private static void parsePatPassing(PbpServiceRequestPojo params) {
 		try {
-			String passString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
+			String passString = PbpParsingUtils.extractCustom(params.getPlayRawText(),
 					String.format("%s pass(:?ing)? attempt.+(?i)((?:is good)|(?:failed)|(?:successful)|(?:good$))",
 							NcaaConstants.PLAYER_NAME_REGEX),
 					9);
 			String[] passStringArray = passString.split("\\|")[0].split("\\~");
 
 			PbpPlayerStatPassingPojo passingStat = new PbpPlayerStatPassingPojo(
-					pbpParsingUtils.formatName(passStringArray[0]));
+					PbpParsingUtils.formatName(passStringArray[0]));
 			passingStat.setPassingDirection(PlayDirectionEnum.MISSING);
 			passingStat.setPassingSack(0);
 			passingStat.setPassingSpike(0);
@@ -159,7 +154,7 @@ public class PbpPassParseService {
 				passingStat.setPassingTwoPointConversion(0);
 			} else {
 				String logInfo = String.format("Play text: %s", params.getPlayRawText());
-				loggingUtils.logInfo(logInfo);
+				LoggingUtils.logInfo(logInfo);
 				throw new IllegalArgumentException("PAT passing did not evaluate");
 			}
 
@@ -167,19 +162,19 @@ public class PbpPassParseService {
 			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
 					.add(passingStat);
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 
 		}
 	}
 
-	private void parsePassingBasic(PbpServiceRequestPojo params) {
+	private static void parsePassingBasic(PbpServiceRequestPojo params) {
 		try {
-			String passString = pbpParsingUtils.extractCustom(params.getPlayRawText(), String.format(
+			String passString = PbpParsingUtils.extractCustom(params.getPlayRawText(), String.format(
 					"%s ((?:pass ?((?:up the middle)|(?:to the (?:(?:right)|(?:left))))? ((?:(?:in)?complete)|(?:intercepted)))|(sacked)|(spike))(,? (?i)spike)?",
 					NcaaConstants.PLAYER_NAME_REGEX), 13);
 			String[] passStringArray = passString.split("\\|")[0].split("\\~");
 			PbpPlayerStatPassingPojo passingStat = new PbpPlayerStatPassingPojo(
-					pbpParsingUtils.formatName(passStringArray[0]));
+					PbpParsingUtils.formatName(passStringArray[0]));
 
 			if (!"null".equals(passStringArray[8])) {
 				passingStat
@@ -217,15 +212,15 @@ public class PbpPassParseService {
 			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
 					.add(passingStat);
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 
 		}
 	}
 
-	private void parseReceivingBasic(PbpServiceRequestPojo params) {
+	private static void parseReceivingBasic(PbpServiceRequestPojo params) {
 		try {
 			if (parseReceivingBasicFilterHelper(params)) {
-				if (pbpParsingUtils.evalMatch(params.getPlayRawText(),
+				if (PbpParsingUtils.evalMatch(params.getPlayRawText(),
 						String.format("%s pass(:?ing)? attempt (?i)(failed)$", NcaaConstants.PLAYER_NAME_REGEX))) {
 					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
 							.get(0).setPassingCompletion(0);
@@ -246,53 +241,42 @@ public class PbpPassParseService {
 				String fourthMatchStr = String.format("%s pass incomplete$", NcaaConstants.PLAYER_NAME_REGEX);
 				String fifthMatchStr = String.format("pass(:?ing)? attempt to %s good$",
 						NcaaConstants.PLAYER_NAME_REGEX);
-				if (pbpParsingUtils.evalMatch(params.getPlayRawText(), firstMatchStr)) {
-					receivingString = pbpParsingUtils.extractCustom(params.getPlayRawText(), firstMatchStr, 9);
+				if (PbpParsingUtils.evalMatch(params.getPlayRawText(), firstMatchStr)) {
+					receivingString = PbpParsingUtils.extractCustom(params.getPlayRawText(), firstMatchStr, 9);
 					receivingStringArray = receivingString.split("\\|")[0].split("\\~");
-
-					if ("complete".equals(receivingStringArray[0])) {
-						completion = 1;
-					} else {
-						completion = 0;
-					}
-					receiverName = pbpParsingUtils.formatName(receivingStringArray[2]);
+					completion = parseReceivingBasicHelperCompletion(receivingStringArray);
+					receiverName = PbpParsingUtils.formatName(receivingStringArray[2]);
 					twoPointConversion = 0;
-				} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(), secondMatchStr)) {
-					receivingString = pbpParsingUtils.extractCustom(params.getPlayRawText(), secondMatchStr, 7);
+				} else if (PbpParsingUtils.evalMatch(params.getPlayRawText(), secondMatchStr)) {
+					receivingString = PbpParsingUtils.extractCustom(params.getPlayRawText(), secondMatchStr, 7);
 					receivingStringArray = receivingString.split("\\|")[0].split("\\~");
 					completion = 1;
-					receiverName = pbpParsingUtils.formatName(receivingStringArray[0]);
+					receiverName = PbpParsingUtils.formatName(receivingStringArray[0]);
 					twoPointConversion = 0;
-				} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(), thirdMatchStr)) {
-					receivingString = pbpParsingUtils.extractCustom(params.getPlayRawText(), thirdMatchStr, 9);
-					receivingStringArray = receivingString.split("\\|")[0].split("\\~");
-					completion = 1;
-					receiverName = pbpParsingUtils.formatName(receivingStringArray[0]);
-
-					if ("is good".equalsIgnoreCase(receivingStringArray[7])) {
-						twoPointConversion = 1;
-					} else {
-						twoPointConversion = 0;
-					}
-				} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(), fourthMatchStr)) {
+				} else if (PbpParsingUtils.evalMatch(params.getPlayRawText(), thirdMatchStr)) {
+					completion = 0;
+					receiverName = String.format("TEAM,%s", params.getTeamAbbrevDict().get(params.getPossessionTeam())
+							.getSeoName().replace(" ", "").replace("-", ""));
+					twoPointConversion = 0;
+				} else if (PbpParsingUtils.evalMatch(params.getPlayRawText(), fourthMatchStr)) {
 					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
 							.get(0).setPassingCompletion(1);
 					receiverName = String.format("TEAM,%s", params.getTeamAbbrevDict().get(params.getPossessionTeam())
 							.getSeoName().replace(" ", "").replace("-", ""));
-					completion = 1;
-					twoPointConversion = 1;
-				} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(), fifthMatchStr)) {
-					receivingString = pbpParsingUtils.extractCustom(params.getPlayRawText(), fifthMatchStr, 8);
+					completion = 0;
+					twoPointConversion = 0;
+				} else if (PbpParsingUtils.evalMatch(params.getPlayRawText(), fifthMatchStr)) {
+					receivingString = PbpParsingUtils.extractCustom(params.getPlayRawText(), fifthMatchStr, 8);
 					receivingStringArray = receivingString.split("\\|")[0].split("\\~");
 					completion = 1;
-					receiverName = pbpParsingUtils.formatName(receivingStringArray[1]);
+					receiverName = PbpParsingUtils.formatName(receivingStringArray[1]);
 					twoPointConversion = 1;
 				} else {
 					String logInfo = String.format(
 							"Regex1: %s | Regex2: %s | Regex3: %s | Regex4: %s | Regex5: %s | Play Text: %s",
 							firstMatchStr, secondMatchStr, thirdMatchStr, fourthMatchStr, fifthMatchStr,
 							params.getPlayRawText());
-					loggingUtils.logInfo(logInfo);
+					LoggingUtils.logInfo(logInfo);
 					throw new IllegalArgumentException("Receiving parsing did not match regex");
 				}
 
@@ -307,12 +291,12 @@ public class PbpPassParseService {
 						.setPassingCompletion(completion);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 
 		}
 	}
 
-	private boolean parseReceivingBasicFilterHelper(PbpServiceRequestPojo params) {
+	private static boolean parseReceivingBasicFilterHelper(PbpServiceRequestPojo params) {
 		try {
 			String firstMatchStr = String.format(
 					"attempt to %s ((?:is good)|(?:failed))(; conversion is no good \\[down at the%s\\])?",
@@ -325,18 +309,31 @@ public class PbpPassParseService {
 							.get(0).getPassingSpike() == 1
 					|| params.getPlayRawText().contains("intercepted")
 					|| params.getPlayRawText().contains("incomplete broken up by")
-					|| (pbpParsingUtils.evalMatch(params.getPlayRawText(), firstMatchStr)
+					|| (PbpParsingUtils.evalMatch(params.getPlayRawText(), firstMatchStr)
 							&& !params.getPlayRawText().contains("intended"))
-					|| (pbpParsingUtils.evalMatch(params.getPlayRawText(), secondMatchStr))));
+					|| (PbpParsingUtils.evalMatch(params.getPlayRawText(), secondMatchStr))));
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 			throw new IllegalArgumentException(e.toString());
 		}
 	}
 
-	private void parseDropped(PbpServiceRequestPojo params) {
+	private static Integer parseReceivingBasicHelperCompletion(String[] receivingStringArray) {
 		try {
-			if (pbpParsingUtils.evalMatch(params.getPlayRawText(), " drop(ped)? ")) {
+			if ("complete".equals(receivingStringArray[0])) {
+				return 1;
+			} else {
+				return 0;
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.getMessage());
+			throw new IllegalArgumentException(e.toString());
+		}
+	}
+
+	private static void parseDropped(PbpServiceRequestPojo params) {
+		try {
+			if (PbpParsingUtils.evalMatch(params.getPlayRawText(), " drop(ped)? ")) {
 				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat().get(0)
 						.setReceivingDrop(1);
 				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
@@ -355,94 +352,135 @@ public class PbpPassParseService {
 
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 
 		}
 	}
 
-	private void parsePassingYards(PbpServiceRequestPojo params) {
+	private static void parsePassingYards(PbpServiceRequestPojo params) {
 		try {
-			String yardsString;
-			String[] yardsStringArray;
-			Integer yard;
 			String firstMatchStr = " complete ?.+? ?for( loss of)? (((-?\\d{1,3}) yards?)|(no gain))( loss)?()";
 			String secondMatchStr = " sacked for (?:a )?loss of (-?\\d{1,3}) yards?";
 			String thirdMatchStr = String.format("; conversion is no good \\[down at the%s\\]",
 					NcaaConstants.TEAM_YARD_REGEX);
-			if (pbpParsingUtils.evalMatch(params.getPlayRawText(), firstMatchStr)) {
-				yardsString = pbpParsingUtils.extractCustom(params.getPlayRawText(), firstMatchStr, 6);
-				yardsStringArray = yardsString.split("\\|")[0].split("\\~");
-
-				if ("no gain".equals(yardsStringArray[4])) {
-					yard = 0;
-				} else {
-					yard = Integer.valueOf(yardsStringArray[3]);
-				}
-
-				if (" loss of".equals(yardsStringArray[0]) || " loss".equals(yardsStringArray[5])) {
-					yard *= -1;
-				}
-				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat().get(0)
-						.setReceivingYard(yard);
-				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
-						.setPassingYard(yard);
-				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
-						.setPassingSackYard(0);
-				params.getPlay().getPlayResult().updatePenaltyPlayResultYard(yard);
-
-			} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(), secondMatchStr)) {
-				yardsString = pbpParsingUtils.extractCustom(params.getPlayRawText(), secondMatchStr, 1);
-				yardsStringArray = yardsString.split("\\|")[0].split("\\~");
-				yard = -1 * Integer.valueOf(yardsStringArray[0]);
-				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
-						.setPassingSackYard(yard);
-				params.getPlay().getPlayResult().updatePenaltyPlayResultYard(yard);
-			} else if (pbpParsingUtils.evalMatch(params.getPlayRawText(), thirdMatchStr)) {
-				yardsString = pbpParsingUtils.extractCustom(params.getPlayRawText(), thirdMatchStr, 1);
-				yardsStringArray = yardsString.split("\\|")[0].split("\\~");
-				yard = pbpParsingUtils.formatYardLine(yardsStringArray[0], params.getPossessionTeam(),
-						params.getDefenseTeam(), params.getTeamAbbrevDict()) - params.getPlay().getPlayStartYard();
-				params.getPlay().getPlayResult().updatePenaltyPlayResultYard(yard);
-				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
-						.setPassingYard(yard);
-				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat().get(0)
-						.setReceivingYard(yard);
-				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
-						.setPassingSackYard(0);
+			if (PbpParsingUtils.evalMatch(params.getPlayRawText(), firstMatchStr)) {
+				parsePassingYardsFirstMatchHelper(params, firstMatchStr);
+			} else if (PbpParsingUtils.evalMatch(params.getPlayRawText(), secondMatchStr)) {
+				parsePassingYardsSecondMatchHelper(params, secondMatchStr);
+			} else if (PbpParsingUtils.evalMatch(params.getPlayRawText(), thirdMatchStr)) {
+				parsePassingYardsThirdMatchHelper(params, thirdMatchStr);
 			} else {
-				if (params.getPlayRawText().contains(" yard") && !params.getPlayRawText().contains(" intercept")) {
-					String logInfo = String.format("Regex1: %s | Regex2: %s | Regex3: %s | Play Text: %s",
-							firstMatchStr, secondMatchStr, thirdMatchStr, params.getPlayRawText());
-					loggingUtils.logInfo(logInfo);
-					throw new IllegalArgumentException("Passing yards parsing did not match regex");
-				} else {
-					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
-							.get(0).setPassingSackYard(0);
-					if (Objects.isNull(params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense()
-							.getPassingStat().get(0).getPassingYard())) {
-						params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
-								.get(0).setPassingYard(0);
-					}
-					params.getPlay().getPlayResult().updatePenaltyPlayResultYard(0);
-				}
+				parsePassingYardsNoMatchHelper(params, firstMatchStr, secondMatchStr, thirdMatchStr);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 
 		}
 	}
 
-	private void parseYardsAfterCatch(PbpServiceRequestPojo params) {
+	private static void parsePassingYardsFirstMatchHelper(PbpServiceRequestPojo params, String firstMatchStr) {
+		try {
+			Integer yard;
+			String yardsString = PbpParsingUtils.extractCustom(params.getPlayRawText(), firstMatchStr, 6);
+			String[] yardsStringArray = yardsString.split("\\|")[0].split("\\~");
+
+			if ("no gain".equals(yardsStringArray[4])) {
+				yard = 0;
+			} else {
+				yard = Integer.valueOf(yardsStringArray[3]);
+			}
+
+			if (" loss of".equals(yardsStringArray[0]) || " loss".equals(yardsStringArray[5])) {
+				yard *= -1;
+			}
+			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat().get(0)
+					.setReceivingYard(yard);
+			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
+					.setPassingYard(yard);
+			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
+					.setPassingSackYard(0);
+			params.getPlay().getPlayResult().updatePenaltyPlayResultYard(yard);
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.getMessage());
+
+		}
+	}
+
+	private static void parsePassingYardsSecondMatchHelper(PbpServiceRequestPojo params, String secondMatchStr) {
+		try {
+			Integer yard;
+
+			String yardsString = PbpParsingUtils.extractCustom(params.getPlayRawText(), secondMatchStr, 1);
+			String[] yardsStringArray = yardsString.split("\\|")[0].split("\\~");
+			yard = -1 * Integer.valueOf(yardsStringArray[0]);
+			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
+					.setPassingSackYard(yard);
+			params.getPlay().getPlayResult().updatePenaltyPlayResultYard(yard);
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.getMessage());
+
+		}
+	}
+
+	private static void parsePassingYardsThirdMatchHelper(PbpServiceRequestPojo params, String thirdMatchStr) {
+		try {
+			Integer yard;
+
+			String yardsString = PbpParsingUtils.extractCustom(params.getPlayRawText(), thirdMatchStr, 1);
+			String[] yardsStringArray = yardsString.split("\\|")[0].split("\\~");
+			yard = PbpParsingUtils.formatYardLine(yardsStringArray[0], params.getPossessionTeam(),
+					params.getDefenseTeam(), params.getTeamAbbrevDict()) - params.getPlay().getPlayStartYard();
+			params.getPlay().getPlayResult().updatePenaltyPlayResultYard(yard);
+			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
+					.setPassingYard(yard);
+			if (!params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat()
+					.isEmpty()) {
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getReceivingStat().get(0)
+						.setReceivingYard(yard);
+			}
+			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
+					.setPassingSackYard(0);
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.getMessage());
+
+		}
+	}
+
+	private static void parsePassingYardsNoMatchHelper(PbpServiceRequestPojo params, String firstMatchStr,
+			String secondMatchStr, String thirdMatchStr) {
+		try {
+			if (params.getPlayRawText().contains(" yard") && !params.getPlayRawText().contains(" intercept")) {
+				String logInfo = String.format("Regex1: %s | Regex2: %s | Regex3: %s | Play Text: %s", firstMatchStr,
+						secondMatchStr, thirdMatchStr, params.getPlayRawText());
+				LoggingUtils.logInfo(logInfo);
+				throw new IllegalArgumentException("Passing yards parsing did not match regex");
+			} else {
+				params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat().get(0)
+						.setPassingSackYard(0);
+				if (Objects.isNull(params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense()
+						.getPassingStat().get(0).getPassingYard())) {
+					params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getPassingStat()
+							.get(0).setPassingYard(0);
+				}
+				params.getPlay().getPlayResult().updatePenaltyPlayResultYard(0);
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.getMessage());
+
+		}
+	}
+
+	private static void parseYardsAfterCatch(PbpServiceRequestPojo params) {
 		try {
 			if (params.getPlayRawText().toUpperCase().contains("ADVANCE")) {
 				String matchStr = String.format("caught at the%s and advanced to the%s", NcaaConstants.TEAM_YARD_REGEX,
 						NcaaConstants.TEAM_YARD_REGEX);
-				if (pbpParsingUtils.evalMatch(params.getPlayRawText(), matchStr)) {
-					String yacString = pbpParsingUtils.extractCustom(params.getPlayRawText(), matchStr, 2);
+				if (PbpParsingUtils.evalMatch(params.getPlayRawText(), matchStr)) {
+					String yacString = PbpParsingUtils.extractCustom(params.getPlayRawText(), matchStr, 2);
 					String[] yacStringArray = yacString.split("\\|")[0].split("\\~");
-					Integer formattedStartYard = pbpParsingUtils.formatYardLine(yacStringArray[0],
+					Integer formattedStartYard = PbpParsingUtils.formatYardLine(yacStringArray[0],
 							params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict());
-					Integer formattedEndYard = pbpParsingUtils.formatYardLine(yacStringArray[1],
+					Integer formattedEndYard = PbpParsingUtils.formatYardLine(yacStringArray[1],
 							params.getPossessionTeam(), params.getDefenseTeam(), params.getTeamAbbrevDict());
 					Integer formattedThrownYard = formattedStartYard - params.getPlay().getPlayStartYard();
 					Integer yardsAfterCatch = formattedEndYard - formattedStartYard;
@@ -456,14 +494,14 @@ public class PbpPassParseService {
 							.get(0).setPassingAirLessNeeded(formattedThrownYard - params.getPlay().getPlayYardToGain());
 				} else {
 					String logInfo = String.format("Regex: %s | Play Text: %s", matchStr, params.getPlayRawText());
-					loggingUtils.logInfo(logInfo);
+					LoggingUtils.logInfo(logInfo);
 					throw new IllegalArgumentException("Yards after catch parsing did not match regex");
 				}
 			} else {
 				// Nothing needed here right now
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 
 		}
 	}

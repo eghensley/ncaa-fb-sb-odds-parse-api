@@ -43,6 +43,7 @@ public class GameController {
 	public ResponseEntity<GetResponse> getGame(
 			@RequestHeader(value = "password", required = true) String attemptedPassword,
 			@RequestHeader(value = "debug", required = false) String debug,
+			@RequestHeader(value = "complete", required = false) String complete,
 			@RequestHeader(value = "stack", required = false) String stack, @PathVariable("gameId") String gameId) {
 
 		if (Objects.nonNull(debug) && NcaaConstants.CONTEXT_DEBUG_VALUE_TRUE.equalsIgnoreCase(debug)) {
@@ -59,15 +60,65 @@ public class GameController {
 		String methodStartInfo = String.format(" -- Request Received [%s]", ste[1].getMethodName());
 		LOG.log(Level.INFO, methodStartInfo);
 
+		GetResponse response;
 		if (loginKey.equals(attemptedPassword)) {
-			GetResponse response = gameService.fetchGame(gameId);
+			if (Objects.nonNull(complete) && NcaaConstants.CONTEXT_DEBUG_VALUE_TRUE.equalsIgnoreCase(complete)) {
+				response = gameService.fetchGameComplete(gameId);
+			} else {
+				response = gameService.fetchGame(gameId);
+			}
+
 			ThreadContext.remove(NcaaConstants.CONTEXT_DEBUG_KEY);
 			ThreadContext.remove(NcaaConstants.CONTEXT_STACK_KEY);
 			return new ResponseEntity<>(response, response.getStatus());
 		} else {
 			String errorMsg = loginFailed;
 			LOG.log(Level.WARNING, errorMsg);
-			GetResponse response = new GetResponse(0, HttpStatus.FORBIDDEN, errorMsg);
+			response = new GetResponse(0, HttpStatus.FORBIDDEN, errorMsg);
+			ThreadContext.remove(NcaaConstants.CONTEXT_DEBUG_KEY);
+			ThreadContext.remove(NcaaConstants.CONTEXT_STACK_KEY);
+			return new ResponseEntity<>(response, response.getStatus());
+		}
+	}
+	
+	@ApiOperation(value = "Get game objects by year and week")
+	@GetMapping("/all/season/{season}/week/{week}")
+	public ResponseEntity<GetResponse> getSeasonWeekGames(
+			@RequestHeader(value = "password", required = true) String attemptedPassword,
+			@RequestHeader(value = "debug", required = false) String debug,
+			@RequestHeader(value = "onlyId", required = false) String onlyId,
+			@RequestHeader(value = "missing", required = false) Boolean missing,
+			@RequestHeader(value = "stack", required = false) String stack, @PathVariable("season") Integer season, @PathVariable("week") Integer week) {
+
+		if (Objects.nonNull(debug) && NcaaConstants.CONTEXT_DEBUG_VALUE_TRUE.equalsIgnoreCase(debug)) {
+			ThreadContext.put(NcaaConstants.CONTEXT_DEBUG_KEY, NcaaConstants.CONTEXT_DEBUG_VALUE_TRUE);
+		} else {
+			ThreadContext.put(NcaaConstants.CONTEXT_DEBUG_KEY, NcaaConstants.CONTEXT_DEBUG_VALUE_FALSE);
+		}
+		if (Objects.nonNull(stack) && NcaaConstants.CONTEXT_STACK_VALUE_TRUE.equalsIgnoreCase(stack)) {
+			ThreadContext.put(NcaaConstants.CONTEXT_STACK_KEY, NcaaConstants.CONTEXT_STACK_VALUE_TRUE);
+		} else {
+			ThreadContext.put(NcaaConstants.CONTEXT_STACK_KEY, NcaaConstants.CONTEXT_STACK_VALUE_FALSE);
+		}
+		final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+		String methodStartInfo = String.format(" -- Request Received [%s]", ste[1].getMethodName());
+		LOG.log(Level.INFO, methodStartInfo);
+
+		GetResponse response;
+		if (loginKey.equals(attemptedPassword)) {
+			if (Objects.nonNull(onlyId) && NcaaConstants.CONTEXT_DEBUG_VALUE_TRUE.equalsIgnoreCase(onlyId)) {
+				response = gameService.fetchSeasonWeekGamesOnlyIds(season, week, missing);
+			} else {
+				response = gameService.fetchSeasonWeekGames(season, week, missing);
+			}
+
+			ThreadContext.remove(NcaaConstants.CONTEXT_DEBUG_KEY);
+			ThreadContext.remove(NcaaConstants.CONTEXT_STACK_KEY);
+			return new ResponseEntity<>(response, response.getStatus());
+		} else {
+			String errorMsg = loginFailed;
+			LOG.log(Level.WARNING, errorMsg);
+			response = new GetResponse(0, HttpStatus.FORBIDDEN, errorMsg);
 			ThreadContext.remove(NcaaConstants.CONTEXT_DEBUG_KEY);
 			ThreadContext.remove(NcaaConstants.CONTEXT_STACK_KEY);
 			return new ResponseEntity<>(response, response.getStatus());

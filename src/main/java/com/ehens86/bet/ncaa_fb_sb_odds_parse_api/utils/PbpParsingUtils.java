@@ -7,18 +7,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Service;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.constants.NcaaConstants;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayPeriodEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.pbp.PlayByPlayTeamPojo;
 
-@Service
-public class PbpParsingUtils {
+public final class PbpParsingUtils {
 	private static final String ERROR_S_FAILED_WITH_S_INPUT_S = "ERROR: [%s] failed with %s.  Input = %s";
 	private static final Logger LOG = Logger.getLogger(PbpParsingUtils.class.toString());
 
-	public Integer convertMinSecToSec(String inputStr, PlayPeriodEnum playPeriod) {
+    // Private constructor to prevent instantiation
+    private PbpParsingUtils() {
+        throw new UnsupportedOperationException();
+    }
+    
+	public static Integer convertMinSecToSec(String inputStr, PlayPeriodEnum playPeriod) {
 		try {
 			String[] timeSplit = inputStr.split(":");
 			String minute = timeSplit[0];
@@ -40,49 +43,7 @@ public class PbpParsingUtils {
 		}
 	}
 
-	public String[] extractNames(String inputStr) {
-		try {
-			Pattern pattern = Pattern.compile(NcaaConstants.PLAYER_NAME_REGEX);
-			Matcher matcher = pattern.matcher(inputStr);
-
-			StringBuilder result = new StringBuilder();
-			while (matcher.find()) {
-				result.append(matcher.group(1));
-				result.append("|");
-			}
-			return result.toString().split("\\|");
-		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format(ERROR_S_FAILED_WITH_S_INPUT_S, ste[1].getMethodName(), e.toString(),
-					inputStr);
-			LOG.log(Level.SEVERE, errorStr);
-			LOG.log(Level.INFO, e.getMessage(), e);
-			throw new IllegalArgumentException(errorStr);
-		}
-	}
-
-	public String[] extractYard(String inputStr) {
-		try {
-			Pattern pattern = Pattern.compile(NcaaConstants.TEAM_YARD_REGEX);
-			Matcher matcher = pattern.matcher(inputStr);
-
-			StringBuilder result = new StringBuilder();
-			while (matcher.find()) {
-				result.append(matcher.group(1));
-				result.append("|");
-			}
-			return result.toString().split("\\|");
-		} catch (Exception e) {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String errorStr = String.format(ERROR_S_FAILED_WITH_S_INPUT_S, ste[1].getMethodName(), e.toString(),
-					inputStr);
-			LOG.log(Level.SEVERE, errorStr);
-			LOG.log(Level.INFO, e.getMessage(), e);
-			throw new IllegalArgumentException(errorStr);
-		}
-	}
-
-	public String[] extractTackle(String inputStr) {
+	public static String[] extractTackle(String inputStr) {
 		try {
 			if (inputStr.toUpperCase().contains("BLOCKED BY")) {
 				return new String[0];
@@ -125,7 +86,7 @@ public class PbpParsingUtils {
 		}
 	}
 
-	public boolean evalMatch(String inputStr, String regex) {
+	public static boolean evalMatch(String inputStr, String regex) {
 		try {
 			boolean match = false;
 			Pattern pattern = Pattern.compile(regex);
@@ -146,7 +107,7 @@ public class PbpParsingUtils {
 		}
 	}
 
-	public String extractCustom(String inputStr, String regex, Integer groups) {
+	public static String extractCustom(String inputStr, String regex, Integer groups) {
 		try {
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(inputStr);
@@ -176,7 +137,7 @@ public class PbpParsingUtils {
 		}
 	}
 
-	public String[] convertDownAndDistance(String inputStr) {
+	public static String[] convertDownAndDistance(String inputStr) {
 		try {
 			String regex = String.format("(\\d[a-z]{2}) and (\\d+) at ?%s", NcaaConstants.TEAM_YARD_REGEX);
 			Integer groups = 3;
@@ -219,7 +180,7 @@ public class PbpParsingUtils {
 		}
 	}
 
-	public String formatName(String inputStrRaw) {
+	public static String formatName(String inputStrRaw) {
 		try {
 			if ("null".equals(inputStrRaw)) {
 				throw new IllegalArgumentException("Name == null");
@@ -263,7 +224,7 @@ public class PbpParsingUtils {
 		}
 	}
 
-	public boolean resolvePossesionTeam(String abbrev, String possTeam, String defTeam,
+	public static boolean resolvePossesionTeam(String abbrev, String possTeam, String defTeam,
 			Map<String, PlayByPlayTeamPojo> teamAbbrevDict) {
 		try {
 			if (NcaaConstants.TEAM_ID_YARD_ABBREV_DICT.containsKey(possTeam)
@@ -291,7 +252,7 @@ public class PbpParsingUtils {
 		}
 	}
 
-	public Integer formatYardLine(String inputStr, String possTeam, String defTeam,
+	public static Integer formatYardLine(String inputStr, String possTeam, String defTeam,
 			Map<String, PlayByPlayTeamPojo> teamAbbrevDict) {
 		try {
 			if ("50 yardline".equals(inputStr.strip()) || "the 50".equals(inputStr.strip())

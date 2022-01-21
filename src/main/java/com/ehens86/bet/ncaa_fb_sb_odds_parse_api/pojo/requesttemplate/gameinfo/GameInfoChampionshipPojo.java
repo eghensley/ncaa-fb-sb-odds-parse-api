@@ -1,6 +1,7 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.gameinfo;
 
 import java.util.List;
+import java.util.Objects;
 
 public class GameInfoChampionshipPojo {
 
@@ -15,21 +16,7 @@ public class GameInfoChampionshipPojo {
 	private String bracketRegion;
 	
 	public GameInfoChampionshipPojo() {
-		
-	}
-
-	public GameInfoChampionshipPojo(String division, String year, String bracketRound, List<Object> champLinks,
-			String championshipId, String bracketId, String title, String sport, String bracketRegion) {
-		super();
-		this.division = division;
-		this.year = year;
-		this.bracketRound = bracketRound;
-		this.champLinks = champLinks;
-		this.championshipId = championshipId;
-		this.bracketId = bracketId;
-		this.title = title;
-		this.sport = sport;
-		this.bracketRegion = bracketRegion;
+		// Base constructor
 	}
 
 	/**
@@ -160,18 +147,8 @@ public class GameInfoChampionshipPojo {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((bracketId == null) ? 0 : bracketId.hashCode());
-		result = prime * result + ((bracketRegion == null) ? 0 : bracketRegion.hashCode());
-		result = prime * result + ((bracketRound == null) ? 0 : bracketRound.hashCode());
-		result = prime * result + ((champLinks == null) ? 0 : champLinks.hashCode());
-		result = prime * result + ((championshipId == null) ? 0 : championshipId.hashCode());
-		result = prime * result + ((division == null) ? 0 : division.hashCode());
-		result = prime * result + ((sport == null) ? 0 : sport.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		result = prime * result + ((year == null) ? 0 : year.hashCode());
-		return result;
+		return Objects.hash(bracketId, bracketRegion, bracketRound, champLinks, championshipId, division, sport, title,
+				year);
 	}
 
 	@Override
@@ -183,70 +160,11 @@ public class GameInfoChampionshipPojo {
 			return false;
 		}
 		GameInfoChampionshipPojo other = (GameInfoChampionshipPojo) obj;
-		if (bracketId == null) {
-			if (other.bracketId != null) {
-				return false;
-			}
-		} else if (!bracketId.equals(other.bracketId)) {
-			return false;
-		}
-		if (bracketRegion == null) {
-			if (other.bracketRegion != null) {
-				return false;
-			}
-		} else if (!bracketRegion.equals(other.bracketRegion)) {
-			return false;
-		}
-		if (bracketRound == null) {
-			if (other.bracketRound != null) {
-				return false;
-			}
-		} else if (!bracketRound.equals(other.bracketRound)) {
-			return false;
-		}
-		if (champLinks == null) {
-			if (other.champLinks != null) {
-				return false;
-			}
-		} else if (!champLinks.equals(other.champLinks)) {
-			return false;
-		}
-		if (championshipId == null) {
-			if (other.championshipId != null) {
-				return false;
-			}
-		} else if (!championshipId.equals(other.championshipId)) {
-			return false;
-		}
-		if (division == null) {
-			if (other.division != null) {
-				return false;
-			}
-		} else if (!division.equals(other.division)) {
-			return false;
-		}
-		if (sport == null) {
-			if (other.sport != null) {
-				return false;
-			}
-		} else if (!sport.equals(other.sport)) {
-			return false;
-		}
-		if (title == null) {
-			if (other.title != null) {
-				return false;
-			}
-		} else if (!title.equals(other.title)) {
-			return false;
-		}
-		if (year == null) {
-			if (other.year != null) {
-				return false;
-			}
-		} else if (!year.equals(other.year)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(bracketId, other.bracketId) && Objects.equals(bracketRegion, other.bracketRegion)
+				&& Objects.equals(bracketRound, other.bracketRound) && Objects.equals(champLinks, other.champLinks)
+				&& Objects.equals(championshipId, other.championshipId) && Objects.equals(division, other.division)
+				&& Objects.equals(sport, other.sport) && Objects.equals(title, other.title)
+				&& Objects.equals(year, other.year);
 	}
 
 	@Override

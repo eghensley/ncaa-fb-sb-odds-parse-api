@@ -31,7 +31,7 @@ public class PlayData extends OidAuditEntity implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "DRIVE_OID", referencedColumnName = "OID", nullable = false)
 	private DriveData drive;
-	@Column(name = "PLAY_TEXT", nullable = false)
+	@Column(name = "PLAY_TEXT", nullable = false, length = 510)
 	private String playText;
 	@Column(name = "PLAY_DOWN_DISTANCE_TEXT", nullable = false)
 	private String driveText;
@@ -85,8 +85,6 @@ public class PlayData extends OidAuditEntity implements Serializable {
 	private boolean playResultSuccess;
 	@Column(name = "F_PLAY_FIELD_ZONE", nullable = true)
 	private FieldZoneEnum playFieldZone;
-	@Column(name = "F_PLAY_DEFEAT", nullable = true)
-	private boolean playDefeat;
 	
 	public PlayData() {
 		this.playStat = new ArrayList<>();
@@ -110,13 +108,6 @@ public class PlayData extends OidAuditEntity implements Serializable {
 		this.playStat.add(playStat);
 		playStat.setPlay(this);
 	}
-
-//	/**
-//	 * @return the drive
-//	 */
-//	public DriveData getDrive() {
-//		return drive;
-//	}
 
 	/**
 	 * @param drive the drive to set
@@ -477,26 +468,12 @@ public class PlayData extends OidAuditEntity implements Serializable {
 		this.playFieldZone = playFieldZone;
 	}
 
-	/**
-	 * @return the playDefeat
-	 */
-	public boolean getPlayDefeat() {
-		return playDefeat;
-	}
-
-	/**
-	 * @param playDefeat the playDefeat to set
-	 */
-	public void setPlayDefeat(boolean playDefeat) {
-		this.playDefeat = playDefeat;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + Objects.hash(drive, driveText, garbageTime, noPlayPenalty, passingDown, period,
-				playCallType, playDefeat, playFieldZone, playResultAwayScore, playResultFirstDown, playResultHomeScore,
+				playCallType, playFieldZone, playResultAwayScore, playResultFirstDown, playResultHomeScore,
 				playResultPoints, playResultPossessionTeam, playResultSuccess, playResultTurnover, playResultYard,
 				playResultYardLine, playStartAwayScore, playStartDown, playStartHomeScore, playStartPossessionTeam,
 				playStartYard, playStat, playTempo, playText, playType, playYardToGain);
@@ -518,7 +495,7 @@ public class PlayData extends OidAuditEntity implements Serializable {
 		return Objects.equals(drive, other.drive) && Objects.equals(driveText, other.driveText)
 				&& garbageTime == other.garbageTime && Objects.equals(noPlayPenalty, other.noPlayPenalty)
 				&& passingDown == other.passingDown && period == other.period && playCallType == other.playCallType
-				&& playDefeat == other.playDefeat && playFieldZone == other.playFieldZone
+				&& playFieldZone == other.playFieldZone
 				&& Objects.equals(playResultAwayScore, other.playResultAwayScore)
 				&& Objects.equals(playResultFirstDown, other.playResultFirstDown)
 				&& Objects.equals(playResultHomeScore, other.playResultHomeScore)
@@ -549,7 +526,7 @@ public class PlayData extends OidAuditEntity implements Serializable {
 				+ ", playStartAwayScore=" + playStartAwayScore + ", playResultHomeScore=" + playResultHomeScore
 				+ ", playResultAwayScore=" + playResultAwayScore + ", garbageTime=" + garbageTime + ", passingDown="
 				+ passingDown + ", playResultSuccess=" + playResultSuccess + ", playFieldZone=" + playFieldZone
-				+ ", playDefeat=" + playDefeat + "]";
+				+ "]";
 	}
 
 

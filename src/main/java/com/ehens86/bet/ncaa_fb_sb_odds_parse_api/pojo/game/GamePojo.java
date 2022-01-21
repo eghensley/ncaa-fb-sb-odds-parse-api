@@ -23,26 +23,10 @@ public class GamePojo {
 	private boolean valid;
 	private GameInfoVenuePojo venue;
 	private PbpPojo plays;
+	private Integer week;
 
 	public GamePojo() {
 		this.valid = true;
-	}
-
-	public GamePojo(TeamPojo teamHome, TeamPojo teamAway, String gameDate, String ncaaGameId, String gameTime,
-			DivisionEnum division, Integer season, HomeAwayEnum winner, boolean valid, GameInfoVenuePojo venue,
-			PbpPojo plays) {
-		super();
-		this.teamHome = teamHome;
-		this.teamAway = teamAway;
-		this.gameDate = gameDate;
-		this.ncaaGameId = ncaaGameId;
-		this.gameTime = gameTime;
-		this.division = division;
-		this.season = season;
-		this.winner = winner;
-		this.valid = valid;
-		this.venue = venue;
-		this.plays = plays;
 	}
 
 	/**
@@ -229,10 +213,24 @@ public class GamePojo {
 		this.plays = plays;
 	}
 
+	/**
+	 * @return the week
+	 */
+	public Integer getWeek() {
+		return week;
+	}
+
+	/**
+	 * @param week the week to set
+	 */
+	public void setWeek(Integer week) {
+		this.week = week;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(division, gameDate, gameTime, ncaaGameId, plays, season, teamAway, teamHome, valid, venue,
-				winner);
+				week, winner);
 	}
 
 	@Override
@@ -248,16 +246,15 @@ public class GamePojo {
 				&& Objects.equals(gameTime, other.gameTime) && Objects.equals(ncaaGameId, other.ncaaGameId)
 				&& Objects.equals(plays, other.plays) && Objects.equals(season, other.season)
 				&& Objects.equals(teamAway, other.teamAway) && Objects.equals(teamHome, other.teamHome)
-				&& valid == other.valid && Objects.equals(venue, other.venue) && winner == other.winner;
+				&& valid == other.valid && Objects.equals(venue, other.venue) && Objects.equals(week, other.week)
+				&& winner == other.winner;
 	}
 
 	@Override
 	public String toString() {
 		return "GamePojo [teamHome=" + teamHome + ", teamAway=" + teamAway + ", gameDate=" + gameDate + ", ncaaGameId="
 				+ ncaaGameId + ", gameTime=" + gameTime + ", division=" + division + ", season=" + season + ", winner="
-				+ winner + ", valid=" + valid + ", venue=" + venue + ", plays=" + plays + "]";
+				+ winner + ", valid=" + valid + ", venue=" + venue + ", plays=" + plays + ", week=" + week + "]";
 	}
-
-
 
 }

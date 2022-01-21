@@ -48,7 +48,7 @@ public class OidAuditEntity {
 	private Date updateTs;
 
 	public OidAuditEntity() {
-
+		// Base constructor
 	}
 
 	public String getOid() {

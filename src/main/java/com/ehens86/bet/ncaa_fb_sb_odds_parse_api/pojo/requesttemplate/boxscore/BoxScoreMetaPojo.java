@@ -1,6 +1,7 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.boxscore;
 
 import java.util.List;
+import java.util.Objects;
 
 public class BoxScoreMetaPojo {
     private String title;
@@ -15,23 +16,8 @@ public class BoxScoreMetaPojo {
     private List<BoxScoreTeamPojo> teams;
     
     public BoxScoreMetaPojo() {
-    	
+    	// Base constructor
     }
-
-	public BoxScoreMetaPojo(String title, String description, String sport, String division, String gametype,
-			String status, String period, String minutes, String seconds, List<BoxScoreTeamPojo> teams) {
-		super();
-		this.title = title;
-		this.description = description;
-		this.sport = sport;
-		this.division = division;
-		this.gametype = gametype;
-		this.status = status;
-		this.period = period;
-		this.minutes = minutes;
-		this.seconds = seconds;
-		this.teams = teams;
-	}
 
 	/**
 	 * @return the title
@@ -175,19 +161,7 @@ public class BoxScoreMetaPojo {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((division == null) ? 0 : division.hashCode());
-		result = prime * result + ((gametype == null) ? 0 : gametype.hashCode());
-		result = prime * result + ((minutes == null) ? 0 : minutes.hashCode());
-		result = prime * result + ((period == null) ? 0 : period.hashCode());
-		result = prime * result + ((seconds == null) ? 0 : seconds.hashCode());
-		result = prime * result + ((sport == null) ? 0 : sport.hashCode());
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result + ((teams == null) ? 0 : teams.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		return result;
+		return Objects.hash(description, division, gametype, minutes, period, seconds, sport, status, teams, title);
 	}
 
 	@Override
@@ -199,77 +173,11 @@ public class BoxScoreMetaPojo {
 			return false;
 		}
 		BoxScoreMetaPojo other = (BoxScoreMetaPojo) obj;
-		if (description == null) {
-			if (other.description != null) {
-				return false;
-			}
-		} else if (!description.equals(other.description)) {
-			return false;
-		}
-		if (division == null) {
-			if (other.division != null) {
-				return false;
-			}
-		} else if (!division.equals(other.division)) {
-			return false;
-		}
-		if (gametype == null) {
-			if (other.gametype != null) {
-				return false;
-			}
-		} else if (!gametype.equals(other.gametype)) {
-			return false;
-		}
-		if (minutes == null) {
-			if (other.minutes != null) {
-				return false;
-			}
-		} else if (!minutes.equals(other.minutes)) {
-			return false;
-		}
-		if (period == null) {
-			if (other.period != null) {
-				return false;
-			}
-		} else if (!period.equals(other.period)) {
-			return false;
-		}
-		if (seconds == null) {
-			if (other.seconds != null) {
-				return false;
-			}
-		} else if (!seconds.equals(other.seconds)) {
-			return false;
-		}
-		if (sport == null) {
-			if (other.sport != null) {
-				return false;
-			}
-		} else if (!sport.equals(other.sport)) {
-			return false;
-		}
-		if (status == null) {
-			if (other.status != null) {
-				return false;
-			}
-		} else if (!status.equals(other.status)) {
-			return false;
-		}
-		if (teams == null) {
-			if (other.teams != null) {
-				return false;
-			}
-		} else if (!teams.equals(other.teams)) {
-			return false;
-		}
-		if (title == null) {
-			if (other.title != null) {
-				return false;
-			}
-		} else if (!title.equals(other.title)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(description, other.description) && Objects.equals(division, other.division)
+				&& Objects.equals(gametype, other.gametype) && Objects.equals(minutes, other.minutes)
+				&& Objects.equals(period, other.period) && Objects.equals(seconds, other.seconds)
+				&& Objects.equals(sport, other.sport) && Objects.equals(status, other.status)
+				&& Objects.equals(teams, other.teams) && Objects.equals(title, other.title);
 	}
 
 	@Override

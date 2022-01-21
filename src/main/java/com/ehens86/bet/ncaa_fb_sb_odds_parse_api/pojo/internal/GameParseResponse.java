@@ -12,7 +12,7 @@ public class GameParseResponse {
 	private Integer gamesAdded;
 
 	public GameParseResponse() {
-
+		// Base constructor
 	}
 
 	/**

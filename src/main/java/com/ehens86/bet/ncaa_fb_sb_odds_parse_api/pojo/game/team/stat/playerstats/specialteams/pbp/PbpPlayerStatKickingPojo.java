@@ -23,20 +23,6 @@ public class PbpPlayerStatKickingPojo extends BaseStatKickingPojo {
 		super();
 	}
 
-	public PbpPlayerStatKickingPojo(Integer extraPointAttempt, Integer fieldGoalBlock, Integer fieldGoalYard,
-			Integer fieldGoalMiss, Integer extraPointBlock, Integer extraPointYard, Integer extraPointMiss,
-			KickMissReasonEnum kickMissReason) {
-		super();
-		this.extraPointAttempt = extraPointAttempt;
-		this.fieldGoalBlock = fieldGoalBlock;
-		this.fieldGoalYard = fieldGoalYard;
-		this.fieldGoalMiss = fieldGoalMiss;
-		this.extraPointBlock = extraPointBlock;
-		this.extraPointYard = extraPointYard;
-		this.extraPointMiss = extraPointMiss;
-		this.kickMissReason = kickMissReason;
-	}
-
 	/**
 	 * @return the fieldGoalBlock
 	 */

@@ -251,4 +251,17 @@ public class PbpPlayerStatSpecialTeamPojo {
 				.get(0);
 	}
 
+	public PbpPlayerStatPuntReturnPojo findPuntReturnerBlock() {
+		if (puntReturn.stream().filter(returner -> returner.getPuntReturn() == 1).collect(Collectors.toList())
+				.size() != 1) {
+			if (puntReturn.stream().filter(returner -> returner.getPuntReturnBlock() == 1).collect(Collectors.toList())
+					.size() == 1) {
+				return null;
+			} else {
+				throw new IllegalArgumentException("Number of returners != 1");
+			}
+		}
+		return puntReturn.stream().filter(returner -> returner.getPuntReturn() == 1).collect(Collectors.toList())
+				.get(0);
+	}
 }

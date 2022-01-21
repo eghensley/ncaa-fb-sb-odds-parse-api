@@ -1,5 +1,7 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.scoringsummary;
 
+import java.util.Objects;
+
 public class ScoringSummarySummaryPojo {
     private String teamId;
     private String time;
@@ -125,16 +127,7 @@ public class ScoringSummarySummaryPojo {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((driveText == null) ? 0 : driveText.hashCode());
-		result = prime * result + ((homeScore == null) ? 0 : homeScore.hashCode());
-		result = prime * result + ((scoreText == null) ? 0 : scoreText.hashCode());
-		result = prime * result + ((scoreType == null) ? 0 : scoreType.hashCode());
-		result = prime * result + ((teamId == null) ? 0 : teamId.hashCode());
-		result = prime * result + ((time == null) ? 0 : time.hashCode());
-		result = prime * result + ((visitingScore == null) ? 0 : visitingScore.hashCode());
-		return result;
+		return Objects.hash(driveText, homeScore, scoreText, scoreType, teamId, time, visitingScore);
 	}
 
 	@Override
@@ -146,56 +139,10 @@ public class ScoringSummarySummaryPojo {
 			return false;
 		}
 		ScoringSummarySummaryPojo other = (ScoringSummarySummaryPojo) obj;
-		if (driveText == null) {
-			if (other.driveText != null) {
-				return false;
-			}
-		} else if (!driveText.equals(other.driveText)) {
-			return false;
-		}
-		if (homeScore == null) {
-			if (other.homeScore != null) {
-				return false;
-			}
-		} else if (!homeScore.equals(other.homeScore)) {
-			return false;
-		}
-		if (scoreText == null) {
-			if (other.scoreText != null) {
-				return false;
-			}
-		} else if (!scoreText.equals(other.scoreText)) {
-			return false;
-		}
-		if (scoreType == null) {
-			if (other.scoreType != null) {
-				return false;
-			}
-		} else if (!scoreType.equals(other.scoreType)) {
-			return false;
-		}
-		if (teamId == null) {
-			if (other.teamId != null) {
-				return false;
-			}
-		} else if (!teamId.equals(other.teamId)) {
-			return false;
-		}
-		if (time == null) {
-			if (other.time != null) {
-				return false;
-			}
-		} else if (!time.equals(other.time)) {
-			return false;
-		}
-		if (visitingScore == null) {
-			if (other.visitingScore != null) {
-				return false;
-			}
-		} else if (!visitingScore.equals(other.visitingScore)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(driveText, other.driveText) && Objects.equals(homeScore, other.homeScore)
+				&& Objects.equals(scoreText, other.scoreText) && Objects.equals(scoreType, other.scoreType)
+				&& Objects.equals(teamId, other.teamId) && Objects.equals(time, other.time)
+				&& Objects.equals(visitingScore, other.visitingScore);
 	}
 
 	@Override

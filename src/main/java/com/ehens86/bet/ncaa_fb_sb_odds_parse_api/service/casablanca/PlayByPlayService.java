@@ -9,9 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.ThreadContext;
-import org.springframework.stereotype.Service;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.constants.NcaaConstants;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.DriveResultEnum;
@@ -27,6 +25,8 @@ import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.plays.DrivePojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.plays.PbpPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.plays.PlayPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.PbpPlayerStatPojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerstats.PlayerStatPenaltyPojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.pbp.GameMapPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.pbp.PbpServiceRequestPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.pbp.drive.DriveTimesPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.pbp.drive.HomeAwayScoreMeta;
@@ -47,16 +47,15 @@ import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service.casablanca.pbp.PbpPenal
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service.casablanca.pbp.PbpPuntParseService;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service.casablanca.pbp.PbpRushParseService;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service.casablanca.pbp.PbpValidateService;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service.casablanca.pbp.validate.DriveValidationService;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils.LoggingUtils;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils.PbpParsingUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Service
-public class PlayByPlayService {
+public final class PlayByPlayService {
+	private static final String KICKOFF_DRIVE_NUMBER_S = "Kickoff Drive Number: %s";
+
 	private static final String DRIVE_END_TIME_S = "Drive End Time: %s";
-
-	private static final String LAST_DRIVE_END_YARDLINE_S_DRIVE_START_YARDLINE_S = "Last drive end yardline: %s | Drive start yardline: %s";
-
-	private static final String DRIVES_GET_D_1_GET_DRIVE_END_YARDLINE_EQUALS_DRIVES_GET_D_GET_DRIVE_START_YARDLINE = "!drives.get(d-1).getDriveEndYardline().equals(drives.get(d).getDriveStartYardline())";
 
 	private static final String STARTING_S = " -- Starting [%s]";
 
@@ -68,43 +67,23 @@ public class PlayByPlayService {
 
 	private static final String QUARTER_START = "15:00";
 
-	private final PbpKickoffParseService pbpKickoffParse;
-	private final PbpParsingUtils pbpParsingUtils;
-	private final PbpPassParseService pbpPassParse;
-	private final PbpRushParseService pbpRushParse;
-	private final PbpPuntParseService pbpPuntParse;
-	private final PbpDefenseParseService pbpDefenseParse;
-	private final PbpOffenseParseService pbpOffenseParse;
-	private final PbpFieldGoalParseService pbpFieldGoalParse;
-	private final PbpValidateService pbpValidateService;
-	private final PbpPenaltyParseService pbpPenaltyParse;
-	private final LoggingUtils loggingUtils;
-
-	public PlayByPlayService(PbpKickoffParseService pbpKickoffParse, PbpParsingUtils pbpParsingUtils,
-			PbpPassParseService pbpPassParse, PbpRushParseService pbpRushParse, PbpPuntParseService pbpPuntParse,
-			PbpDefenseParseService pbpDefenseParse, PbpOffenseParseService pbpOffenseParse,
-			PbpValidateService pbpValidateService, PbpFieldGoalParseService pbpFieldGoalParse,
-			PbpPenaltyParseService pbpPenaltyParse, LoggingUtils loggingUtils) {
-		this.pbpKickoffParse = pbpKickoffParse;
-		this.pbpPuntParse = pbpPuntParse;
-		this.pbpParsingUtils = pbpParsingUtils;
-		this.pbpPassParse = pbpPassParse;
-		this.pbpRushParse = pbpRushParse;
-		this.pbpDefenseParse = pbpDefenseParse;
-		this.pbpOffenseParse = pbpOffenseParse;
-		this.pbpValidateService = pbpValidateService;
-		this.pbpFieldGoalParse = pbpFieldGoalParse;
-		this.pbpPenaltyParse = pbpPenaltyParse;
-		this.loggingUtils = loggingUtils;
+	// private static static constructor to prevent instantiation
+	private PlayByPlayService() {
+		throw new UnsupportedOperationException();
 	}
 
-	public void parsePbP(PlayByPlayPojo playByPlayRaw, GamePojo game) {
+	public static void parsePbP(PlayByPlayPojo playByPlayRaw, GamePojo game) {
 		try {
 
 			if ("5851600".equals(game.getNcaaGameId()) || "5851699".equals(game.getNcaaGameId())) {
 				return;
 			}
 
+			ObjectMapper objectMapper = new ObjectMapper();
+			String json = objectMapper.writeValueAsString(playByPlayRaw);
+			System.out.println(json);
+			String jsonGame = objectMapper.writeValueAsString(game);
+			System.out.println(jsonGame);
 			HashMap<String, HomeAwayEnum> teamDict = new HashMap<>();
 			HashMap<String, PlayByPlayTeamPojo> teamAbbrevDict = new HashMap<>();
 
@@ -112,13 +91,13 @@ public class PlayByPlayService {
 				teamDict.put(gameTeam.getId(), gameTeam.pullHomeAwayEnum());
 				teamAbbrevDict.put(gameTeam.getId(), gameTeam);
 			}
-			List<List<PbpServiceRequestPojo>> gameInfo = driveFirstPassParse(playByPlayRaw, game, teamDict,
-					teamAbbrevDict);
+			GameMapPojo gameMaps = new GameMapPojo(teamDict, teamAbbrevDict);
+			List<List<PbpServiceRequestPojo>> gameInfo = driveFirstPassParse(playByPlayRaw, game, gameMaps);
 
 			/**
 			 * Split TD/Extra Point into 2 plays where needed
 			 */
-			splitTdExtraPointPlays(gameInfo, teamDict, teamAbbrevDict);
+			splitTdExtraPointPlays(gameInfo, gameMaps);
 
 			/**
 			 * Set kickoff indexes
@@ -138,6 +117,11 @@ public class PlayByPlayService {
 			 * Send for processing
 			 */
 			sendPlaysForProcessing(gameInfo);
+
+			/**
+			 * Set punt turnover indexes
+			 */
+			splitPuntTurnoverToNewDrive(gameInfo);
 
 			/**
 			 * Combine drives split across quarters
@@ -179,7 +163,7 @@ public class PlayByPlayService {
 			/**
 			 * Validate Drives
 			 */
-			validateDrives(drives);
+			DriveValidationService.validateDrives(drives);
 
 			PbpPojo gamePlays = new PbpPojo();
 			gamePlays.setDrives(drives);
@@ -187,7 +171,7 @@ public class PlayByPlayService {
 		} catch (Exception e) {
 			String errorStr = String.format("ERROR: PBP parse failed for %s vs %s with %s",
 					game.getTeamHome().getTeamName(), game.getTeamAway().getTeamName(), e.toString());
-			loggingUtils.logException(e, errorStr);
+			LoggingUtils.logException(e, errorStr);
 			throw new IllegalArgumentException(errorStr);
 		}
 	}
@@ -195,43 +179,71 @@ public class PlayByPlayService {
 	/**
 	 * Split TD/Extra Point into 2 plays where needed
 	 */
-	private void splitTdExtraPointPlays(List<List<PbpServiceRequestPojo>> gameInfo,
-			HashMap<String, HomeAwayEnum> teamDict, HashMap<String, PlayByPlayTeamPojo> teamAbbrevDict) {
+	private static void splitTdExtraPointPlays(List<List<PbpServiceRequestPojo>> gameInfo, GameMapPojo gameMaps) {
 		try {
 
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String methodStartInfo = String.format(STARTING_S, ste[1].getMethodName());
-			loggingUtils.logInfo(methodStartInfo);
+			LoggingUtils.logInfo(methodStartInfo);
 
 			for (int d = 0; d < gameInfo.size(); d++) {
 				List<PbpServiceRequestPojo> drive = gameInfo.get(d);
 				for (int p = 0; p < drive.size(); p++) {
 					PbpServiceRequestPojo play = drive.get(p);
-					if (play.getPlayRawText().contains("TOUCHDOWN")) {
+
+					if (PbpParsingUtils.evalMatch(play.getPlayRawText(),
+							"The previous play is under review. The ruling on the field (stands|is confirmed)")) {
+						String newRawText = play.getPlayRawText().split("The previous play is under review")[0];
+						newRawText = newRawText.strip();
+						newRawText = newRawText.replaceAll(".$", "");
+						play.setPlayRawText(newRawText);
+					} else if (PbpParsingUtils.evalMatch(play.getPlayRawText(),
+							"After review, the ruling on the field was overturned")) {
+						String newRawText = play.getPlayRawText()
+								.split("After review, the ruling on the field was overturned")[0];
+						newRawText = newRawText.strip();
+						newRawText = newRawText.replaceAll(".$", "");
+						play.setPlayRawText(newRawText);
+					} else if (PbpParsingUtils.evalMatch(play.getPlayRawText(),
+							"\\(After review, play stands as called on the field\\)")) {
+						String newRawText = play.getPlayRawText()
+								.split("(After review, play stands as called on the field)")[0];
+						newRawText = newRawText.strip();
+						newRawText = newRawText.replaceAll(".$", "");
+						play.setPlayRawText(newRawText);
+					} else if (play.getPlayRawText().contains("TOUCHDOWN")
+							&& !play.getPlayRawText().contains("score nullified")) {
 						String newRawText = play.getPlayRawText().split("TOUCHDOWN")[1];
 						newRawText = newRawText.replaceAll("^,", "");
 						newRawText = newRawText.replace(" clock ", "");
 						newRawText = newRawText.strip();
 						newRawText = newRawText.replaceAll("^,", "");
 						newRawText = newRawText.strip();
-						if (!newRawText.isEmpty()) {
-							newRawText = cleanUpPlayText(newRawText, teamAbbrevDict, play.getPossessionTeam(),
-									play.getDefenseTeam());
-							String[] playTackles = pbpParsingUtils.extractTackle(newRawText);
+						newRawText = newRawText.replace("(Scoring play confirmed)", "");
+						newRawText = newRawText.strip();
+						newRawText = newRawText.replaceAll("1ST DOWN$", "");
+						newRawText = newRawText.strip();
+						Integer newRawTextWordCount = newRawText.split(" ").length;
+						if (!newRawText.isEmpty() && newRawTextWordCount > 1) {
+							newRawText = cleanUpPlayText(newRawText, play.getPossessionTeam(), play.getDefenseTeam(),
+									gameMaps);
+							String[] playTackles = PbpParsingUtils.extractTackle(newRawText);
 
 							PlayPojo newPlay = initializePlay(play.getPlay().getPeriod(), newRawText,
-									play.getPlay().getDriveText().replace("AMP;", ""), teamDict,
-									play.getPlay().getPlayResult().getPlayResultPossessionTeamId());
+									play.getPlay().getDriveText().replace("AMP;", ""),
+									play.getPlay().getPlayResult().getPlayResultPossessionTeamId(), gameMaps);
 
 							PbpServiceRequestPojo newServiceRequest = new PbpServiceRequestPojo(
 									new DrivePojo(play.getDrive().getPossessionTeamId(),
 											play.getDrive().getDriveStartPeriod(), play.getDrive().getDriveStartTime(),
 											play.getDrive().getDriveEndTime()),
-									newPlay, play.getPlayRaw(), newRawText, playTackles, teamDict, teamAbbrevDict,
-									play.getPossessionTeam(), play.getDefenseTeam());
+									newPlay, play.getPlayRaw(), newRawText, playTackles, gameMaps.getTeamDict(),
+									gameMaps.getTeamAbbrevDict());
+							newServiceRequest.setPossessionTeam(play.getPossessionTeam());
+							newServiceRequest.setDefenseTeam(play.getDefenseTeam());
 							cleanUpPlay(newServiceRequest);
 							addEndYard(newServiceRequest);
-							pbpPenaltyParse.parsePenalty(newServiceRequest);
+							PbpPenaltyParseService.parsePenalty(newServiceRequest);
 							newServiceRequest.getPlay().getPlayResult().setPlayResultPossessionTeamId(
 									newServiceRequest.getPlay().getPlayStartPossessionTeamId());
 							gameInfo.get(d).add(p + 1, newServiceRequest);
@@ -241,22 +253,21 @@ public class PlayByPlayService {
 				}
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 		}
 	}
 
 	/**
-	 * Set kickoff indexes
+	 * Set punt turnover indexes
 	 */
-	private void splitKickoffToNewDrive(List<List<PbpServiceRequestPojo>> gameInfo) {
+	private static void splitPuntTurnoverToNewDrive(List<List<PbpServiceRequestPojo>> gameInfo) {
 		try {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String methodStartInfo = String.format(STARTING_S, ste[1].getMethodName());
-			loggingUtils.logInfo(methodStartInfo);
+			LoggingUtils.logInfo(methodStartInfo);
 
-			HashMap<Integer, List<Integer>> kickoffIndexes = new HashMap<>();
+			HashMap<Integer, List<Integer>> puntIndexes = new HashMap<>();
 			HashMap<Integer, Integer> driveLengths = new HashMap<>();
-			EnumMap<PlayPeriodEnum, Integer> drivePeriods = new EnumMap<>(PlayPeriodEnum.class);
 			Integer drivesInGame = gameInfo.size();
 			for (int d = 0; d < drivesInGame; d++) {
 				List<PbpServiceRequestPojo> drive = gameInfo.get(d);
@@ -265,10 +276,107 @@ public class PlayByPlayService {
 				driveLengths.put(d, playsInPossession);
 				for (int p = 0; p < playsInPossession; p++) {
 					PbpServiceRequestPojo play = drive.get(p);
-					if (!drivePeriods.containsKey(play.getDrive().getDriveStartPeriod())) {
-						drivePeriods.put(play.getDrive().getDriveStartPeriod(), d);
+					if (PlayTypeEnum.PUNT.equals(play.getPlay().getPlayType())
+							&& Boolean.TRUE.equals(play.getPlay().getPlayResult().isPlayResultTurnover())) {
+						if (!puntIndexes.containsKey(d)) {
+							List<Integer> puntList = new ArrayList<>();
+							puntList.add(p);
+							puntIndexes.put(d, puntList);
+						} else {
+							puntIndexes.get(d).add(p);
+						}
 					}
-					if (play.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
+				}
+			}
+			applyNewPuntTurnoverIndexes(gameInfo, driveLengths, puntIndexes);
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
+
+		}
+	}
+
+	/**
+	 * Split punt turnovers to seperate drives
+	 */
+	private static void applyNewPuntTurnoverIndexes(List<List<PbpServiceRequestPojo>> gameInfo,
+			HashMap<Integer, Integer> driveLengths, HashMap<Integer, List<Integer>> puntIndexes) {
+		try {
+			List<Integer> puntDrives = new ArrayList<>(puntIndexes.keySet());
+			Collections.sort(puntDrives);
+			Collections.reverse(puntDrives);
+			for (Integer puntDriveIndex : puntDrives) {
+				if (puntIndexes.get(puntDriveIndex).size() > 1) {
+					String puntDriveInfo = String.format("Punt Drive Number: %s", puntDriveIndex);
+					LoggingUtils.logInfo(puntDriveInfo);
+					String logInfo = String.format("Number of punts found in drive: %s",
+							puntIndexes.get(puntDriveIndex).size());
+					LoggingUtils.logInfo(logInfo);
+					throw new IllegalArgumentException("handle multiple punts in a drive");
+				}
+
+				if (driveLengths.get(puntDriveIndex) > 3) {
+					Integer puntTurnoverPlayInDrive = puntIndexes.get(puntDriveIndex).get(0);
+					Integer lastPlayInDrive = driveLengths.get(puntDriveIndex);
+					Integer splitTimeEnd = (int) gameInfo.get(puntDriveIndex).get(lastPlayInDrive - 1).getDrive()
+							.getDriveEndTime();
+					Integer splitTimeStart = (int) gameInfo.get(puntDriveIndex).get(0).getDrive().getDriveStartTime();
+
+					List<PbpServiceRequestPojo> newPuntDrive = new ArrayList<>();
+					for (int p = puntTurnoverPlayInDrive + 1; p < lastPlayInDrive; p++) {
+						PbpServiceRequestPojo playNewDrive = gameInfo.get(puntDriveIndex).get(p);
+						playNewDrive.getDrive().setDriveEndTime(splitTimeEnd);
+						playNewDrive.getDrive().setDriveStartTime(splitTimeEnd);
+						newPuntDrive.add(playNewDrive);
+					}
+
+					gameInfo.add(puntDriveIndex + 1, newPuntDrive);
+
+					List<PbpServiceRequestPojo> oldPuntDrive = gameInfo.get(puntDriveIndex);
+					for (int p = lastPlayInDrive - 1; p >= puntTurnoverPlayInDrive + 1; p--) {
+						oldPuntDrive.remove(p);
+					}
+
+					for (PbpServiceRequestPojo oldPuntPlay : oldPuntDrive) {
+						oldPuntPlay.getDrive().setDriveEndTime(splitTimeEnd);
+						oldPuntPlay.getDrive().setDriveStartTime(splitTimeStart);
+					}
+					gameInfo.set(puntDriveIndex, oldPuntDrive);
+				} else {
+					String puntDriveInfo = String.format("Punt Drive Number: %s", puntDriveIndex);
+					LoggingUtils.logInfo(puntDriveInfo);
+					String logInfo = String.format("Number of plays found after punt turnover in drive: %s",
+							driveLengths.get(puntDriveIndex));
+					LoggingUtils.logInfo(logInfo);
+					throw new IllegalArgumentException("handle punt turnover without additional play drives");
+				}
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
+		}
+	}
+
+	/**
+	 * Set kickoff indexes
+	 */
+	private static void splitKickoffToNewDrive(List<List<PbpServiceRequestPojo>> gameInfo) {
+		try {
+			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			String methodStartInfo = String.format(STARTING_S, ste[1].getMethodName());
+			LoggingUtils.logInfo(methodStartInfo);
+
+			HashMap<Integer, List<Integer>> kickoffIndexes = new HashMap<>();
+			HashMap<Integer, List<Integer>> penaltyIndexes = new HashMap<>();
+
+			HashMap<Integer, Integer> driveLengths = new HashMap<>();
+			Integer drivesInGame = gameInfo.size();
+			for (int d = 0; d < drivesInGame; d++) {
+				List<PbpServiceRequestPojo> drive = gameInfo.get(d);
+
+				Integer playsInPossession = drive.size();
+				driveLengths.put(d, playsInPossession);
+				for (int p = 0; p < playsInPossession; p++) {
+					PbpServiceRequestPojo play = drive.get(p);
+					if (PlayCallTypeEnum.KICKOFF.equals(play.getPlay().getPlayCallType())) {
 						if (!kickoffIndexes.containsKey(d)) {
 							List<Integer> kickoffList = new ArrayList<>();
 							kickoffList.add(p);
@@ -276,12 +384,21 @@ public class PlayByPlayService {
 						} else {
 							kickoffIndexes.get(d).add(p);
 						}
+						if (p > 0 && PlayTypeEnum.PENALTY.equals(drive.get(p - 1).getPlay().getPlayType())) {
+							if (!penaltyIndexes.containsKey(d)) {
+								List<Integer> penaltyList = new ArrayList<>();
+								penaltyList.add(p - 1);
+								penaltyIndexes.put(d, penaltyList);
+							} else {
+								penaltyIndexes.get(d).add(p - 1);
+							}
+						}
 					}
 				}
 			}
-			applyNewKickoffIndexes(gameInfo, driveLengths, kickoffIndexes);
+			applyNewKickoffIndexes(gameInfo, driveLengths, kickoffIndexes, penaltyIndexes);
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
@@ -289,19 +406,20 @@ public class PlayByPlayService {
 	/**
 	 * Split kickoffs to seperate drives
 	 */
-	private void applyNewKickoffIndexes(List<List<PbpServiceRequestPojo>> gameInfo,
-			HashMap<Integer, Integer> driveLengths, HashMap<Integer, List<Integer>> kickoffIndexes) {
+	private static void applyNewKickoffIndexes(List<List<PbpServiceRequestPojo>> gameInfo,
+			HashMap<Integer, Integer> driveLengths, HashMap<Integer, List<Integer>> kickoffIndexes,
+			HashMap<Integer, List<Integer>> penaltyIndexes) {
 		try {
 			List<Integer> kickoffDrives = new ArrayList<>(kickoffIndexes.keySet());
 			Collections.sort(kickoffDrives);
 			Collections.reverse(kickoffDrives);
 			for (Integer kickoffDriveIndex : kickoffDrives) {
 				if (kickoffIndexes.get(kickoffDriveIndex).size() > 1) {
-					String kickoffDriveInfo = String.format("Kickoff Drive Number: %s", kickoffDriveIndex);
-					loggingUtils.logInfo(kickoffDriveInfo);
+					String kickoffDriveInfo = String.format(KICKOFF_DRIVE_NUMBER_S, kickoffDriveIndex);
+					LoggingUtils.logInfo(kickoffDriveInfo);
 					String logInfo = String.format("Number of kickoffs found in drive: %s",
 							kickoffIndexes.get(kickoffDriveIndex).size());
-					loggingUtils.logInfo(logInfo);
+					LoggingUtils.logInfo(logInfo);
 					throw new IllegalArgumentException("handle multiple kickoffs in a drive");
 				}
 
@@ -309,15 +427,41 @@ public class PlayByPlayService {
 					List<PbpServiceRequestPojo> newKickoffDrive = new ArrayList<>();
 					newKickoffDrive
 							.add(gameInfo.get(kickoffDriveIndex).get(kickoffIndexes.get(kickoffDriveIndex).get(0)));
-					gameInfo.add(kickoffDriveIndex + 1, newKickoffDrive);
 					List<PbpServiceRequestPojo> oldKickoffDrive = gameInfo.get(kickoffDriveIndex);
 					oldKickoffDrive.remove((int) kickoffIndexes.get(kickoffDriveIndex).get(0));
-					gameInfo.set((int) kickoffDriveIndex, oldKickoffDrive);
+					if (penaltyIndexes.containsKey(kickoffDriveIndex)) {
+						if (penaltyIndexes.get(kickoffDriveIndex).size() > 1) {
+							String penaltyDriveInfo = String.format(KICKOFF_DRIVE_NUMBER_S, kickoffDriveIndex);
+							LoggingUtils.logInfo(penaltyDriveInfo);
+							String logInfo = String.format("Number of penalties found in drive after PAT: %s",
+									penaltyIndexes.get(kickoffDriveIndex).size());
+							LoggingUtils.logInfo(logInfo);
+							throw new IllegalArgumentException("handle multiple penalties in a drive after PAT");
+						}
+						if (penaltyIndexes.get(kickoffDriveIndex).get(0) + 1 != kickoffIndexes.get(kickoffDriveIndex)
+								.get(0)) {
+							String penaltyDriveInfo = String.format(KICKOFF_DRIVE_NUMBER_S, kickoffDriveIndex);
+							LoggingUtils.logInfo(penaltyDriveInfo);
+							String logInfo = String.format(
+									"Penalty is play %s in drive which is not directly before kickoff at play %s",
+									penaltyIndexes.get(kickoffDriveIndex).get(0),
+									kickoffIndexes.get(kickoffDriveIndex).get(0));
+							LoggingUtils.logInfo(logInfo);
+							throw new IllegalArgumentException(
+									"Handle penalty after PAT but not directly before kickoff");
+						}
+						newKickoffDrive.add(0,
+								gameInfo.get(kickoffDriveIndex).get(penaltyIndexes.get(kickoffDriveIndex).get(0)));
+						newKickoffDrive.get(0).setKickoffTeam(newKickoffDrive.get(1).getDefenseTeam());
+						newKickoffDrive.get(0).setKickoffReturnTeam(newKickoffDrive.get(1).getPossessionTeam());
+						oldKickoffDrive.remove((int) penaltyIndexes.get(kickoffDriveIndex).get(0));
+					}
+					gameInfo.add(kickoffDriveIndex + 1, newKickoffDrive);
+					gameInfo.set(kickoffDriveIndex, oldKickoffDrive);
 				}
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
-
+			LoggingUtils.logException(e, e.toString());
 		}
 	}
 
@@ -325,12 +469,12 @@ public class PlayByPlayService {
 	 * Rollforward end yardline to fill in start yard where missing. addTempoType()
 	 * cleanUpYards()
 	 */
-	private void rollforwardEndYardLine(List<List<PbpServiceRequestPojo>> gameInfo) {
+	private static void rollforwardEndYardLine(List<List<PbpServiceRequestPojo>> gameInfo) {
 		try {
 
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String methodStartInfo = String.format(STARTING_S, ste[1].getMethodName());
-			loggingUtils.logInfo(methodStartInfo);
+			LoggingUtils.logInfo(methodStartInfo);
 
 			Integer drivesInGame = gameInfo.size();
 			RollforwardLastPlayPojo rollforwardInfo = new RollforwardLastPlayPojo();
@@ -343,7 +487,7 @@ public class PlayByPlayService {
 				}
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
@@ -352,21 +496,23 @@ public class PlayByPlayService {
 	 * Rollforward end yardline to fill in start yard where missing. addTempoType()
 	 * cleanUpYards()
 	 */
-	private void rollforwardEndYardLinePlayHelper(PbpServiceRequestPojo play, RollforwardLastPlayPojo rollforwardInfo) {
+	private static void rollforwardEndYardLinePlayHelper(PbpServiceRequestPojo play,
+			RollforwardLastPlayPojo rollforwardInfo) {
 		try {
 			if (play.getPlayRawText().isEmpty()) {
 				String logInfo = String.format("Play Down & Distance: %s", play.getPlay().getDriveText());
-				loggingUtils.logInfo(logInfo);
+				LoggingUtils.logInfo(logInfo);
 				throw new IllegalArgumentException("play raw text is empty");
 			}
-			if (play.getPlay().getPlayType() != PlayTypeEnum.KICKOFF
+			if (!PlayTypeEnum.KICKOFF.equals(play.getPlay().getPlayType())
 					&& Objects.nonNull(play.getPlay().getPlayStartYard())) {
 				play.getPlay().setPlayStartYard(rollforwardInfo.getLastPlayEndYardLine());
 			}
-			if (play.getPlay().getPlayType() != PlayTypeEnum.PAT && play.getPlay().getDriveText().endsWith("at -")) {
+			if (!PlayTypeEnum.PAT.equals(play.getPlay().getPlayType())
+					&& play.getPlay().getDriveText().endsWith("at -")) {
 				if (Objects.isNull(rollforwardInfo.getLastDriveText())) {
 					String logInfo = String.format("Play text: %s", play.getPlayRawText());
-					loggingUtils.logInfo(logInfo);
+					LoggingUtils.logInfo(logInfo);
 					throw new IllegalArgumentException("missing needed down & distance text from prior play");
 				}
 				play.getPlay().setDriveText(
@@ -381,7 +527,7 @@ public class PlayByPlayService {
 			addTempoType(play);
 			cleanUpYards(play);
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
@@ -389,11 +535,11 @@ public class PlayByPlayService {
 	/**
 	 * Send for processing
 	 */
-	private void sendPlaysForProcessing(List<List<PbpServiceRequestPojo>> gameInfo) {
+	private static void sendPlaysForProcessing(List<List<PbpServiceRequestPojo>> gameInfo) {
 		try {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String methodStartInfo = String.format(STARTING_S, ste[1].getMethodName());
-			loggingUtils.logInfo(methodStartInfo);
+			LoggingUtils.logInfo(methodStartInfo);
 
 			Integer drivesInGame = gameInfo.size();
 
@@ -402,7 +548,6 @@ public class PlayByPlayService {
 				List<PbpServiceRequestPojo> drive = gameInfo.get(d);
 				Integer playsInPossession = drive.size();
 				for (int p = 0; p < playsInPossession; p++) {
-					boolean updated = false;
 					PbpServiceRequestPojo play = drive.get(p);
 
 					play.getPlay().setPlayStartHomeScore(homeAwayScoreMeta.getHomeScore());
@@ -410,173 +555,248 @@ public class PlayByPlayService {
 
 					if (NcaaConstants.CONTEXT_DEBUG_VALUE_TRUE
 							.equals(ThreadContext.get(NcaaConstants.CONTEXT_DEBUG_KEY))) {
-						loggingUtils.logInfo("----------------------------");
-						loggingUtils.logInfo(String.format("Play Text: %s", play.getPlayRawText()));
-						loggingUtils.logInfo(String.format("Play Type: %s", play.getPlay().getPlayType()));
-						loggingUtils.logInfo(String.format("Play Call Type: %s", play.getPlay().getPlayCallType()));
+						LoggingUtils.logInfo("----------------------------");
+						LoggingUtils.logInfo(String.format("Play Text: %s", play.getPlayRawText()));
+						LoggingUtils.logInfo(String.format("Play Type: %s", play.getPlay().getPlayType()));
+						LoggingUtils.logInfo(String.format("Play Call Type: %s", play.getPlay().getPlayCallType()));
 					}
-					if (Boolean.FALSE.equals(play.getPlay().getNoPlayPenalty())) {
-						updated = pbpKickoffParse.parseKickoff(play, updated);
-						updated = pbpPuntParse.parsePunt(play, updated);
-						updated = pbpFieldGoalParse.parseFieldGoal(play, updated);
-						updated = pbpPassParse.parsePass(play, updated);
-						updated = pbpRushParse.parseRush(play, updated);
-						pbpDefenseParse.parseDefense(play);
-						pbpOffenseParse.parseOffense(play);
-					}
-
-					postProcessingApplyPlayScore(play, homeAwayScoreMeta);
-					Integer scoreDiff = homeAwayScoreMeta.calcAbsScoreDiff();
-					if ((PlayPeriodEnum.SECOND.equals(play.getPlay().getPeriod()) && scoreDiff > 38)
-							|| (PlayPeriodEnum.THIRD.equals(play.getPlay().getPeriod()) && scoreDiff > 28)
-							|| (PlayPeriodEnum.FOURTH.equals(play.getPlay().getPeriod()) && scoreDiff > 22)) {
-						play.getPlay().setGarbageTime(true);
-					} else {
-						play.getPlay().setGarbageTime(false);
-					}
-					addStartYard(play);
-
-					if (!PlayTypeEnum.KICKOFF.equals(play.getPlay().getPlayType())
-							&& !PlayTypeEnum.PAT.equals(play.getPlay().getPlayType())) {
-						if (play.getPlay().getPlayStartYard() <= 20) {
-							play.getPlay().setPlayFieldZone(FieldZoneEnum.DEEP);
-						} else if (play.getPlay().getPlayStartYard() <= 39) {
-							play.getPlay().setPlayFieldZone(FieldZoneEnum.BACK);
-						} else if (play.getPlay().getPlayStartYard() <= 60) {
-							play.getPlay().setPlayFieldZone(FieldZoneEnum.MID);
-						} else if (play.getPlay().getPlayStartYard() <= 81) {
-							play.getPlay().setPlayFieldZone(FieldZoneEnum.FRONT);
-						} else {
-							play.getPlay().setPlayFieldZone(FieldZoneEnum.RED);
-						}
-
-						if (!PlayTypeEnum.PUNT.equals(play.getPlay().getPlayType())) {
-							Integer yardToGain = play.getPlay().getPlayYardToGain();
-							PlayDownEnum playDown = play.getPlay().getPlayStartDown();
-							Integer yardGained = play.getPlay().getPlayResult().getPlayResultYard();
-							boolean firstDown = play.getPlay().getPlayResult().isPlayResultFirstDown();
-							Integer playPoints = play.getPlay().getPlayResult().getPlayResultPoints();
-
-							if (PlayDownEnum.SECOND.equals(playDown) && yardToGain >= 7) {
-								play.getPlay().setPassingDown(true);
-							} else if (PlayDownEnum.THIRD.equals(playDown) && yardToGain >= 5) {
-								play.getPlay().setPassingDown(true);
-							} else if (PlayDownEnum.FOURTH.equals(playDown) && yardToGain >= 5) {
-								play.getPlay().setPassingDown(true);
-							} else {
-								play.getPlay().setPassingDown(false);
-							}
-
-							if (playPoints == 6) {
-								play.getPlay().getPlayResult().setPlayResultSuccess(true);
-							} else if (firstDown) {
-								play.getPlay().getPlayResult().setPlayResultSuccess(true);
-							} else if (PlayDownEnum.FIRST.equals(playDown) && yardGained >= yardToGain / 2) {
-								play.getPlay().getPlayResult().setPlayResultSuccess(true);
-							} else if (PlayDownEnum.SECOND.equals(playDown) && yardGained >= yardToGain * .7) {
-								play.getPlay().getPlayResult().setPlayResultSuccess(true);
-							} else {
-								play.getPlay().getPlayResult().setPlayResultSuccess(false);
-							}
-
-							if (PlayCallTypeEnum.RUN.equals(play.getPlay().getPlayCallType())) {
-								boolean rushingPower = false;
-								Boolean rushingPowerSuccess = null;
-
-								if (play.getPlay().getPlayStartYard() >= 98) {
-									rushingPower = true;
-								} else if (play.getPlay().getPlayYardToGain() <= 2
-										&& (PlayDownEnum.THIRD.equals(play.getPlay().getPlayStartDown())
-												|| PlayDownEnum.FOURTH.equals(play.getPlay().getPlayStartDown()))) {
-									rushingPower = true;
-								}
-
-								if (Boolean.TRUE.equals(rushingPower)) {
-									if (play.getPlay().getPlayerStat().get(play.getPossessionTeam()).getOffense()
-											.getRushingStat().get(0).getRushingFirstDown() == 1
-											|| play.getPlay().getPlayerStat().get(play.getPossessionTeam()).getOffense()
-													.getRushingStat().get(0).getRushingTouchdown() == 1) {
-										rushingPowerSuccess = true;
-									} else {
-										rushingPowerSuccess = false;
-									}
-								}
-
-								play.getPlay().getPlayerStat().get(play.getPossessionTeam()).getOffense()
-										.getRushingStat().get(0).setRushingPower(rushingPower);
-								play.getPlay().getPlayerStat().get(play.getPossessionTeam()).getOffense()
-										.getRushingStat().get(0).setRushingPowerSuccess(rushingPowerSuccess);
-								play.getPlay().getPlayerStat().get(play.getPossessionTeam()).getOffense()
-										.getRushingStat().get(0)
-										.setRushingSuccess(play.getPlay().getPlayResult().getPlayResultSuccess());
-							}
-
-							if (yardGained < 0) {
-								play.getPlay().setDefeat(true);
-							} else if (Boolean.TRUE.equals(play.getPlay().getPlayResult().isPlayResultTurnover())) {
-								play.getPlay().setDefeat(true);
-							} else if (PlayDownEnum.THIRD.equals(playDown) && !firstDown) {
-								play.getPlay().setDefeat(true);
-							} else if (PlayDownEnum.FOURTH.equals(playDown) && !firstDown) {
-								play.getPlay().setDefeat(true);
-							} else {
-								play.getPlay().setDefeat(false);
-							}
-
-						}
-					}
-
+					boolean updated = sendPlaysForProcessingHelperProcess(play);
+					sendPlaysForProcessingPostProcessingHelper(play, homeAwayScoreMeta);
 					if (!updated && Boolean.FALSE.equals(play.getPlay().getNoPlayPenalty())) {
 						String logInfo = String.format("Play Text: %s", play.getPlayRawText());
-						loggingUtils.logInfo(logInfo);
+						LoggingUtils.logInfo(logInfo);
 						throw new IllegalArgumentException("Play matched no conditions to enter processing.");
 					}
+
 				}
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
+		}
+	}
+
+	private static boolean sendPlaysForProcessingHelperProcess(PbpServiceRequestPojo play) {
+		boolean updated = false;
+		try {
+			if (Boolean.FALSE.equals(play.getPlay().getNoPlayPenalty())) {
+				updated = PbpKickoffParseService.parseKickoff(play, updated);
+				updated = PbpPuntParseService.parsePunt(play, updated);
+				updated = PbpFieldGoalParseService.parseFieldGoal(play, updated);
+				updated = PbpPassParseService.parsePass(play, updated);
+				updated = PbpRushParseService.parseRush(play, updated);
+				PbpDefenseParseService.parseDefense(play);
+				PbpOffenseParseService.parseOffense(play);
+			} else {
+				reconcileNoPlayHalfDistance(play);
+				if (Objects.isNull(play.getPlay().getPlayCallType())) {
+					play.getPlay().setPlayCallType(PlayCallTypeEnum.NA);
+				}
+			}
+			return updated;
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
+			return updated;
+		}
+	}
+
+	private static void sendPlaysForProcessingPostProcessingHelper(PbpServiceRequestPojo play,
+			HomeAwayScoreMeta homeAwayScoreMeta) {
+		try {
+			postProcessingApplyPlayScore(play, homeAwayScoreMeta);
+			sendPlaysForProcessingGarbageTimeHelper(play, homeAwayScoreMeta);
+			addStartYardPenalty(play);
+
+			if (!PlayTypeEnum.KICKOFF.equals(play.getPlay().getPlayType())
+					&& !PlayTypeEnum.PAT.equals(play.getPlay().getPlayType())) {
+				sendPlaysForProcessingFieldZoneHelper(play);
+
+				if (!PlayCallTypeEnum.FG.equals(play.getPlay().getPlayCallType())
+						&& !PlayTypeEnum.PUNT.equals(play.getPlay().getPlayType())) {
+					Integer yardToGain = play.getPlay().getPlayYardToGain();
+					PlayDownEnum playDown = play.getPlay().getPlayStartDown();
+					Integer yardGained = play.getPlay().getPlayResult().getPlayResultYard();
+					boolean firstDown = play.getPlay().getPlayResult().isPlayResultFirstDown();
+					Integer playPoints = play.getPlay().getPlayResult().getPlayResultPoints();
+
+					sendPlaysForProcessingPassingDownHelper(play, playDown, yardToGain);
+					sendPlaysForProcessingPlaySuccessHelper(play, playDown, yardGained, firstDown, yardToGain,
+							playPoints);
+					if (PlayCallTypeEnum.RUN.equals(play.getPlay().getPlayCallType())
+							&& Boolean.FALSE.equals(play.getPlay().getNoPlayPenalty())) {
+						sendPlaysForProcessingRushingPowerHelper(play);
+					}
+					sendPlaysForProcessingDefeatHelper(play, playDown, yardGained, firstDown);
+				}
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
+		}
+	}
+
+	private static void sendPlaysForProcessingRushingPowerHelper(PbpServiceRequestPojo play) {
+		try {
+			boolean rushingPower = false;
+			Boolean rushingPowerSuccess = null;
+
+			if ((play.getPlay().getPlayStartYard() >= 98) || (play.getPlay().getPlayYardToGain() <= 2
+					&& (PlayDownEnum.THIRD.equals(play.getPlay().getPlayStartDown())
+							|| PlayDownEnum.FOURTH.equals(play.getPlay().getPlayStartDown())))) {
+				rushingPower = true;
+			}
+
+			if (Boolean.TRUE.equals(rushingPower)) {
+				if (play.getPlay().getPlayerStat().get(play.getPossessionTeam()).getOffense().getRushingStat().get(0)
+						.getRushingFirstDown() == 1
+						|| play.getPlay().getPlayerStat().get(play.getPossessionTeam()).getOffense().getRushingStat()
+								.get(0).getRushingTouchdown() == 1) {
+					rushingPowerSuccess = true;
+				} else {
+					rushingPowerSuccess = false;
+				}
+			}
+
+			play.getPlay().getPlayerStat().get(play.getPossessionTeam()).getOffense().getRushingStat().get(0)
+					.setRushingPower(rushingPower);
+			play.getPlay().getPlayerStat().get(play.getPossessionTeam()).getOffense().getRushingStat().get(0)
+					.setRushingPowerSuccess(rushingPowerSuccess);
+			play.getPlay().getPlayerStat().get(play.getPossessionTeam()).getOffense().getRushingStat().get(0)
+					.setRushingSuccess(play.getPlay().getPlayResult().getPlayResultSuccess());
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
+
+		}
+	}
+
+	private static void sendPlaysForProcessingPlaySuccessHelper(PbpServiceRequestPojo play, PlayDownEnum playDown,
+			Integer yardGained, boolean firstDown, Integer yardToGain, Integer playPoints) {
+		try {
+			play.getPlay().getPlayResult().setPlayResultSuccess(false);
+			if (playPoints == 6 || Boolean.TRUE.equals(firstDown)
+					|| (PlayDownEnum.FIRST.equals(playDown) && yardGained >= yardToGain / 2)
+					|| (PlayDownEnum.SECOND.equals(playDown) && yardGained >= yardToGain * .7)) {
+				play.getPlay().getPlayResult().setPlayResultSuccess(true);
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
+
+		}
+	}
+
+	private static void sendPlaysForProcessingPassingDownHelper(PbpServiceRequestPojo play, PlayDownEnum playDown,
+			Integer yardToGain) {
+		try {
+			play.getPlay().setPassingDown(false);
+			if ((PlayDownEnum.SECOND.equals(playDown) && yardToGain >= 7)
+					|| (PlayDownEnum.THIRD.equals(playDown) && yardToGain >= 5)
+					|| (PlayDownEnum.FOURTH.equals(playDown) && yardToGain >= 5)) {
+				play.getPlay().setPassingDown(true);
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
+
+		}
+	}
+
+	private static void sendPlaysForProcessingDefeatHelper(PbpServiceRequestPojo play, PlayDownEnum playDown,
+			Integer yardGained, boolean firstDown) {
+		try {
+			play.getPlay().setDefeat(false);
+			if (yardGained < 0 || Boolean.TRUE.equals(play.getPlay().getPlayResult().isPlayResultTurnover())
+					|| ((PlayDownEnum.THIRD.equals(playDown) || PlayDownEnum.FOURTH.equals(playDown)) && !firstDown)) {
+				play.getPlay().setDefeat(true);
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
+
+		}
+	}
+
+	private static void sendPlaysForProcessingFieldZoneHelper(PbpServiceRequestPojo play) {
+		try {
+			if (play.getPlay().getPlayStartYard() <= 20) {
+				play.getPlay().setPlayFieldZone(FieldZoneEnum.DEEP);
+			} else if (play.getPlay().getPlayStartYard() <= 39) {
+				play.getPlay().setPlayFieldZone(FieldZoneEnum.BACK);
+			} else if (play.getPlay().getPlayStartYard() <= 60) {
+				play.getPlay().setPlayFieldZone(FieldZoneEnum.MID);
+			} else if (play.getPlay().getPlayStartYard() <= 81) {
+				play.getPlay().setPlayFieldZone(FieldZoneEnum.FRONT);
+			} else {
+				play.getPlay().setPlayFieldZone(FieldZoneEnum.RED);
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
+
+		}
+	}
+
+	private static void sendPlaysForProcessingGarbageTimeHelper(PbpServiceRequestPojo play,
+			HomeAwayScoreMeta homeAwayScoreMeta) {
+		try {
+			Integer scoreDiff = homeAwayScoreMeta.calcAbsScoreDiff();
+			play.getPlay().setGarbageTime(false);
+			if ((PlayPeriodEnum.SECOND.equals(play.getPlay().getPeriod()) && scoreDiff > 38)
+					|| (PlayPeriodEnum.THIRD.equals(play.getPlay().getPeriod()) && scoreDiff > 28)
+					|| (PlayPeriodEnum.FOURTH.equals(play.getPlay().getPeriod()) && scoreDiff > 22)) {
+				play.getPlay().setGarbageTime(true);
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
+
 		}
 	}
 
 	/**
 	 * Add play result scores: home/away
 	 */
-	private void postProcessingApplyPlayScore(PbpServiceRequestPojo play, HomeAwayScoreMeta homeAwayScoreMeta) {
+	private static void postProcessingApplyPlayScore(PbpServiceRequestPojo play, HomeAwayScoreMeta homeAwayScoreMeta) {
 		try {
 			if (HomeAwayEnum.HOME
 					.equals(play.getTeamDict().get(play.getPlay().getPlayResult().getPlayResultPossessionTeamId()))) {
 				if (play.getPlay().getPlayResult().getPlayResultPoints() >= 0) {
 					homeAwayScoreMeta.setHomeScore(
 							homeAwayScoreMeta.getHomeScore() + play.getPlay().getPlayResult().getPlayResultPoints());
-				} else {
+				} else if (play.getPlay().getPlayResult().getPlayResultPoints() == -2) {
 					homeAwayScoreMeta.setAwayScore(homeAwayScoreMeta.getAwayScore()
 							+ -1 * play.getPlay().getPlayResult().getPlayResultPoints());
+				} else if (play.getPlay().getPlayResult().getPlayResultPoints() == -6) {
+					homeAwayScoreMeta.setHomeScore(homeAwayScoreMeta.getHomeScore()
+							+ -1 * play.getPlay().getPlayResult().getPlayResultPoints());
+				} else {
+					throw new IllegalArgumentException(String.format("Play result not supported: %s",
+							play.getPlay().getPlayResult().getPlayResultPoints()));
 				}
 			} else {
 				if (play.getPlay().getPlayResult().getPlayResultPoints() >= 0) {
 					homeAwayScoreMeta.setAwayScore(
 							homeAwayScoreMeta.getAwayScore() + play.getPlay().getPlayResult().getPlayResultPoints());
-				} else {
+				} else if (play.getPlay().getPlayResult().getPlayResultPoints() == -2) {
 					homeAwayScoreMeta.setHomeScore(homeAwayScoreMeta.getHomeScore()
 							+ -1 * play.getPlay().getPlayResult().getPlayResultPoints());
+				} else if (play.getPlay().getPlayResult().getPlayResultPoints() == -6) {
+					homeAwayScoreMeta.setAwayScore(homeAwayScoreMeta.getAwayScore()
+							+ -1 * play.getPlay().getPlayResult().getPlayResultPoints());
+				} else {
+					throw new IllegalArgumentException(String.format("Play result not supported: %s",
+							play.getPlay().getPlayResult().getPlayResultPoints()));
 				}
 			}
 
 			play.getPlay().getPlayResult().setPlayResultHomeScore(homeAwayScoreMeta.getHomeScore());
 			play.getPlay().getPlayResult().setPlayResultAwayScore(homeAwayScoreMeta.getAwayScore());
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 		}
 	}
 
 	/**
 	 * Combine drives split across quarters
 	 */
-	private void combineCarryOverQuarterDrives(List<List<PbpServiceRequestPojo>> gameInfo) {
+	private static void combineCarryOverQuarterDrives(List<List<PbpServiceRequestPojo>> gameInfo) {
 		try {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String methodStartInfo = String.format(STARTING_S, ste[1].getMethodName());
-			loggingUtils.logInfo(methodStartInfo);
+			LoggingUtils.logInfo(methodStartInfo);
 
 			EnumMap<PlayPeriodEnum, DriveTimesPojo> periodDrives = pullPeriodStartEndDrive(gameInfo);
 			List<Integer> drivesToCombine = new ArrayList<>();
@@ -595,7 +815,7 @@ public class PlayByPlayService {
 				gameInfo.remove((int) dd);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
@@ -603,7 +823,7 @@ public class PlayByPlayService {
 	/**
 	 * Helper function per drive to split across quarters
 	 */
-	private String combineCarryOverQuarterDrivesHelper(List<PbpServiceRequestPojo> drive, Integer d,
+	private static String combineCarryOverQuarterDrivesHelper(List<PbpServiceRequestPojo> drive, Integer d,
 			String lastPossessionTeam, EnumMap<PlayPeriodEnum, DriveTimesPojo> periodDrives,
 			List<Integer> drivesToCombine, List<List<PbpServiceRequestPojo>> gameInfo) {
 		try {
@@ -617,27 +837,45 @@ public class PlayByPlayService {
 			}
 			if (Objects.isNull(possessionTeam)) {
 				String logInfo = String.format(DRIVE_NUMBER_S, d);
-				loggingUtils.logInfo(logInfo);
+				LoggingUtils.logInfo(logInfo);
 				throw new IllegalArgumentException("missing needed possession team from prior drive");
 			}
-			if (d != 0 && possessionTeam.equals(lastPossessionTeam)) {
-				if (periodDrives.get(PlayPeriodEnum.SECOND).getStartDrive().equals(d)
-						|| periodDrives.get(PlayPeriodEnum.FOURTH).getStartDrive().equals(d)) {
-					drivesToCombine.add(d);
-				} else {
-					String logInfo = String.format(DRIVE_NUMBER_S, d);
-					loggingUtils.logInfo(logInfo);
-					throw new IllegalArgumentException("Same possession team across consecutive drives");
-				}
-			}
-			if (gameInfo.get(d).get(0).getPlay().getPlayType() != PlayTypeEnum.KICKOFF) {
-				lastPossessionTeam = gameInfo.get(d).get(0).getPossessionTeam();
+			combineCarryOverQuarterDrivesHelperCombine(d, lastPossessionTeam, periodDrives, drivesToCombine, gameInfo,
+					possessionTeam);
+			if (!PlayTypeEnum.KICKOFF.equals(gameInfo.get(d).get(gameInfo.get(d).size() - 1).getPlay().getPlayType())) {
+				lastPossessionTeam = gameInfo.get(d).get(gameInfo.get(d).size() - 1).getPossessionTeam();
 			} else {
 				lastPossessionTeam = null;
 			}
 			return lastPossessionTeam;
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
+			throw new IllegalArgumentException(e.toString());
+		}
+	}
+
+	private static List<Integer> combineCarryOverQuarterDrivesHelperCombine(Integer d, String lastPossessionTeam,
+			EnumMap<PlayPeriodEnum, DriveTimesPojo> periodDrives, List<Integer> drivesToCombine,
+			List<List<PbpServiceRequestPojo>> gameInfo, String possessionTeam) {
+		try {
+			if (d != 0 && possessionTeam.equals(lastPossessionTeam)) {
+				if (periodDrives.get(PlayPeriodEnum.SECOND).getStartDrive().equals(d)
+						|| periodDrives.get(PlayPeriodEnum.FOURTH).getStartDrive().equals(d)) {
+					drivesToCombine.add(d);
+				} else if (!periodDrives.get(PlayPeriodEnum.THIRD).getStartDrive().equals(d)) {
+					List<PbpServiceRequestPojo> lastDrive = gameInfo.get(d - 1);
+					PbpServiceRequestPojo lastPlayLastDrive = lastDrive.get(lastDrive.size() - 1);
+					if (Boolean.FALSE.equals(lastPlayLastDrive.getPlay().getPlayResult().isPlayResultTurnover())
+							&& !PlayTypeEnum.PUNT.equals(lastPlayLastDrive.getPlay().getPlayType())) {
+						String logInfo = String.format(DRIVE_NUMBER_S, d);
+						LoggingUtils.logInfo(logInfo);
+						throw new IllegalArgumentException("Same possession team across consecutive drives");
+					}
+				}
+			}
+			return drivesToCombine;
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
 			throw new IllegalArgumentException(e.toString());
 		}
 	}
@@ -645,11 +883,11 @@ public class PlayByPlayService {
 	/**
 	 * Clean Up Scoring Plays, Extra Point, Penalties before kickoff
 	 */
-	private void scoringPlayCleanup(List<List<PbpServiceRequestPojo>> gameInfo) {
+	private static void scoringPlayCleanup(List<List<PbpServiceRequestPojo>> gameInfo) {
 		try {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String methodStartInfo = String.format(STARTING_S, ste[1].getMethodName());
-			loggingUtils.logInfo(methodStartInfo);
+			LoggingUtils.logInfo(methodStartInfo);
 
 			List<PlayResultMeta> playResults = new ArrayList<>();
 			Integer drivesInGame = gameInfo.size();
@@ -676,95 +914,115 @@ public class PlayByPlayService {
 					scoringPlayCleanupPatHelper(gameInfo.get(pp.getDrive()), pp);
 				} else if (pp.getPoints() == 3) {
 					scoringPlayCleanupFgHelper(gameInfo.get(pp.getDrive()), pp);
+				} else if (pp.getPoints() == -6) {
+					scoringPlayCleanupDefTdHelper(gameInfo.get(pp.getDrive()), pp);
 				} else {
 					logInfoPlayText = String.format(TEXT_S,
 							gameInfo.get(pp.getDrive()).get(pp.getPlay() + 1).getPlayRawText());
-					loggingUtils.logInfo(logInfoPlayText);
+					LoggingUtils.logInfo(logInfoPlayText);
 					logInfoPlayNumber = String.format(PLAY_NUMBER_S, pp.getPlay());
-					loggingUtils.logInfo(logInfoPlayNumber);
+					LoggingUtils.logInfo(logInfoPlayNumber);
 					logInfoDriveNumber = String.format(DRIVE_NUMBER_S, pp.getDrive());
-					loggingUtils.logInfo(logInfoDriveNumber);
+					LoggingUtils.logInfo(logInfoDriveNumber);
 					throw new IllegalArgumentException("Handle uncaught scoring logic");
 				}
-
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
-
+			LoggingUtils.logException(e, e.toString());
 		}
 	}
 
-	private void scoringPlayCleanupTdHelper(List<PbpServiceRequestPojo> driveInfo, PlayResultMeta pp) {
+	private static void scoringPlayCleanupDefTdHelper(List<PbpServiceRequestPojo> driveInfo, PlayResultMeta pp) {
+		try {
+			String logInfoDriveNumber;
+			String logInfoPlayNumber;
+			String logInfoPlayText;
+			if (driveInfo.size() > pp.getPlay() + 1) {
+				logInfoPlayText = String.format(TEXT_S, driveInfo.get(pp.getPlay() + 1).getPlayRawText());
+				LoggingUtils.logInfo(logInfoPlayText);
+				logInfoPlayNumber = String.format(PLAY_NUMBER_S, pp.getPlay());
+				LoggingUtils.logInfo(logInfoPlayNumber);
+				logInfoDriveNumber = String.format(DRIVE_NUMBER_S, pp.getDrive());
+				LoggingUtils.logInfo(logInfoDriveNumber);
+				throw new IllegalArgumentException("What to do for play after Defensive Touchdown in drive?");
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
+		}
+	}
+
+	private static void scoringPlayCleanupTdHelper(List<PbpServiceRequestPojo> driveInfo, PlayResultMeta pp) {
 		try {
 			String logInfoDriveNumber;
 			String logInfoPlayNumber;
 			String logInfoPlayText;
 			Integer tdDriveLength = driveInfo.size();
 			if (tdDriveLength == pp.getPlay() + 1
-					&& driveInfo.get(pp.getPlay()).getPlay().getPlayType() != PlayTypeEnum.PUNT) {
-				logInfoPlayText = String.format(TEXT_S, driveInfo.get(pp.getPlay() + 1).getPlayRawText());
-				loggingUtils.logInfo(logInfoPlayText);
+					&& !PlayTypeEnum.PUNT.equals(driveInfo.get(pp.getPlay()).getPlay().getPlayType())
+					&& !PlayTypeEnum.KICKOFF.equals(driveInfo.get(pp.getPlay()).getPlay().getPlayType())) {
+				logInfoPlayText = String.format(TEXT_S, driveInfo.get(pp.getPlay()).getPlayRawText());
+				LoggingUtils.logInfo(logInfoPlayText);
 				logInfoPlayNumber = String.format(PLAY_NUMBER_S, pp.getPlay());
-				loggingUtils.logInfo(logInfoPlayNumber);
+				LoggingUtils.logInfo(logInfoPlayNumber);
 				logInfoDriveNumber = String.format(DRIVE_NUMBER_S, pp.getDrive());
-				loggingUtils.logInfo(logInfoDriveNumber);
+				LoggingUtils.logInfo(logInfoDriveNumber);
 				throw new IllegalArgumentException("What to do for TD as last play?");
 			}
 			for (PbpServiceRequestPojo ppp : driveInfo.subList(pp.getPlay() + 1, tdDriveLength)) {
-				if (ppp.getPlay().getPlayType() == PlayTypeEnum.PAT) {
+				if (PlayTypeEnum.PAT.equals(ppp.getPlay().getPlayType())) {
 					break; // Stop search at PAT
 				} else {
 					logInfoPlayText = String.format(TEXT_S, ppp.getPlayRawText());
-					loggingUtils.logInfo(logInfoPlayText);
+					LoggingUtils.logInfo(logInfoPlayText);
 					logInfoPlayNumber = String.format(PLAY_NUMBER_S, pp.getPlay());
-					loggingUtils.logInfo(logInfoPlayNumber);
+					LoggingUtils.logInfo(logInfoPlayNumber);
 					logInfoDriveNumber = String.format(DRIVE_NUMBER_S, pp.getDrive());
-					loggingUtils.logInfo(logInfoDriveNumber);
+					LoggingUtils.logInfo(logInfoDriveNumber);
 					throw new IllegalArgumentException("What to do for non PAT play after TD in drive?");
 				}
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
 
-	private void scoringPlayCleanupPatHelper(List<PbpServiceRequestPojo> driveInfo, PlayResultMeta pp) {
+	private static void scoringPlayCleanupPatHelper(List<PbpServiceRequestPojo> driveInfo, PlayResultMeta pp) {
 		try {
 			String logInfoDriveNumber;
 			String logInfoPlayNumber;
 			String logInfoPlayText;
 			if (driveInfo.size() > pp.getPlay() + 1) {
 				logInfoPlayText = String.format(TEXT_S, driveInfo.get(pp.getPlay() + 1).getPlayRawText());
-				loggingUtils.logInfo(logInfoPlayText);
+				LoggingUtils.logInfo(logInfoPlayText);
 				logInfoPlayNumber = String.format(PLAY_NUMBER_S, pp.getPlay());
-				loggingUtils.logInfo(logInfoPlayNumber);
+				LoggingUtils.logInfo(logInfoPlayNumber);
 				logInfoDriveNumber = String.format(DRIVE_NUMBER_S, pp.getDrive());
-				loggingUtils.logInfo(logInfoDriveNumber);
+				LoggingUtils.logInfo(logInfoDriveNumber);
 				throw new IllegalArgumentException("Need to handle play after PAT in a drive");
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
 
-	private void scoringPlayCleanupFgHelper(List<PbpServiceRequestPojo> driveInfo, PlayResultMeta pp) {
+	private static void scoringPlayCleanupFgHelper(List<PbpServiceRequestPojo> driveInfo, PlayResultMeta pp) {
 		try {
 			String logInfoDriveNumber;
 			String logInfoPlayNumber;
 			String logInfoPlayText;
 			if (driveInfo.size() > pp.getPlay() + 1) {
 				logInfoPlayText = String.format(TEXT_S, driveInfo.get(pp.getPlay() + 1).getPlayRawText());
-				loggingUtils.logInfo(logInfoPlayText);
+				LoggingUtils.logInfo(logInfoPlayText);
 				logInfoPlayNumber = String.format(PLAY_NUMBER_S, pp.getPlay());
-				loggingUtils.logInfo(logInfoPlayNumber);
+				LoggingUtils.logInfo(logInfoPlayNumber);
 				logInfoDriveNumber = String.format(DRIVE_NUMBER_S, pp.getDrive());
-				loggingUtils.logInfo(logInfoDriveNumber);
+				LoggingUtils.logInfo(logInfoDriveNumber);
 				throw new IllegalArgumentException("What to do for play after FG in drive?");
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
@@ -772,20 +1030,20 @@ public class PlayByPlayService {
 	/**
 	 * Validate Plays
 	 */
-	private void addTurnoverOnDowns(List<List<PbpServiceRequestPojo>> gameInfo) {
+	private static void addTurnoverOnDowns(List<List<PbpServiceRequestPojo>> gameInfo) {
 		try {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String methodStartInfo = String.format(STARTING_S, ste[1].getMethodName());
-			loggingUtils.logInfo(methodStartInfo);
+			LoggingUtils.logInfo(methodStartInfo);
 
 			Integer drivesInGame = gameInfo.size();
 			for (int d = 0; d < drivesInGame; d++) {
 				List<PbpServiceRequestPojo> drive = gameInfo.get(d);
 				Integer playsInPossession = drive.size();
 				PbpServiceRequestPojo play = drive.get(playsInPossession - 1);
-				if (play.getPlay().getPlayType() == PlayTypeEnum.OFFENSE
-						&& play.getPlay().getPlayCallType() != PlayCallTypeEnum.FG
-						&& play.getPlay().getPlayStartDown() == PlayDownEnum.FOURTH
+				if (PlayTypeEnum.OFFENSE.equals(play.getPlay().getPlayType())
+						&& !PlayCallTypeEnum.FG.equals(play.getPlay().getPlayCallType())
+						&& PlayDownEnum.FOURTH.equals(play.getPlay().getPlayStartDown())
 						&& play.getPlay().getPlayYardToGain() > play.getPlay().getPlayResult().getPlayResultYard()) {
 					play.getPlay().getPlayResult().setPlayResultTurnover(true);
 					play.getPlay().getPlayResult().setPlayResultPossessionTeamId(play.getDefenseTeam());
@@ -793,7 +1051,7 @@ public class PlayByPlayService {
 				}
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
@@ -801,11 +1059,11 @@ public class PlayByPlayService {
 	/**
 	 * Validate Plays
 	 */
-	private void validatePlays(List<List<PbpServiceRequestPojo>> gameInfo) {
+	private static void validatePlays(List<List<PbpServiceRequestPojo>> gameInfo) {
 		try {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String methodStartInfo = String.format(STARTING_S, ste[1].getMethodName());
-			loggingUtils.logInfo(methodStartInfo);
+			LoggingUtils.logInfo(methodStartInfo);
 
 			Integer drivesInGame = gameInfo.size();
 			for (int d = 0; d < drivesInGame; d++) {
@@ -813,11 +1071,11 @@ public class PlayByPlayService {
 				Integer playsInPossession = drive.size();
 				for (int p = 0; p < playsInPossession; p++) {
 					PbpServiceRequestPojo play = drive.get(p);
-					pbpValidateService.validate(play);
+					PbpValidateService.validate(play);
 				}
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
@@ -825,11 +1083,11 @@ public class PlayByPlayService {
 	/**
 	 * Add Time
 	 */
-	private List<DrivePojo> applyTime(List<List<PbpServiceRequestPojo>> gameInfo) {
+	private static List<DrivePojo> applyTime(List<List<PbpServiceRequestPojo>> gameInfo) {
 		try {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String methodStartInfo = String.format(STARTING_S, ste[1].getMethodName());
-			loggingUtils.logInfo(methodStartInfo);
+			LoggingUtils.logInfo(methodStartInfo);
 
 			EnumMap<PlayPeriodEnum, DriveTimesPojo> periodDrives = pullPeriodStartEndDrive(gameInfo);
 			HashMap<Integer, DrivePojo> driveMap = new HashMap<>();
@@ -855,16 +1113,31 @@ public class PlayByPlayService {
 				applyTimePerDriveHelper(driveMap, periodDrives, d);
 			}
 
-			loggingUtils.logInfo("- [aggregateDrives] -");
+			LoggingUtils.logInfo("- [aggregateDrives] -");
 			for (int d = 0; d < drivesInGame; d++) {
 				DrivePojo drive = driveMap.get(d);
 
 				if (NcaaConstants.CONTEXT_DEBUG_VALUE_TRUE.equals(ThreadContext.get(NcaaConstants.CONTEXT_DEBUG_KEY))) {
-					loggingUtils.logInfo(String.format(DRIVE_NUMBER_S, d));
-					loggingUtils.logInfo(String.format("Drive Start Time: %s", drive.getDriveStartTime()));
-					loggingUtils.logInfo(String.format(DRIVE_END_TIME_S, drive.getDriveEndTime()));
-					loggingUtils.logInfo(String.format("Drive Start Yardline: %s", drive.getDriveStartYardline()));
-					loggingUtils.logInfo(String.format("Drive End Yardline: %s", drive.getDriveEndYardline()));
+					LoggingUtils.logInfo(String.format(DRIVE_NUMBER_S, d));
+					LoggingUtils.logInfo(String.format("Drive Start Time: %s", drive.getDriveStartTime()));
+					LoggingUtils.logInfo(String.format(DRIVE_END_TIME_S, drive.getDriveEndTime()));
+					LoggingUtils.logInfo(String.format("Drive Start Yardline: %s", drive.getDriveStartYardline()));
+					LoggingUtils.logInfo(String.format("Drive End Yardline: %s", drive.getDriveEndYardline()));
+				}
+
+				if (!periodDrives.get(PlayPeriodEnum.FIRST).getStartDrive().equals(d)
+						&& !periodDrives.get(PlayPeriodEnum.THIRD).getStartDrive().equals(d)) {
+					// If field goal miss did not account for loss of yards from ball spot
+					// Use following drive start yardline
+					if (DriveResultEnum.FG.equals(drives.get(d - 1).getDriveResult())
+							&& drives.get(d - 1).getDriveResultPoint().equals(0)) {
+						if (drive.getDriveStartYardline() < 100 - drives.get(d - 1).getDriveStartYardline()) {
+							Integer pullforwardYardLine = (int) 100 - drive.getDriveStartYardline();
+							drives.get(d - 1).setDriveEndYardline(pullforwardYardLine);
+							drives.get(d - 1).getDrivePlays().get(drives.get(d - 1).getDrivePlays().size() - 1)
+									.getPlayResult().setPlayResultYardLine(pullforwardYardLine);
+						}
+					}
 				}
 
 				drive.setDriveTotalTime(drive.getDriveStartTime() - drive.getDriveEndTime());
@@ -882,7 +1155,7 @@ public class PlayByPlayService {
 
 			return drives;
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 			throw new IllegalArgumentException(e.toString());
 		}
 	}
@@ -890,36 +1163,51 @@ public class PlayByPlayService {
 	/**
 	 * Apply time logic on second pass over drives
 	 */
-	private void applyTimePerDriveHelper(HashMap<Integer, DrivePojo> driveMap,
+	private static void applyTimePerDriveHelper(HashMap<Integer, DrivePojo> driveMap,
 			EnumMap<PlayPeriodEnum, DriveTimesPojo> periodDrives, Integer d) {
 		try {
 			if (NcaaConstants.CONTEXT_DEBUG_VALUE_TRUE.equals(ThreadContext.get(NcaaConstants.CONTEXT_DEBUG_KEY))) {
-				loggingUtils.logInfo(String.format("-- Drive Number: %s", d));
+				LoggingUtils.logInfo(String.format("-- Drive Number: %s", d));
 			}
 			// Skip for first drive of the second half
 			// Set next drive start time based on drive end time
 			if (driveMap.containsKey(d + 1) && periodDrives.get(PlayPeriodEnum.THIRD).getStartDrive() != d + 1
 					&& driveMap.get(d + 1).getDriveStartTime() > driveMap.get(d).getDriveEndTime()) {
 				if (NcaaConstants.CONTEXT_DEBUG_VALUE_TRUE.equals(ThreadContext.get(NcaaConstants.CONTEXT_DEBUG_KEY))) {
-					loggingUtils.logInfo(String.format(DRIVE_END_TIME_S, driveMap.get(d).getDriveEndTime()));
-					loggingUtils.logInfo(
+					LoggingUtils.logInfo(String.format(DRIVE_END_TIME_S, driveMap.get(d).getDriveEndTime()));
+					LoggingUtils.logInfo(
 							String.format("Next Drive Start Time: %s", driveMap.get(d + 1).getDriveStartTime()));
 				}
 				driveMap.get(d + 1).setDriveStartTime(driveMap.get(d).getDriveEndTime());
 			}
 			// Skip for last drive of the first half
 			// Set drive time based on next drive end time
-			if (driveMap.containsKey(d + 1) && periodDrives.get(PlayPeriodEnum.SECOND).getEndDrive() != d
+			if (driveMap.containsKey(d + 1) && !periodDrives.get(PlayPeriodEnum.SECOND).getEndDrive().equals(d)
 					&& driveMap.get(d + 1).getDriveStartTime() < driveMap.get(d).getDriveEndTime()) {
 				if (NcaaConstants.CONTEXT_DEBUG_VALUE_TRUE.equals(ThreadContext.get(NcaaConstants.CONTEXT_DEBUG_KEY))) {
-					loggingUtils.logInfo(String.format(DRIVE_END_TIME_S, driveMap.get(d).getDriveEndTime()));
-					loggingUtils.logInfo(
+					LoggingUtils.logInfo(String.format(DRIVE_END_TIME_S, driveMap.get(d).getDriveEndTime()));
+					LoggingUtils.logInfo(
 							String.format("Next Drive Start Time: %s", driveMap.get(d + 1).getDriveStartTime()));
 				}
 				driveMap.get(d).setDriveEndTime(driveMap.get(d + 1).getDriveStartTime());
 			}
+			if (!periodDrives.get(PlayPeriodEnum.FIRST).getStartDrive().equals(d)
+					&& !periodDrives.get(PlayPeriodEnum.THIRD).getStartDrive().equals(d)) {
+				// If time difference for drive was all applied to following kickoff
+				// Roll drive end time forward to apply all to drive and no time to kickoff
+				if (DriveResultEnum.KICKOFF.equals(driveMap.get(d).getDriveResult())
+						&& !driveMap.get(d).getDriveStartTime().equals(driveMap.get(d).getDriveEndTime())) {
+					if (DriveResultEnum.TD.equals(driveMap.get(d - 1).getDriveResult())
+							&& driveMap.get(d - 1).getDriveStartTime().equals(driveMap.get(d - 1).getDriveEndTime())
+							&& driveMap.get(d).getDriveStartTime().equals(driveMap.get(d - 1).getDriveEndTime())) {
+						Integer pullforwardDriveEnd = (Integer) driveMap.get(d).getDriveEndTime();
+						driveMap.get(d - 1).setDriveEndTime(pullforwardDriveEnd);
+						driveMap.get(d).setDriveStartTime(pullforwardDriveEnd);
+					}
+				}
+			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
@@ -927,7 +1215,7 @@ public class PlayByPlayService {
 	/**
 	 * Add Time - Per Drive
 	 */
-	private void applyTimeDriveHelper(List<PbpServiceRequestPojo> drive, Integer d,
+	private static void applyTimeDriveHelper(List<PbpServiceRequestPojo> drive, Integer d,
 			HashMap<Integer, DrivePojo> driveMap, HomeAwayScoreMeta homeAwayScoreMeta) {
 		try {
 
@@ -945,11 +1233,15 @@ public class PlayByPlayService {
 			for (int p = 0; p < playsInPossession; p++) {
 				PbpServiceRequestPojo play = drive.get(p);
 				applyTimePlayHelper(play, p, standardDrive);
-				if (p < playsInPossession - 1 && standardDrive.getDriveResult() == DriveResultEnum.TURNOVER) {
+				if (p < playsInPossession - 1 && DriveResultEnum.TURNOVER.equals(standardDrive.getDriveResult())) {
 					String logInfo = String.format("Play text: %s", play.getPlayRawText());
-					loggingUtils.logInfo(logInfo);
+					LoggingUtils.logInfo(logInfo);
 					throw new IllegalArgumentException("Turnover is not the last play of drive");
 				}
+			}
+			if (Objects.isNull(standardDrive.getDriveEndYardline()) && drive.size() == 1
+					&& PlayTypeEnum.PAT.equals(drive.get(0).getPlay().getPlayType())) {
+				standardDrive.setDriveEndYardline(drive.get(0).getPlay().getPlayStartYard());
 			}
 			if (Objects.isNull(standardDrive.getKickoff())) {
 				standardDrive.setKickoff(false);
@@ -981,7 +1273,7 @@ public class PlayByPlayService {
 
 			driveMap.put(d, standardDrive);
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
@@ -989,16 +1281,16 @@ public class PlayByPlayService {
 	/**
 	 * Add Time - Per Play
 	 */
-	private void applyTimePlayHelper(PbpServiceRequestPojo play, Integer p, DrivePojo standardDrive) {
+	private static void applyTimePlayHelper(PbpServiceRequestPojo play, Integer p, DrivePojo standardDrive) {
 		try {
 
 			applyTimePlayHelperFirstPlay(play, standardDrive, p);
 
 			if (Objects.nonNull(standardDrive.getDriveResult())
-					&& standardDrive.getDriveResult() != DriveResultEnum.TD) {
+					&& !DriveResultEnum.TD.equals(standardDrive.getDriveResult())) {
 				String logInfo = String.format("Play text: %s | Drive result: %s", play.getPlayRawText(),
 						standardDrive.getDriveResult());
-				loggingUtils.logInfo(logInfo);
+				LoggingUtils.logInfo(logInfo);
 				throw new IllegalArgumentException("Drive result already set before drive complete");
 			}
 			if (play.getDrive().getDriveEndTime() < standardDrive.getDriveEndTime()) {
@@ -1019,14 +1311,7 @@ public class PlayByPlayService {
 				}
 			}
 
-			if (play.getPlay().getPlayType() == PlayTypeEnum.OFFENSE) {
-				if (play.getPlay().getPlayStartYard() >= 60) {
-					standardDrive.setDriveResultScoringOpp(true);
-				}
-				if (Boolean.FALSE.equals(play.getPlay().getPlayResult().isPlayResultTurnover())) {
-					standardDrive.addDriveOffenseYard(play.getPlay().getPlayResult().getPlayResultYard());
-				}
-			}
+			applyTimePlayHelperOffensePlayType(play, standardDrive);
 
 			if (PlayCallTypeEnum.PUNT.equals(play.getPlay().getPlayCallType())) {
 				standardDrive.addDriveResultPoint(play.getPlay().getPlayResult().getPlayResultPoints() * -1);
@@ -1035,18 +1320,34 @@ public class PlayByPlayService {
 			}
 
 			if (!standardDrive.getPossessionTeamId().equals(play.getPossessionTeam())
-					&& play.getPlay().getPlayType() != PlayTypeEnum.PUNT) {
+					&& !PlayTypeEnum.PUNT.equals(play.getPlay().getPlayType())) {
 				throw new IllegalArgumentException("drive includes mulitple possession teams");
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
+		}
+	}
+
+	private static void applyTimePlayHelperOffensePlayType(PbpServiceRequestPojo play, DrivePojo standardDrive) {
+		try {
+			if (PlayTypeEnum.OFFENSE.equals(play.getPlay().getPlayType())
+					&& !PlayCallTypeEnum.FG.equals(play.getPlay().getPlayCallType())) {
+				if (play.getPlay().getPlayStartYard() >= 60) {
+					standardDrive.setDriveResultScoringOpp(true);
+				}
+				if (Boolean.FALSE.equals(play.getPlay().getPlayResult().isPlayResultTurnover())) {
+					standardDrive.addDriveOffenseYard(play.getPlay().getPlayResult().getPlayResultYard());
+				}
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
 		}
 	}
 
 	/**
 	 * Extra logic for first play in drive
 	 */
-	private void applyTimePlayHelperFirstPlay(PbpServiceRequestPojo play, DrivePojo standardDrive, Integer p) {
+	private static void applyTimePlayHelperFirstPlay(PbpServiceRequestPojo play, DrivePojo standardDrive, Integer p) {
 		try {
 			if (p == 0) {
 				standardDrive.setDriveStartTime(play.getDrive().getDriveStartTime());
@@ -1055,38 +1356,50 @@ public class PlayByPlayService {
 				standardDrive.setDriveStartYardline(play.getPlay().getPlayStartYard());
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 		}
 	}
 
 	/**
 	 * Add Play Result - Per Play
 	 */
-	private void applyTimePlayHelperApplyDriveResult(PbpServiceRequestPojo play, DrivePojo standardDrive) {
+	private static void applyTimePlayHelperApplyDriveResult(PbpServiceRequestPojo play, DrivePojo standardDrive) {
 		try {
-			if (play.getPlay().getPlayResult().getPlayResultPoints() == 6) {
-				standardDrive.setDriveResult(DriveResultEnum.TD);
-			} else if (play.getPlay().getPlayType() == PlayTypeEnum.PUNT) {
-				standardDrive.setDriveResult(DriveResultEnum.PUNT);
-			} else if (Boolean.TRUE.equals(play.getPlay().getPlayResult().isPlayResultTurnover())) {
-				standardDrive.setDriveResult(DriveResultEnum.TURNOVER);
-			} else if (play.getPlay().getPlayCallType() == PlayCallTypeEnum.FG) {
-				standardDrive.setDriveResult(DriveResultEnum.FG);
-			} else if (PlayTypeEnum.KICKOFF.equals(play.getPlay().getPlayType())) {
-				standardDrive.setDriveResult(DriveResultEnum.KICKOFF);
-			} else if (Objects.isNull(standardDrive.getDriveResult())
-					&& PlayTypeEnum.PAT.equals(play.getPlay().getPlayType())) {
-				standardDrive.setDriveResult(DriveResultEnum.PAT);
+			if (Boolean.FALSE.equals(play.getPlay().getNoPlayPenalty())) {
+				if (play.getPlay().getPlayResult().getPlayResultPoints() == 6) {
+					if (PlayTypeEnum.PUNT.equals(play.getPlay().getPlayType())) {
+						standardDrive.setDriveResult(DriveResultEnum.PUNT_TD);
+					} else if (PlayTypeEnum.KICKOFF.equals(play.getPlay().getPlayType())) {
+						standardDrive.setDriveResult(DriveResultEnum.KICKOFF_TD);
+					} else {
+						standardDrive.setDriveResult(DriveResultEnum.TD);
+					}
+				} else if (PlayTypeEnum.PUNT.equals(play.getPlay().getPlayType())) {
+					standardDrive.setDriveResult(DriveResultEnum.PUNT);
+				} else if (Boolean.TRUE.equals(play.getPlay().getPlayResult().isPlayResultTurnover())) {
+					if (play.getPlay().getPlayResult().getPlayResultPoints() == -6) {
+						standardDrive.setDriveResult(DriveResultEnum.TURNOVER_TD);
+					} else {
+						standardDrive.setDriveResult(DriveResultEnum.TURNOVER);
+					}
+				} else if (PlayCallTypeEnum.FG.equals(play.getPlay().getPlayCallType())) {
+					standardDrive.setDriveResult(DriveResultEnum.FG);
+				} else if (PlayTypeEnum.KICKOFF.equals(play.getPlay().getPlayType())) {
+					standardDrive.setDriveResult(DriveResultEnum.KICKOFF);
+				} else if (Objects.isNull(standardDrive.getDriveResult())
+						&& PlayTypeEnum.PAT.equals(play.getPlay().getPlayType())) {
+					standardDrive.setDriveResult(DriveResultEnum.PAT);
+				}
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 		}
 	}
 
 	/**
 	 * Generate MAP with the start drive and end drive indices for each quarter
 	 */
-	private EnumMap<PlayPeriodEnum, DriveTimesPojo> pullPeriodStartEndDrive(
+	private static EnumMap<PlayPeriodEnum, DriveTimesPojo> pullPeriodStartEndDrive(
 			List<List<PbpServiceRequestPojo>> gameInfo) {
 		try {
 			EnumMap<PlayPeriodEnum, DriveTimesPojo> periodDrives = new EnumMap<>(PlayPeriodEnum.class);
@@ -1106,30 +1419,30 @@ public class PlayByPlayService {
 			}
 			return periodDrives;
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 			throw new IllegalArgumentException(e.toString());
 		}
 	}
 
-	private PlayPojo initializePlay(PlayPeriodEnum playPeriod, String playRawText, String driveText,
-			HashMap<String, HomeAwayEnum> teamDict, String possessionTeam) {
+	private static PlayPojo initializePlay(PlayPeriodEnum playPeriod, String playRawText, String driveText,
+			String possessionTeam, GameMapPojo gameMaps) {
 		PlayPojo play = new PlayPojo();
 		play.setPeriod(playPeriod);
 		play.setPlayText(playRawText);
 		play.setDriveText(driveText.replace("AMP;", ""));
 		play.setPlayStartPossessionTeamId(possessionTeam);
-		for (String teamId : teamDict.keySet()) {
+		for (String teamId : gameMaps.getTeamDict().keySet()) {
 			play.getPlayerStat().put(teamId, new PbpPlayerStatPojo());
 		}
 		return play;
 	}
 
-	private List<List<PbpServiceRequestPojo>> driveFirstPassParse(PlayByPlayPojo playByPlayRaw, GamePojo game,
-			HashMap<String, HomeAwayEnum> teamDict, HashMap<String, PlayByPlayTeamPojo> teamAbbrevDict) {
+	private static List<List<PbpServiceRequestPojo>> driveFirstPassParse(PlayByPlayPojo playByPlayRaw, GamePojo game,
+			GameMapPojo gameMaps) {
 		try {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String methodStartInfo = String.format(STARTING_S, ste[1].getMethodName());
-			loggingUtils.logInfo(methodStartInfo);
+			LoggingUtils.logInfo(methodStartInfo);
 
 			List<List<PbpServiceRequestPojo>> gameInfo = new ArrayList<>();
 			Integer periodsInGame = playByPlayRaw.getPeriods().size();
@@ -1140,25 +1453,24 @@ public class PlayByPlayService {
 				Integer drivesInPeriod = period.getPossessions().size();
 
 				PlayParseStartTimeEndTime startTimeEndTime = new PlayParseStartTimeEndTime(
-						pbpParsingUtils.convertMinSecToSec(QUARTER_START, playPeriod),
-						pbpParsingUtils.convertMinSecToSec(QUARTER_START, playPeriod));
+						PbpParsingUtils.convertMinSecToSec(QUARTER_START, playPeriod),
+						PbpParsingUtils.convertMinSecToSec(QUARTER_START, playPeriod));
 				for (int d = 0; d < drivesInPeriod; d++) {
 					PlayByPlayPossessionPojo possession = period.getPossessions().get(d);
 					driveFirstPassParseDriveHelper(game, possession, playByPlayRaw, startTimeEndTime, playPeriod,
-							teamDict, teamAbbrevDict, gameInfo);
+							gameInfo, gameMaps);
 				}
 			}
 			return gameInfo;
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 			throw new IllegalArgumentException(e.toString());
 		}
 	}
 
-	private void driveFirstPassParseDriveHelper(GamePojo game, PlayByPlayPossessionPojo possession,
+	private static void driveFirstPassParseDriveHelper(GamePojo game, PlayByPlayPossessionPojo possession,
 			PlayByPlayPojo playByPlayRaw, PlayParseStartTimeEndTime startTimeEndTime, PlayPeriodEnum playPeriod,
-			HashMap<String, HomeAwayEnum> teamDict, HashMap<String, PlayByPlayTeamPojo> teamAbbrevDict,
-			List<List<PbpServiceRequestPojo>> gameInfo) {
+			List<List<PbpServiceRequestPojo>> gameInfo, GameMapPojo gameMaps) {
 		try {
 			List<PbpServiceRequestPojo> driveInfo = new ArrayList<>();
 			String possessionTeam;
@@ -1169,58 +1481,62 @@ public class PlayByPlayService {
 			}
 			String defenseTeam = playByPlayRaw.pullOpponent(possessionTeam);
 			if (!QUARTER_START.equals(possession.getTime())) {
-				startTimeEndTime.setStartTime(pbpParsingUtils.convertMinSecToSec(possession.getTime(), playPeriod));
-				startTimeEndTime.setEndTime(pbpParsingUtils.convertMinSecToSec(possession.getTime(), playPeriod));
+				startTimeEndTime.setStartTime(PbpParsingUtils.convertMinSecToSec(possession.getTime(), playPeriod));
+				startTimeEndTime.setEndTime(PbpParsingUtils.convertMinSecToSec(possession.getTime(), playPeriod));
 			}
 
 			Integer playsInPossession = possession.getPlays().size();
 			for (int p = 0; p < playsInPossession; p++) {
 				PlayByPlayPlayPojo playRaw = possession.getPlays().get(p);
-				driveFirstPassParsePlayHelper(playRaw, playPeriod, possessionTeam, defenseTeam, teamDict,
-						teamAbbrevDict, startTimeEndTime, driveInfo);
+				driveFirstPassParsePlayHelper(playRaw, playPeriod, possessionTeam, defenseTeam, startTimeEndTime,
+						driveInfo, gameMaps);
 			}
 			if (!driveInfo.isEmpty()) {
 				gameInfo.add(driveInfo);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
 
-	private void driveFirstPassParsePlayHelper(PlayByPlayPlayPojo playRaw, PlayPeriodEnum playPeriod,
-			String possessionTeam, String defenseTeam, HashMap<String, HomeAwayEnum> teamDict,
-			HashMap<String, PlayByPlayTeamPojo> teamAbbrevDict, PlayParseStartTimeEndTime startTimeEndTime,
-			List<PbpServiceRequestPojo> driveInfo) {
+	private static void driveFirstPassParsePlayHelper(PlayByPlayPlayPojo playRaw, PlayPeriodEnum playPeriod,
+			String possessionTeam, String defenseTeam, PlayParseStartTimeEndTime startTimeEndTime,
+			List<PbpServiceRequestPojo> driveInfo, GameMapPojo gameMaps) {
 		try {
-
 			PlayPojo play;
 			String playRawText = playRaw.getScoreText().replace("  ", " ").replaceAll("#\\d{1,2} ", "")
 					.replace(" III,", ",").replace(" Jr ", " ");
 
-			String suffixReplacementRegexCondition = "[A-Z]\\.[A-Z][a-z]+ [A-Z] ";
-			if (pbpParsingUtils.evalMatch(playRawText, suffixReplacementRegexCondition)) {
-				String suffixReplaceFull = pbpParsingUtils
+			String suffixReplacementRegexCondition = "([A-Z]\\.[A-Z][a-z]+ [A-Z] )";
+			if (PbpParsingUtils.evalMatch(playRawText, suffixReplacementRegexCondition)) {
+				String suffixReplaceFull = PbpParsingUtils
 						.extractCustom(playRawText, suffixReplacementRegexCondition, 1).split("\\~")[0];
 				String suffixReplaceNew = suffixReplaceFull.split(" ")[0];
-				playRawText = playRawText.replace(suffixReplaceFull, suffixReplaceNew);
+				playRawText = playRawText.replace(suffixReplaceFull.strip(), suffixReplaceNew);
 			}
 
 			String endTimeRegexCondition = "\\(?(\\d{1,2}:\\d{1,2})\\)?";
-			if (pbpParsingUtils.evalMatch(playRawText, endTimeRegexCondition)) {
-				String timeString = pbpParsingUtils.extractCustom(playRawText, endTimeRegexCondition, 1).split("~")[0];
-				startTimeEndTime.setEndTime(pbpParsingUtils.convertMinSecToSec(timeString, playPeriod));
+			if (PbpParsingUtils.evalMatch(playRawText, endTimeRegexCondition)) {
+				String timeString = PbpParsingUtils.extractCustom(playRawText, endTimeRegexCondition, 1).split("~")[0];
+				startTimeEndTime.setEndTime(PbpParsingUtils.convertMinSecToSec(timeString, playPeriod));
 			}
 			playRawText = playRawText.replaceAll("\\(?\\d{1,2}:\\d{1,2}\\)? ?", "");
+			if (playRawText.contains("score nullified by penalty. ")) {
+				playRawText = playRawText.split("score nullified by penalty\\. ")[1];
+			}
 
+			if (playRawText.contains("nullified")) {
+				System.out.println("asdfadsfadfs");
+			}
 			if (filterPlaysByText(playRawText)) {
-				play = initializePlay(playPeriod, playRawText, playRaw.getDriveText(), teamDict, possessionTeam);
+				play = initializePlay(playPeriod, playRawText, playRaw.getDriveText(), possessionTeam, gameMaps);
 			} else {
 				return;
 			}
 
-			playRawText = cleanUpPlayText(playRawText, teamAbbrevDict, possessionTeam, defenseTeam);
-			String[] playTackles = pbpParsingUtils.extractTackle(playRawText);
+			playRawText = cleanUpPlayText(playRawText, possessionTeam, defenseTeam, gameMaps);
+			String[] playTackles = PbpParsingUtils.extractTackle(playRawText);
 
 			if (playRawText.startsWith(" ")) {
 				playRawText = playRawText.stripLeading();
@@ -1230,34 +1546,39 @@ public class PlayByPlayService {
 			PbpServiceRequestPojo serviceRequest = new PbpServiceRequestPojo(
 					new DrivePojo(possessionTeam, playPeriod, startTimeEndTime.getStartTime(),
 							startTimeEndTime.getEndTime()),
-					play, playRaw, playRawText, playTackles, teamDict, teamAbbrevDict, possessionTeam, defenseTeam);
-
+					play, playRaw, playRawText, playTackles, gameMaps.getTeamDict(), gameMaps.getTeamAbbrevDict());
+			serviceRequest.setPossessionTeam(possessionTeam);
+			serviceRequest.setDefenseTeam(defenseTeam);
 			cleanUpPlay(serviceRequest);
 
 			if (serviceRequest.getPlay().getDriveText().isEmpty()
-					&& serviceRequest.getPlay().getPlayType() != PlayTypeEnum.KICKOFF
-					&& serviceRequest.getPlay().getPlayType() != PlayTypeEnum.PAT) {
+					&& !PlayTypeEnum.KICKOFF.equals(serviceRequest.getPlay().getPlayType())
+					&& !PlayTypeEnum.PAT.equals(serviceRequest.getPlay().getPlayType())) {
 				return;
 			}
 			addEndYard(serviceRequest);
+			if ("A. McNulty kickoff 50 yards to the WAG15, N Simmons return 0 yards to the WAG15 (C. Tate)"
+					.equals(serviceRequest.getPlayRawText())) {
+				serviceRequest.getPlay().getPlayResult().setPlayResultYardLine(15);
+			}
 			serviceRequest.getPlay().getPlayResult().setPlayResultPossessionTeamId(serviceRequest.getPossessionTeam());
-			boolean declinedNoPlay = pbpPenaltyParse.parsePenalty(serviceRequest);
+			boolean declinedNoPlay = PbpPenaltyParseService.parsePenalty(serviceRequest);
 			if (declinedNoPlay) {
 				return;
 			}
 
 			driveInfo.add(serviceRequest);
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
 
-	private boolean filterPlaysByText(String playRawText) {
+	private static boolean filterPlaysByText(String playRawText) {
 		try {
 			if (playRawText.contains("Start of ") && playRawText.contains("quarter")) {
 				return false;
-			} else if (pbpParsingUtils.evalMatch(playRawText, "w[io]ns?(?: the)?(?: coin)? toss")) {
+			} else if (PbpParsingUtils.evalMatch(playRawText, "(?i)w[io]ns?(?: the)?(?: coin)? toss")) {
 				return false;
 			} else if (playRawText.contains(" drive start at ")) {
 				return false;
@@ -1265,7 +1586,7 @@ public class PlayByPlayService {
 				return false;
 			} else if (playRawText.contains("will receive")) {
 				return false;
-			} else if (playRawText.contains("captains")) {
+			} else if (playRawText.toUpperCase().contains("CAPTAINS")) {
 				return false;
 			} else if (playRawText.contains("free kick")) {
 				return false; // TODO account for these
@@ -1273,26 +1594,34 @@ public class PlayByPlayService {
 				return false;
 			} else if (playRawText.startsWith("Timeout")) {
 				return false; // TODO account for these
-			} else if (pbpParsingUtils.evalMatch(playRawText, "^[aA-zZ]{4} ball on [aA-zZ]{4}\\d{2}\\.?$")) {
+			} else if (PbpParsingUtils.evalMatch(playRawText, "^[a-z|A-Z]{2,5} ball on [a-z|A-Z]{2,5}\\d{1,2}\\.?$")) {
 				return false;
-			} else if (pbpParsingUtils.evalMatch(playRawText, "^(\\d[a-z]{2}) and (\\d+)\\.$")) {
+			} else if (PbpParsingUtils.evalMatch(playRawText, "^(\\d[a-z]{2}) and (\\d+)\\.$")) {
 				return false;
-			} else if (pbpParsingUtils.evalMatch(playRawText, "^[A-Z]{3} Capt. [\\d,]+$")) {
+			} else if (PbpParsingUtils.evalMatch(playRawText, "^QB hurry by ")) {
+				return false;
+			} else if (PbpParsingUtils.evalMatch(playRawText, "^Clock \\.$")) {
+				return false;
+			} else if (PbpParsingUtils.evalMatch(playRawText, "^ ?\\(.+\\)\\.$")) {
+				return false;
+			} else if (PbpParsingUtils.evalMatch(playRawText, "^Change of possession.+ 1st and 10\\.$")) {
+				return false;
+			} else if (PbpParsingUtils.evalMatch(playRawText, "^[A-Z]{3} Capt. [\\d,]+$")) {
 				return false;
 			} else {
 				return true;
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 			throw new IllegalArgumentException(e.toString());
 		}
 
 	}
 
-	private void addTempoType(PbpServiceRequestPojo serviceRequest) {
+	private static void addTempoType(PbpServiceRequestPojo serviceRequest) {
 		try {
-			String playRawText = serviceRequest.getPlayRawText();
-			if (playRawText.contains("[NHSG")) {
+			String playRawText = serviceRequest.getPlay().getPlayText();
+			if (playRawText.contains("[NHSG]")) {
 				serviceRequest.getPlay().setPlayTempo(TempoTypeEnum.NHSG);
 			} else if (playRawText.contains("[SG]")) {
 				serviceRequest.getPlay().setPlayTempo(TempoTypeEnum.SG);
@@ -1304,14 +1633,16 @@ public class PlayByPlayService {
 				serviceRequest.getPlay().setPlayTempo(TempoTypeEnum.NONE);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
 
-	private String cleanUpPlayText(String playRawText, HashMap<String, PlayByPlayTeamPojo> teamAbbrevDict,
-			String possessionTeam, String defenseTeam) {
+	private static String cleanUpPlayText(String playRawText, String possessionTeam, String defenseTeam,
+			GameMapPojo gameMaps) {
 		try {
+
+			Map<String, PlayByPlayTeamPojo> teamAbbrevDict = gameMaps.getTeamAbbrevDict();
 			playRawText = playRawText.replace("'", "");
 			playRawText = playRawText.replace("Jr,", "Jr");
 			playRawText = playRawText.replace("([^,])( Jr\\.) ", "$1 ");
@@ -1319,7 +1650,7 @@ public class PlayByPlayService {
 			playRawText = playRawText.replaceAll("([A-Z])\\. ([A-Z])\\.", "$1$2");
 			playRawText = playRawText.replaceAll("((, [A-Z])\\. )", "$2 ");
 			playRawText = playRawText.replace(" . ", " ");
-
+			playRawText = playRawText.replaceAll("(\\(OVERTURNED PLAY: .*\\))", "");
 			playRawText = playRawText.replaceAll("( ?\\[NHSG\\] ?)", "");
 			playRawText = playRawText.replaceAll("( ?\\[SG\\] ?)", "");
 			playRawText = playRawText.replaceAll("( ?\\[NH\\] ?)", "");
@@ -1337,26 +1668,26 @@ public class PlayByPlayService {
 
 			playRawText = playRawText.replaceAll("([A-Z]\\. [A-Z][a-z]+),?( Jr\\.?)", "$1");
 			playRawText = playRawText.replaceAll("([A-Z]\\. [A-Z][a-z]+),?( III)", "$1");
-			playRawText = playRawText.replaceAll("([A-Z]{1,2} [aA-zZ]+) III", "$1");
+			playRawText = playRawText.replaceAll("([A-Z]{1,2} [a-z|A-Z]+) III", "$1");
 			playRawText = playRawText.replaceAll("([A-Z]\\. [A-Z][a-z]+),?( II)", "$1");
 			playRawText = playRawText.replaceAll("(, [A-Z] [A-Z][a-z]+),?( II) ", "$1 ");
 
 			playRawText = playRawText.replaceAll("((, [A-Z])\\. )", "$2 ");
-			playRawText = playRawText.replaceAll("([aA-zZ]+?) Jr.,([aA-zZ]*+)", "$1,$2");
+			playRawText = playRawText.replaceAll("([a-z|A-Z]+?) Jr.,([a-z|A-Z]*+)", "$1,$2");
 			playRawText = playRawText.replace("C. La Chapelle", "C. LaChapelle");
 			playRawText = playRawText.replace("A. Junior Ellis", "A. JuniorEllis");
 			playRawText = playRawText.replace("A Junior Ellis", "A. JuniorEllis");
 			playRawText = playRawText.replace("[NHPUNT]", "");
 
-			playRawText = playRawText.replaceAll("([A-Z]\\.) ([aA-zZ]*+) IV ", "$1 $2 ");
-			playRawText = playRawText.replaceAll("([A-Z][a-z]{0,3}\\.) ([aA-zZ]*+) IV ", "$1 $2 ");
+			playRawText = playRawText.replaceAll("([A-Z]\\.) ([a-z|A-Z]*+) IV ", "$1 $2 ");
+			playRawText = playRawText.replaceAll("([A-Z][a-z]{0,3}\\.) ([a-z|A-Z]*+) IV ", "$1 $2 ");
 
-			playRawText = playRawText.replaceAll("([aA-zZ]+?)-([aA-zZ]+?),([aA-zZ]*+)", "$1$2,$3");
+			playRawText = playRawText.replaceAll("([a-z|A-Z]+?)-([a-z|A-Z]+?),([a-z|A-Z]*+)", "$1$2,$3");
 			playRawText = playRawText.replace("Vander Esch,Caleb", "VanderEsch,Caleb");
 			playRawText = playRawText.replace("Holmes,T Quele", "Holmes,TQuele");
 			playRawText = playRawText.replace("Baker,Justin Richard", "Baker,JustinRichard");
 			playRawText = playRawText.replaceAll(String.format("%s( Jr\\.)", NcaaConstants.PLAYER_NAME_REGEX), "$1");
-			playRawText = playRawText.replaceAll("([A-Z][aA-zZ']+ St)\\.", "$1");
+			playRawText = playRawText.replaceAll("([A-Z][a-z|A-Z']+ St)\\.", "$1");
 			playRawText = playRawText.replaceAll("St\\. ([A-Z][a-z]+,[A-Z][a-z]+)", "St$1");
 
 			playRawText = playRawText.replaceAll("((?:\\()?(?:;)?)(Rainbow-Douglas)((?:\\))|(?:;))", "$1Noah $2$3");
@@ -1444,56 +1775,75 @@ public class PlayByPlayService {
 					"Punt by at the DEL15 is blocked by M. Monios, recovered by MAI M. Moss at the DEL4, returned 0 yards to the DEL4, TOUCHDOWN MAI (Scoring play confirmed)",
 					"Punt by T. Pastula at the DEL15 is blocked by M. Monios, recovered by MAI M. Moss at the DEL4, returned 4 yards to the DEL0, TOUCHDOWN MAI (Scoring play confirmed)");
 
+			playRawText = playRawText.replace(
+					". PENALTY Before the snap, BUF Illegal Formation  enforced at the deadball spot for 5 yards from the WAG15 to the WAG20",
+					"");
+
+			playRawText = playRawText.replace(
+					". PENALTY Before the snap, BUF Illegal Formation  enforced at the deadball spot for 5 yards from the WAG15 to the WAG20",
+					"");
+
+			playRawText = playRawText.replace(
+					"T. Pastula punt 38 yards to the MAI15, J Hennie return 38 yards to the DEL47",
+					"T. Pastula punt 38 yards to the MAI15, fair catch by J Hennie");
+
+			if (playRawText.contains("Pastula punt 38 yards to the MAI15")) {
+				System.out.println("catch");
+			}
+			playRawText = playRawText.replace(
+					"C. Reed kickoff 56 yards to the SJS9, S Garrett return 0 yards to the SJS9 (J. Narayan). PENALTY SJS Holding on M. Tago enforced 10 yards from the SJS40 to the SJS30. NO PLAY (replay the down)",
+					"C. Reed kickoff 56 yards to the SJS9, S Garrett return 0 yards to the SJS9 (J. Narayan). PENALTY SJS Holding on M. Tago enforced 10 yards from the SJS40 to the SJS30");
 			return playRawText;
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 			throw new IllegalArgumentException(e.toString());
 		}
 
 	}
 
-	private void cleanUpYards(PbpServiceRequestPojo serviceRequest) {
+	private static void cleanUpYards(PbpServiceRequestPojo serviceRequest) {
 		try {
-			if (serviceRequest.getPlay().getPlayType() == PlayTypeEnum.PAT) {
+
+			if (PlayTypeEnum.PAT.equals(serviceRequest.getPlay().getPlayType())) {
 				cleanUpYardsPatHelper(serviceRequest);
-			} else if (serviceRequest.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
+			} else if (PlayCallTypeEnum.KICKOFF.equals(serviceRequest.getPlay().getPlayCallType())) {
 				// Nothing needed here for now
-			} else if (serviceRequest.getPlay().getPlayType() == PlayTypeEnum.PUNT) {
+			} else if (PlayTypeEnum.PUNT.equals(serviceRequest.getPlay().getPlayType())) {
 				cleanUpYardsPuntHelper(serviceRequest);
 			} else {
 				cleanUpYardsOffenseHelper(serviceRequest);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
 
-	private void cleanUpYardsPatHelper(PbpServiceRequestPojo serviceRequest) {
+	private static void cleanUpYardsPatHelper(PbpServiceRequestPojo serviceRequest) {
 		try {
 			if ("".equals(serviceRequest.getPlay().getDriveText())
 					|| serviceRequest.getPlay().getDriveText().endsWith("at -")) {
 				serviceRequest.getPlay().setPlayStartYard(97);
 				serviceRequest.getPlay().setPlayYardToGain(3);
 			} else {
-				String[] downAndDistance = pbpParsingUtils
+				String[] downAndDistance = PbpParsingUtils
 						.convertDownAndDistance(serviceRequest.getPlay().getDriveText());
 				serviceRequest.getPlay().setPlayStartYard(
-						pbpParsingUtils.formatYardLine(downAndDistance[2], serviceRequest.getPossessionTeam(),
+						PbpParsingUtils.formatYardLine(downAndDistance[2], serviceRequest.getPossessionTeam(),
 								serviceRequest.getDefenseTeam(), serviceRequest.getTeamAbbrevDict()));
 				serviceRequest.getPlay().setPlayYardToGain(100 - serviceRequest.getPlay().getPlayStartYard());
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
 
-	private void cleanUpYardsPuntHelper(PbpServiceRequestPojo serviceRequest) {
+	private static void cleanUpYardsPuntHelper(PbpServiceRequestPojo serviceRequest) {
 		try {
-			String[] downAndDistance = pbpParsingUtils.convertDownAndDistance(serviceRequest.getPlay().getDriveText());
+			String[] downAndDistance = PbpParsingUtils.convertDownAndDistance(serviceRequest.getPlay().getDriveText());
 			serviceRequest.getPlay().setPlayStartYard(
-					pbpParsingUtils.formatYardLine(downAndDistance[2], serviceRequest.getDefenseTeam(),
+					PbpParsingUtils.formatYardLine(downAndDistance[2], serviceRequest.getDefenseTeam(),
 							serviceRequest.getPossessionTeam(), serviceRequest.getTeamAbbrevDict()));
 			serviceRequest.getPlay().setPlayStartDown(PlayDownEnum.valueOf(downAndDistance[0]));
 			serviceRequest.getPlay().setPlayYardToGain(Integer.valueOf(downAndDistance[1]));
@@ -1506,16 +1856,16 @@ public class PlayByPlayService {
 				}
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
 
-	private void cleanUpYardsOffenseHelper(PbpServiceRequestPojo serviceRequest) {
+	private static void cleanUpYardsOffenseHelper(PbpServiceRequestPojo serviceRequest) {
 		try {
-			String[] downAndDistance = pbpParsingUtils.convertDownAndDistance(serviceRequest.getPlay().getDriveText());
+			String[] downAndDistance = PbpParsingUtils.convertDownAndDistance(serviceRequest.getPlay().getDriveText());
 			serviceRequest.getPlay().setPlayStartYard(
-					pbpParsingUtils.formatYardLine(downAndDistance[2], serviceRequest.getPossessionTeam(),
+					PbpParsingUtils.formatYardLine(downAndDistance[2], serviceRequest.getPossessionTeam(),
 							serviceRequest.getDefenseTeam(), serviceRequest.getTeamAbbrevDict()));
 			serviceRequest.getPlay().setPlayStartDown(PlayDownEnum.valueOf(downAndDistance[0]));
 			serviceRequest.getPlay().setPlayYardToGain(Integer.valueOf(downAndDistance[1]));
@@ -1528,12 +1878,12 @@ public class PlayByPlayService {
 				}
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
 
-	private void cleanUpPlay(PbpServiceRequestPojo serviceRequest) {
+	private static void cleanUpPlay(PbpServiceRequestPojo serviceRequest) {
 		try {
 			serviceRequest.getPlay().setPlayText(serviceRequest.getPlay().getPlayText().replace(
 					"D.Longman kickoff 64 yards to the COL1 out of bounds. Receiving team has elected to spot the ball at its 35-yard line .",
@@ -1550,12 +1900,12 @@ public class PlayByPlayService {
 				cleanUpPlayNonKickoffHelper(serviceRequest);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
 
-	private void cleanUpPlayKickoffHelper(PbpServiceRequestPojo serviceRequest) {
+	private static void cleanUpPlayKickoffHelper(PbpServiceRequestPojo serviceRequest) {
 		try {
 			serviceRequest.getPlay().getPlayResult().setPlayResultTurnover(false);
 			if (serviceRequest.getPlayRawText().toUpperCase().contains("KICKOFF")) {
@@ -1566,17 +1916,17 @@ public class PlayByPlayService {
 				serviceRequest.getDrive().setKickoff(true);
 				serviceRequest.getPlay().setPlayType(PlayTypeEnum.KICKOFF);
 				serviceRequest.getPlay().setPlayStartDown(PlayDownEnum.NA);
-				serviceRequest.getPlay().setPlayCallType(PlayCallTypeEnum.NA);
+				serviceRequest.getPlay().setPlayCallType(PlayCallTypeEnum.KICKOFF);
 			} else {
 				serviceRequest.getDrive().setKickoff(false);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 	}
 
-	private void cleanUpPlayNonKickoffHelper(PbpServiceRequestPojo serviceRequest) {
+	private static void cleanUpPlayNonKickoffHelper(PbpServiceRequestPojo serviceRequest) {
 		try {
 			if (serviceRequest.getPlayRawText().toUpperCase().contains("PUNT")) {
 				String puntTeam = serviceRequest.getPossessionTeam();
@@ -1622,19 +1972,18 @@ public class PlayByPlayService {
 				throw new IllegalArgumentException("Missing play type and play call type");
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
-
+			LoggingUtils.logException(e, e.toString());
 		}
 	}
 
-	private void addStartYard(PbpServiceRequestPojo serviceRequest) {
+	private static void addStartYardPenalty(PbpServiceRequestPojo serviceRequest) {
 		try {
 			boolean noPlay = serviceRequest.getPlay().getNoPlayPenalty();
 			if (Objects.isNull(serviceRequest.getPlay().getPlayStartYard()) && noPlay) {
 				String regexCondition = String.format("%s (?:(?:to)|(?:at))(?: the)?%s", NcaaConstants.TEAM_YARD_REGEX,
 						NcaaConstants.TEAM_YARD_REGEX);
-				if (pbpParsingUtils.evalMatch(serviceRequest.getPlay().getPlayText(), regexCondition)) {
-					String startYardString = pbpParsingUtils.extractCustom(serviceRequest.getPlay().getPlayText(),
+				if (PbpParsingUtils.evalMatch(serviceRequest.getPlay().getPlayText(), regexCondition)) {
+					String startYardString = PbpParsingUtils.extractCustom(serviceRequest.getPlay().getPlayText(),
 							regexCondition, 2);
 					String[] startYardStringArrays = startYardString.split("\\|");
 					int startYardMatches = startYardStringArrays.length;
@@ -1642,7 +1991,7 @@ public class PlayByPlayService {
 						throw new IllegalArgumentException("Start regex extraction length = 0");
 					}
 					String[] startYardStringArray = startYardStringArrays[startYardMatches - 1].split("\\~");
-					Integer startYard = pbpParsingUtils.formatYardLine(startYardStringArray[0],
+					Integer startYard = PbpParsingUtils.formatYardLine(startYardStringArray[0],
 							serviceRequest.getPossessionTeam(), serviceRequest.getDefenseTeam(),
 							serviceRequest.getTeamAbbrevDict());
 					serviceRequest.getPlay().setPlayStartYard(startYard);
@@ -1653,24 +2002,56 @@ public class PlayByPlayService {
 				}
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 
 	}
 
-	private void addEndYard(PbpServiceRequestPojo serviceRequest) {
+	private static void reconcileNoPlayHalfDistance(PbpServiceRequestPojo params) {
 		try {
-			if (pbpParsingUtils.evalMatch(serviceRequest.getPlay().getPlayText(), "Touchback.$")) {
-				if (serviceRequest.getPlay().getPlayType() == PlayTypeEnum.KICKOFF) {
+			if (Boolean.TRUE.equals(params.getPlay().getNoPlayPenalty())
+					&& Objects.isNull(params.getPlay().getPlayResult().getPlayResultYardLine())) {
+				List<PlayerStatPenaltyPojo> offensePenalty = params.getPlay().getPlayerStat()
+						.get(params.getPossessionTeam()).getPenalty();
+				List<PlayerStatPenaltyPojo> defensePenalty = params.getPlay().getPlayerStat()
+						.get(params.getDefenseTeam()).getPenalty();
+
+				Integer startYard = params.getPlay().getPlayStartYard();
+				Integer halfDistance;
+				if (!offensePenalty.isEmpty()) {
+					halfDistance = (int) Math.ceil(startYard / 2.0);
+					if (offensePenalty.get(0).getPenaltyYards() > halfDistance) {
+						offensePenalty.get(0).setPenaltyYards(halfDistance);
+						params.getPlay().getPlayResult().setPlayResultYard(halfDistance * -1);
+						params.getPlay().getPlayResult().setPlayResultYardLine(halfDistance);
+					}
+				} else {
+					halfDistance = ((100 - startYard) / 2);
+					if (defensePenalty.get(0).getPenaltyYards() > halfDistance) {
+						defensePenalty.get(0).setPenaltyYards(halfDistance);
+						params.getPlay().getPlayResult().setPlayResultYard(halfDistance);
+						params.getPlay().getPlayResult().setPlayResultYardLine(startYard + halfDistance);
+					}
+				}
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, params.getPlayRawText());
+		}
+	}
+
+	private static void addEndYard(PbpServiceRequestPojo serviceRequest) {
+		try {
+			if (PbpParsingUtils.evalMatch(serviceRequest.getPlay().getPlayText(), "Touchback.$")) {
+				if (PlayTypeEnum.KICKOFF.equals(serviceRequest.getPlay().getPlayType())) {
 					serviceRequest.getPlay().getPlayResult().setPlayResultYardLine(25);
 				} else {
 					serviceRequest.getPlay().getPlayResult().setPlayResultYardLine(20);
 				}
 			} else if (Objects.isNull(serviceRequest.getPlay().getPlayResult().getPlayResultYardLine())
-					&& pbpParsingUtils.evalMatch(serviceRequest.getPlay().getPlayText(),
+					&& PbpParsingUtils.evalMatch(serviceRequest.getPlayRawText(),
 							String.format("(?:(?:to)|(?:at))(?: the)?%s", NcaaConstants.TEAM_YARD_REGEX))) {
-				String endYardString = pbpParsingUtils.extractCustom(serviceRequest.getPlay().getPlayText(),
+				String endYardString = PbpParsingUtils.extractCustom(serviceRequest.getPlayRawText(),
 						String.format("(?:(?:to)|(?:at))(?: the)?%s", NcaaConstants.TEAM_YARD_REGEX), 1);
 				String[] endYardStringArrays = endYardString.split("\\|");
 				int endYardMatches = endYardStringArrays.length;
@@ -1678,372 +2059,16 @@ public class PlayByPlayService {
 					throw new IllegalArgumentException("HANDLE THIS");
 				}
 				String[] endYardStringArray = endYardStringArrays[endYardMatches - 1].split("\\~");
-				Integer endYard = pbpParsingUtils.formatYardLine(endYardStringArray[0],
+				Integer endYard = PbpParsingUtils.formatYardLine(endYardStringArray[0],
 						serviceRequest.getPossessionTeam(), serviceRequest.getDefenseTeam(),
 						serviceRequest.getTeamAbbrevDict());
 				serviceRequest.getPlay().getPlayResult().setPlayResultYardLine(endYard);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
+			LoggingUtils.logException(e, e.toString());
 
 		}
 
-	}
-
-	private void validateDrives(List<DrivePojo> drives) {
-		try {
-			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			String methodStartInfo = String.format(STARTING_S, ste[1].getMethodName());
-			loggingUtils.logInfo(methodStartInfo);
-
-			HomeAwayScoreMeta homeAwayScoreMeta = new HomeAwayScoreMeta();
-			Integer drivesInGame = drives.size();
-			for (int d = 0; d < drivesInGame; d++) {
-				if (NcaaConstants.CONTEXT_DEBUG_VALUE_TRUE.equals(ThreadContext.get(NcaaConstants.CONTEXT_DEBUG_KEY))) {
-					loggingUtils.logInfo(String.format("-- Drive Number: %s", d));
-					loggingUtils.logInfo(String.format("Drive Start Period: %s", drives.get(d).getDriveStartPeriod()));
-					loggingUtils.logInfo(String.format("Drive End Period: %s", drives.get(d).getDriveEndPeriod()));
-					loggingUtils.logInfo(String.format("Drive Start Time: %s", drives.get(d).getDriveStartTime()));
-					loggingUtils.logInfo(String.format(DRIVE_END_TIME_S, drives.get(d).getDriveEndTime()));
-					loggingUtils.logInfo(String.format("Drive Total Time: %s", drives.get(d).getDriveTotalTime()));
-					loggingUtils
-							.logInfo(String.format("Drive Start Yardline: %s", drives.get(d).getDriveStartYardline()));
-					loggingUtils.logInfo(String.format("Drive End Yardline: %s", drives.get(d).getDriveEndYardline()));
-					loggingUtils.logInfo(String.format("Drive Total Yard: %s", drives.get(d).getDriveTotalYard()));
-					loggingUtils.logInfo(String.format("Drive Offense Yards: %s", drives.get(d).getDriveOffenseYard()));
-					loggingUtils.logInfo(String.format("Drive Result: %s", drives.get(d).getDriveResult()));
-					loggingUtils.logInfo(String.format("Drive Result Point: %s", drives.get(d).getDriveResultPoint()));
-					loggingUtils.logInfo(String.format("Drive Kickoff: %s", drives.get(d).getKickoff()));
-					loggingUtils
-							.logInfo(String.format("Drive Offense Plays: %s", drives.get(d).getDriveOffensePlays()));
-				}
-
-				validateDrive(drives.get(d));
-				validateDriveIncreasingScores(drives.get(d), homeAwayScoreMeta);
-
-				if (d != 0) {
-					if (!DriveResultEnum.END_HALF.equals(drives.get(d - 1).getDriveResult())) {
-						if (!drives.get(d).getDriveStartTime().equals(drives.get(d - 1).getDriveEndTime())) {
-							String logInfo = String.format("Last drive end time: %s | Drive start time: %s",
-									drives.get(d - 1).getDriveEndTime(), drives.get(d).getDriveStartTime());
-							loggingUtils.logInfo(logInfo);
-							throw new IllegalArgumentException(
-									"!drives.get(d).getDriveStartTime().equals(drives.get(d - 1).getDriveEndTime())");
-						}
-
-						if (DriveResultEnum.KICKOFF.equals(drives.get(d).getDriveResult())) {
-							if (drives.get(d - 1).getDriveEndYardline().equals(drives.get(d).getDriveStartYardline())) {
-								String logInfo = String.format(LAST_DRIVE_END_YARDLINE_S_DRIVE_START_YARDLINE_S,
-										drives.get(d - 1).getDriveEndYardline(), drives.get(d).getDriveStartYardline());
-								loggingUtils.logInfo(logInfo);
-								throw new IllegalArgumentException(
-										"drives.get(d-1).getDriveEndYardline().equals(drives.get(d).getDriveStartYardline())");
-							}
-							if (!DriveResultEnum.FG.equals(drives.get(d - 1).getDriveResult())
-									&& !DriveResultEnum.PAT.equals(drives.get(d - 1).getDriveResult())
-									&& !drives.get(d - 1).getDriveEndYardline().equals(100)) {
-								throw new IllegalArgumentException(
-										"!drives.get(d - 1).getDriveEndYardline().equals(100)");
-							}
-						} else if (DriveResultEnum.PAT.equals(drives.get(d).getDriveResult())) {
-							if (!DriveResultEnum.TD.equals(drives.get(d - 1).getDriveResult())) {
-								throw new IllegalArgumentException(
-										"!DriveResultEnum.TD.equals(drives.get(d - 1).getDriveResult())");
-							}
-							if (!drives.get(d).getDriveOffensePlays().equals(0)) {
-								throw new IllegalArgumentException("!drives.get(d).getDriveOffensePlays().equals(0)");
-							}
-						} else if (DriveResultEnum.PUNT.equals(drives.get(d - 1).getDriveResult())) {
-							if (!drives.get(d - 1).getDriveEndYardline()
-									.equals(100 - drives.get(d).getDriveStartYardline())) {
-								String logInfo = String.format(LAST_DRIVE_END_YARDLINE_S_DRIVE_START_YARDLINE_S,
-										100 - drives.get(d - 1).getDriveEndYardline(),
-										drives.get(d).getDriveStartYardline());
-								loggingUtils.logInfo(logInfo);
-								throw new IllegalArgumentException(
-										DRIVES_GET_D_1_GET_DRIVE_END_YARDLINE_EQUALS_DRIVES_GET_D_GET_DRIVE_START_YARDLINE);
-							}
-						} else if (DriveResultEnum.FG.equals(drives.get(d - 1).getDriveResult())) {
-							if (!drives.get(d - 1).getDriveEndYardline()
-									.equals(100 - drives.get(d).getDriveStartYardline())) {
-								String logInfo = String.format(LAST_DRIVE_END_YARDLINE_S_DRIVE_START_YARDLINE_S,
-										100 - drives.get(d - 1).getDriveEndYardline(),
-										drives.get(d).getDriveStartYardline());
-								loggingUtils.logInfo(logInfo);
-								throw new IllegalArgumentException(
-										DRIVES_GET_D_1_GET_DRIVE_END_YARDLINE_EQUALS_DRIVES_GET_D_GET_DRIVE_START_YARDLINE);
-							}
-						} else if (DriveResultEnum.TURNOVER.equals(drives.get(d - 1).getDriveResult())) {
-							if (!drives.get(d - 1).getDriveEndYardline()
-									.equals(100 - drives.get(d).getDriveStartYardline())) {
-								String logInfo = String.format(LAST_DRIVE_END_YARDLINE_S_DRIVE_START_YARDLINE_S,
-										100 - drives.get(d - 1).getDriveEndYardline(),
-										drives.get(d).getDriveStartYardline());
-								loggingUtils.logInfo(logInfo);
-								throw new IllegalArgumentException(
-										DRIVES_GET_D_1_GET_DRIVE_END_YARDLINE_EQUALS_DRIVES_GET_D_GET_DRIVE_START_YARDLINE);
-							}
-						} else {
-							if (!drives.get(d - 1).getDriveEndYardline()
-									.equals(drives.get(d).getDriveStartYardline())) {
-								String logInfo = String.format(LAST_DRIVE_END_YARDLINE_S_DRIVE_START_YARDLINE_S,
-										drives.get(d - 1).getDriveEndYardline(), drives.get(d).getDriveStartYardline());
-								loggingUtils.logInfo(logInfo);
-								throw new IllegalArgumentException(
-										DRIVES_GET_D_1_GET_DRIVE_END_YARDLINE_EQUALS_DRIVES_GET_D_GET_DRIVE_START_YARDLINE);
-							}
-						}
-					} else {
-						if (!drives.get(d).getDriveStartTime().equals(1800)) {
-							String logInfo = String.format("Last drive result: %s | Drive start time: %s",
-									drives.get(d - 1).getDriveResult(), drives.get(d).getDriveStartTime());
-							loggingUtils.logInfo(logInfo);
-							throw new IllegalArgumentException("!drives.get(d).getDriveStartTime().equals(1800)");
-						}
-						if (!DriveResultEnum.KICKOFF.equals(drives.get(d).getDriveResult())) {
-							String logInfo = String.format("Last drive result: %s | Drive result: %s",
-									drives.get(d - 1).getDriveResult(), drives.get(d).getDriveResult());
-							loggingUtils.logInfo(logInfo);
-							throw new IllegalArgumentException(
-									"!DriveResultEnum.KICKOFF.equals(drives.get(d).getDriveResult())");
-						}
-					}
-				}
-			}
-		} catch (Exception e) {
-			loggingUtils.logException(e, e.toString());
-		}
-	}
-
-	private void validateDriveIncreasingScores(DrivePojo drive, HomeAwayScoreMeta homeAwayScoreMeta) {
-		if (drive.getDriveStartHomeScore() >= homeAwayScoreMeta.getHomeStartScore()) {
-			homeAwayScoreMeta.setHomeStartScore(drive.getDriveStartHomeScore());
-		} else {
-			throw new IllegalArgumentException("drive.getDriveStartHomeScore() < last drive's homeScoreStart");
-		}
-		if (drive.getDriveStartAwayScore() >= homeAwayScoreMeta.getAwayStartScore()) {
-			homeAwayScoreMeta.setAwayStartScore(drive.getDriveStartAwayScore());
-		} else {
-			throw new IllegalArgumentException("drive.getDriveStartAwayScore() < last drive's awayScoreStart");
-		}
-		if (drive.getDriveResultHomeScore() >= homeAwayScoreMeta.getHomeResultScore()) {
-			homeAwayScoreMeta.setHomeResultScore(drive.getDriveResultHomeScore());
-		} else {
-			throw new IllegalArgumentException("drive.getDriveResultHomeScore() < last drive's homeScoreResult");
-		}
-		if (drive.getDriveResultAwayScore() >= homeAwayScoreMeta.getAwayResultScore()) {
-			homeAwayScoreMeta.setAwayResultScore(drive.getDriveResultAwayScore());
-		} else {
-			throw new IllegalArgumentException("drive.getDriveResultAwayScore() < last drive's awayScoreResult");
-		}
-	}
-
-	private void validateDrive(DrivePojo drive) {
-
-		validateDriveNullCheckHelper(drive);
-		validateDriveNullScoreHelper(drive);
-		validateDriveScoreMatchLastPlay(drive);
-		validatePlayIncreasingScores(drive);
-
-		if (drive.getDriveEndYardline().equals(100) && drive.getDriveResultPoint() < 6) {
-			throw new IllegalArgumentException(
-					"drive.getDriveEndYardline().equals(100) && drive.getDriveResultPoint() < 6");
-		}
-		if (drive.getDriveResultPoint() > 5 && !drive.getDriveEndYardline().equals(100)) {
-			throw new IllegalArgumentException(
-					"drive.getDriveResultPoint() > 5 && !drive.getDriveEndYardline().equals(100)");
-		}
-		if (drive.getDriveResultPoint() < 0 && !drive.getDriveEndYardline().equals(0)) {
-			throw new IllegalArgumentException(
-					"drive.getDriveResultPoint() < 0 && !drive.getDriveEndYardline().equals(-100)");
-		}
-
-		if (drive.getDriveStartAwayScore() != drive.getDriveResultAwayScore()
-				|| drive.getDriveStartHomeScore() != drive.getDriveResultHomeScore()) {
-			if (drive.getDriveResultPoint() == 0) {
-				throw new IllegalArgumentException("drive.getDriveResultPoint() == 0");
-			}
-		} else {
-			if (drive.getDriveResultPoint() != 0) {
-				throw new IllegalArgumentException("drive.getDriveResultPoint() != 0");
-			}
-		}
-
-		if (!(drive.getDriveResultPoint().equals(0) || drive.getDriveResultPoint().equals(7)
-				|| drive.getDriveResultPoint().equals(1) || drive.getDriveResultPoint().equals(8)
-				|| drive.getDriveResultPoint().equals(6) || drive.getDriveResultPoint().equals(3)
-				|| drive.getDriveResultPoint().equals(-6))) {
-			throw new IllegalArgumentException("Invalid drive points");
-		}
-		validateKickoff(drive);
-
-		if (drive.getDriveStartTime() < drive.getDriveEndTime()) {
-			throw new IllegalArgumentException("drive.getDriveStartTime() < drive.getDriveEndTime()");
-		}
-
-	}
-
-	private void validatePlayIncreasingScores(DrivePojo drive) {
-		Integer homeScoreStart = 0;
-		Integer awayScoreStart = 0;
-		Integer homeScoreResult = 0;
-		Integer awayScoreResult = 0;
-		for (PlayPojo play : drive.getDrivePlays()) {
-			if (play.getPlayStartHomeScore() >= homeScoreStart) {
-				homeScoreStart = play.getPlayStartHomeScore();
-			} else {
-				throw new IllegalArgumentException("play.getPlayStartHomeScore() < last play's homeScoreStart");
-			}
-			if (play.getPlayStartAwayScore() >= awayScoreStart) {
-				awayScoreStart = play.getPlayStartAwayScore();
-			} else {
-				throw new IllegalArgumentException("play.getPlayStartAwayScore() < last play's awayScoreStart");
-			}
-			if (play.getPlayResult().getPlayResultHomeScore() >= homeScoreResult) {
-				homeScoreResult = play.getPlayResult().getPlayResultHomeScore();
-			} else {
-				throw new IllegalArgumentException(
-						"play.getPlayResult().getPlayResultHomeScore() < last play's homeScoreResult");
-			}
-			if (play.getPlayResult().getPlayResultAwayScore() >= awayScoreResult) {
-				awayScoreResult = play.getPlayResult().getPlayResultAwayScore();
-			} else {
-				throw new IllegalArgumentException(
-						"play.getPlayResult().getPlayResultAwayScore() < last play's awayScoreResult");
-			}
-		}
-	}
-
-	private void validateDriveScoreMatchLastPlay(DrivePojo drive) {
-		if (drive.getDriveStartHomeScore() != drive.getDrivePlays().get(0).getPlayStartHomeScore()) {
-
-			String actualValueLogStr = String.format("HOME | DRIVE | START | score: %s",
-					drive.getDriveStartHomeScore());
-			String expectedValueLogStr = String.format("HOME | FIRST PLAY | START | score: %s",
-					drive.getDrivePlays().get(0).getPlayStartHomeScore());
-			loggingUtils.logInfo(actualValueLogStr);
-			loggingUtils.logInfo(expectedValueLogStr);
-
-			throw new IllegalArgumentException(
-					"drive.getDriveStartHomeScore() != drive.getDrivePlays().get(0).getPlayStartHomeScore()");
-		}
-		if (drive.getDriveStartAwayScore() != drive.getDrivePlays().get(0).getPlayStartAwayScore()) {
-
-			String actualValueLogStr = String.format("AWAY | DRIVE | START | score: %s",
-					drive.getDriveStartAwayScore());
-			String expectedValueLogStr = String.format("AWAY | FIRST PLAY | START | score: %s",
-					drive.getDrivePlays().get(0).getPlayStartAwayScore());
-			loggingUtils.logInfo(actualValueLogStr);
-			loggingUtils.logInfo(expectedValueLogStr);
-
-			throw new IllegalArgumentException(
-					"drive.getDriveStartAwayScore() != drive.getDrivePlays().get(0).getPlayStartAwayScore()");
-		}
-		if (drive.getDriveResultHomeScore() != drive.getDrivePlays().get(drive.getDrivePlays().size() - 1)
-				.getPlayResult().getPlayResultHomeScore()) {
-
-			String actualValueLogStr = String.format("HOME | DRIVE | RESULT | score: %s",
-					drive.getDriveResultHomeScore());
-			String expectedValueLogStr = String.format("HOME | LAST PLAY | RESULT | score: %s", drive.getDrivePlays()
-					.get(drive.getDrivePlays().size() - 1).getPlayResult().getPlayResultHomeScore());
-			loggingUtils.logInfo(actualValueLogStr);
-			loggingUtils.logInfo(expectedValueLogStr);
-
-			throw new IllegalArgumentException(
-					"drive.getDriveResultHomeScore() != drive.getDrivePlays().get(drive.getDrivePlays().size()-1).getPlayResult().getPlayResultHomeScore()");
-		}
-		if (drive.getDriveResultAwayScore() != drive.getDrivePlays().get(drive.getDrivePlays().size() - 1)
-				.getPlayResult().getPlayResultAwayScore()) {
-
-			String actualValueLogStr = String.format("AWAY | DRIVE | RESULT | score: %s",
-					drive.getDriveResultAwayScore());
-			String expectedValueLogStr = String.format("AWAY | LAST PLAY | RESULT | score: %s", drive.getDrivePlays()
-					.get(drive.getDrivePlays().size() - 1).getPlayResult().getPlayResultAwayScore());
-			loggingUtils.logInfo(actualValueLogStr);
-			loggingUtils.logInfo(expectedValueLogStr);
-
-			throw new IllegalArgumentException(
-					"drive.getDriveResultAwayScore() != drive.getDrivePlays().get(drive.getDrivePlays().size()-1).getPlayResult().getPlayResultAwayScore()");
-		}
-	}
-
-	private void validateDriveNullCheckHelper(DrivePojo drive) {
-		if (StringUtils.isBlank(drive.getPossessionTeamId())) {
-			throw new IllegalArgumentException("StringUtils.isBlank(drive.getPossessionTeamId())");
-		}
-		if (drive.getDriveStartTime() == null) {
-			throw new IllegalArgumentException("drive.getDriveStartTime() == null");
-		}
-		if (drive.getDriveEndTime() == null) {
-			throw new IllegalArgumentException("drive.getDriveEndTime() == null");
-		}
-		if (drive.getDriveTotalTime() == null) {
-			throw new IllegalArgumentException("drive.getDriveTotalTime() == null");
-		}
-		if (drive.getDriveOffensePlays() == null) {
-			throw new IllegalArgumentException("drive.getDriveOffensePlays() == null");
-		}
-		if (drive.getDriveStartPeriod() == null) {
-			throw new IllegalArgumentException("drive.getDriveStartPeriod() == null");
-		}
-		if (drive.getDriveEndPeriod() == null) {
-			throw new IllegalArgumentException("drive.getDriveEndPeriod() == null");
-		}
-		if (drive.getDrivePlays().isEmpty()) {
-			throw new IllegalArgumentException("drive.getDrivePlays().isEmpty()");
-		}
-		if (drive.getDriveStartYardline() == null) {
-			throw new IllegalArgumentException("drive.getDriveStartYardline() == null");
-		}
-		if (drive.getDriveEndYardline() == null) {
-			throw new IllegalArgumentException("drive.getDriveEndYardline() == null");
-		}
-		if (drive.getDriveTotalYard() == null) {
-			throw new IllegalArgumentException("drive.getDriveTotalYard() == null");
-		}
-		if (drive.getDriveOffenseYard() == null) {
-			throw new IllegalArgumentException("drive.getDriveOffenseYard() == null");
-		}
-		if (drive.getDriveResultPoint() == null) {
-			throw new IllegalArgumentException("drive.getDriveResultPoint() == null");
-		}
-		if (drive.getDriveResult() == null) {
-			throw new IllegalArgumentException("drive.getDriveResult() == null");
-		}
-		if (drive.getDriveResultScoringOpp() == null) {
-			throw new IllegalArgumentException("drive.getDriveResultScoringOpp() == null");
-		}
-	}
-
-	private void validateDriveNullScoreHelper(DrivePojo drive) {
-		if (drive.getDriveResultHomeScore() == null) {
-			throw new IllegalArgumentException("drive.getDriveResultHomeScore() == null");
-		}
-		if (drive.getDriveResultAwayScore() == null) {
-			throw new IllegalArgumentException("drive.getDriveResultAwayScore() == null");
-		}
-		if (drive.getDriveStartHomeScore() == null) {
-			throw new IllegalArgumentException("drive.getDriveStartHomeScore() == null");
-		}
-		if (drive.getDriveStartAwayScore() == null) {
-			throw new IllegalArgumentException("drive.getDriveStartAwayScore() == null");
-		}
-	}
-
-	private void validateKickoff(DrivePojo drive) {
-		if (Boolean.TRUE.equals(drive.getKickoff()) || DriveResultEnum.PAT.equals(drive.getDriveResult())) {
-			if (drive.getDrivePlays().stream().filter(p -> !p.getNoPlayPenalty()).collect(Collectors.toList())
-					.size() != 1) {
-				throw new IllegalArgumentException("drive.getDrivePlays().size() != 1");
-			}
-			if (drive.getDriveOffensePlays() != 0) {
-				throw new IllegalArgumentException("drive.getDriveOffensePlays() != 0");
-			}
-		} else {
-			if (drive.getDriveOffensePlays() == 0) {
-				throw new IllegalArgumentException("drive.getDriveOffensePlays() == 0");
-			}
-		}
 	}
 
 }

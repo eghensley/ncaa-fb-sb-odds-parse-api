@@ -1,6 +1,8 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -21,12 +23,10 @@ public class TeamService {
 
 	private final TeamRepository teamRepo;
 	private final MappingUtils mappingUtils;
-	private final LoggingUtils loggingUtils;
 
-	public TeamService(TeamRepository teamRepo, MappingUtils mappingUtils, LoggingUtils loggingUtils) {
+	public TeamService(TeamRepository teamRepo, MappingUtils mappingUtils) {
 		this.teamRepo = teamRepo;
 		this.mappingUtils = mappingUtils;
-		this.loggingUtils = loggingUtils;
 	}
 
 	public GetResponse fetchTeam(String teamId) {
@@ -40,12 +40,39 @@ public class TeamService {
 				return new GetResponse(infoFound, teamDto, null);
 			} else {
 				String logStr = String.format("No team found for ID: %s", teamId);
-				loggingUtils.logInfo(logStr);
+				LoggingUtils.logInfo(logStr);
 				return new GetResponse(noInfoFound, null, logStr);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, String.format("ERROR: Team fetch failed for ID: %s", teamId));
+			LoggingUtils.logException(e, String.format("ERROR: Team fetch failed for ID: %s", teamId));
 			return new GetResponse(noInfoFound, HttpStatus.BAD_REQUEST, e.toString());
+		}
+	}
+
+	public Map<String, TeamData> compileTeamMap(String homeTeamId, String awayTeamId) {
+		try {
+			Map<String, TeamData> teamMap = new HashMap<>();
+			teamMap.put(homeTeamId, retrieveTeam(homeTeamId));
+			teamMap.put(awayTeamId, retrieveTeam(awayTeamId));
+			return teamMap;
+		} catch (Exception e) {
+			LoggingUtils.logException(e, String.format("ERROR: Compile Team Map failed for Home ID: %s | Away ID: %s",
+					homeTeamId, awayTeamId));
+			return new HashMap<>();
+		}
+	}
+
+	private TeamData retrieveTeam(String teamId) {
+		try {
+			Optional<TeamData> teamDataOpt = teamRepo.findByNcaaTeamId(teamId);
+			if (teamDataOpt.isPresent()) {
+				return teamDataOpt.get();
+			} else {
+				throw new IllegalArgumentException(String.format("Team not found: %s", teamId));
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, String.format("ERROR: Retrieve Team failed for ID: %s", teamId));
+			return null;
 		}
 	}
 
@@ -55,18 +82,19 @@ public class TeamService {
 
 		String newTeamLogInfoStrFormat = "Team found to be added: %s - %s";
 		String existingTeamLogInfoStrFormat = "Team already exists: %s - %s";
+		Optional<TeamData> teamOpt = teamRepo.findByNcaaTeamId(parsedTeam.getNcaaTeamId());
 
-		if (Boolean.FALSE.equals(teamRepo.findByNcaaTeamId(parsedTeam.getNcaaTeamId()).isPresent())) {
+		if (teamOpt.isPresent()) {
+			team = teamOpt.get();
+			LoggingUtils
+					.logInfo(String.format(existingTeamLogInfoStrFormat, team.getTeamName(), team.getTeamNickname()));
+		} else {
 			team = (TeamData) mappingUtils.mapToDto(parsedTeam, TeamData.class);
-			loggingUtils.logInfo(String.format(newTeamLogInfoStrFormat, team.getTeamName(), team.getTeamNickname()));
+			LoggingUtils.logInfo(String.format(newTeamLogInfoStrFormat, team.getTeamName(), team.getTeamNickname()));
 			teamRepo.save(team);
-			
+
 			TeamDto teamDto = (TeamDto) mappingUtils.mapToDto(parsedTeam, TeamDto.class);
 			extractedTeams.add(teamDto);
-		} else {
-			team = teamRepo.findByNcaaTeamId(parsedTeam.getNcaaTeamId()).get();
-			loggingUtils
-					.logInfo(String.format(existingTeamLogInfoStrFormat, team.getTeamName(), team.getTeamNickname()));
 		}
 		return team;
 	}

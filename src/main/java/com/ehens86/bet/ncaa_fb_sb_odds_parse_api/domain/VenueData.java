@@ -22,7 +22,7 @@ public class VenueData extends OidAuditEntity implements Serializable {
 	private String state;
 
 	public VenueData() {
-
+		// Base constructor
 	}
 
 	/**

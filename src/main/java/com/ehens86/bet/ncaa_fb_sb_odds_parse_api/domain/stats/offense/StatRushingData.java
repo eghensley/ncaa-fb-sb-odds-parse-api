@@ -50,7 +50,7 @@ public class StatRushingData extends PlayerStatEntity implements Serializable {
 	private Integer rushingOpenFieldYard;
 	@Column(name = "F_RUSH_SECOND_LEVEL", nullable = false)
 	private boolean rushingSecondLevel;
-	@Column(name = "RUSH_SECOND_LEVEL_YARD", nullable = false)
+	@Column(name = "RUSH_SECOND_LEVEL_YARD", nullable = true)
 	private Integer rushingSecondLevelYard;
 	@Column(name = "F_RUSH_STUFF", nullable = false)
 	private boolean rushingStuff;
@@ -62,15 +62,8 @@ public class StatRushingData extends PlayerStatEntity implements Serializable {
 	private boolean rushingSuccess;
 	
 	public StatRushingData() {
-
+		// Base constructor
 	}
-
-//	/**
-//	 * @return the playStat
-//	 */
-//	public TeamPlayStatData getPlayStat() {
-//		return playStat;
-//	}
 
 	/**
 	 * @param playStat the playStat to set

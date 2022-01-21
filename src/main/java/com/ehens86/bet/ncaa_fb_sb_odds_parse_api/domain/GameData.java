@@ -39,6 +39,8 @@ public class GameData extends BaseAuditEntity implements Serializable {
 	private TeamData teamAway;
 	@Column(name = "DATE", nullable = false)
 	private LocalDate gameDate;
+	@Column(name = "WEEK", nullable = false)
+	private Integer week;
 	@Column(name = "TIME", nullable = true)
 	private LocalTime gameTime;
 	@Column(name = "DIVISION", nullable = false)
@@ -266,12 +268,26 @@ public class GameData extends BaseAuditEntity implements Serializable {
 		this.pbpComplete = pbpComplete;
 	}
 
+	/**
+	 * @return the week
+	 */
+	public Integer getWeek() {
+		return week;
+	}
+
+	/**
+	 * @param week the week to set
+	 */
+	public void setWeek(Integer week) {
+		this.week = week;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + Objects.hash(awayScore, division, drives, gameDate, gameTime, homeScore, ncaaGameId,
-				pbpComplete, season, teamAway, teamHome, valid, venue, winner);
+				pbpComplete, season, teamAway, teamHome, valid, venue, week, winner);
 		return result;
 	}
 
@@ -293,15 +309,16 @@ public class GameData extends BaseAuditEntity implements Serializable {
 				&& Objects.equals(ncaaGameId, other.ncaaGameId) && pbpComplete == other.pbpComplete
 				&& Objects.equals(season, other.season) && Objects.equals(teamAway, other.teamAway)
 				&& Objects.equals(teamHome, other.teamHome) && valid == other.valid
-				&& Objects.equals(venue, other.venue) && winner == other.winner;
+				&& Objects.equals(venue, other.venue) && Objects.equals(week, other.week) && winner == other.winner;
 	}
 
 	@Override
 	public String toString() {
 		return "GameData [ncaaGameId=" + ncaaGameId + ", teamHome=" + teamHome + ", teamAway=" + teamAway
-				+ ", gameDate=" + gameDate + ", gameTime=" + gameTime + ", division=" + division + ", season=" + season
-				+ ", winner=" + winner + ", valid=" + valid + ", pbpComplete=" + pbpComplete + ", venue=" + venue
-				+ ", homeScore=" + homeScore + ", awayScore=" + awayScore + ", drives=" + drives + "]";
+				+ ", gameDate=" + gameDate + ", week=" + week + ", gameTime=" + gameTime + ", division=" + division
+				+ ", season=" + season + ", winner=" + winner + ", valid=" + valid + ", pbpComplete=" + pbpComplete
+				+ ", venue=" + venue + ", homeScore=" + homeScore + ", awayScore=" + awayScore + ", drives=" + drives
+				+ "]";
 	}
 
 }

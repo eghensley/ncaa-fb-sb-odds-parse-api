@@ -44,15 +44,8 @@ public class StatPuntData extends PlayerStatEntity implements Serializable {
 	private Integer puntInFive;
 
 	public StatPuntData() {
-
+		// Base constructor
 	}
-
-//	/**
-//	 * @return the playStat
-//	 */
-//	public TeamPlayStatData getPlayStat() {
-//		return playStat;
-//	}
 
 	/**
 	 * @param playStat the playStat to set

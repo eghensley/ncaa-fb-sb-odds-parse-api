@@ -1,0 +1,1593 @@
+{
+    "inputMD5Sum": "3bd9028c322a92bf97fa48839ec87092",
+    "updatedTimestamp": "2021-08-30 01:50:16 ET",
+    "meta": {
+        "title": "PLAY-BY-PLAY",
+        "teams": [
+            {
+                "homeTeam": "false",
+                "id": "958",
+                "color": "#BA0C2F",
+                "shortname": "Southern Utah",
+                "seoName": "southern-utah",
+                "sixCharAbbr": "S UTAH"
+            },
+            {
+                "homeTeam": "true",
+                "id": "1683",
+                "color": "#0032A0",
+                "shortname": "San Jose St.",
+                "seoName": "san-jose-st",
+                "sixCharAbbr": "SJSU"
+            }
+        ]
+    },
+    "periods": [
+        {
+            "title": "1ST",
+            "shortTitle": "1st",
+            "possessions": [
+                {
+                    "teamId": "1683",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "Start of 1st quarter, clock 15:00.",
+                            "driveText": "1st and 10 at SJS30",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "958",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "Southern Utah won the toss and has deferred to the second half. SJS will receive and SUU will defend the north goal.",
+                            "driveText": "",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#37 C.Reed kickoff 65 yards to the SJS0, #24 S.Garrett return 20 yards to the SJS20  (#81 B.Hutchings).",
+                            "driveText": "",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1683",
+                    "time": "14:56",
+                    "plays": [
+                        {
+                            "scoreText": "SJS drive start at 14:56",
+                            "driveText": "1st and 10 at SJS20",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #23 T.Nevens rush up the middle for a gain of 17 yards to the SJS37 (#40 T.Johnson), 1ST DOWN.",
+                            "driveText": "1st and 10 at SJS20",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the right complete for 8 yards to #23 T.Nevens caught at the SJS34 and advanced to the SJS45 (#18 A.Stanley).",
+                            "driveText": "1st and 10 at SJS37",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the right incomplete intended for #7 C.Ross thrown to the SUU35. PENALTY SUU Pass Interference on #17 A.Davis  enforced 15 yards from the end of the play at the SJS45 to the SUU40 and results in automatic 1ST DOWN.",
+                            "driveText": "2nd and 2 at SJS45",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass up the middle complete for 38 yards to #87 D.Deese, Jr. caught at the SUU19 and advanced to the SUU2 (#28 J.Thomas;#18 A.Stanley), 1ST DOWN.",
+                            "driveText": "1st and 10 at SUU40",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #23 T.Nevens rush up the middle for a loss of 3 yards to the SUU5 (#11 T.Vaimaona;#43 Q.Murray).",
+                            "driveText": "1st and 2 at SUU2",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #32 K.Robinson rush up the middle for a gain of 4 yards to the SUU1 (#25 J.Clark;#8 L.Kaho'ohanohano-Davis).",
+                            "driveText": "2nd and 5 at SUU5",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] QB Keeper #17 N.Starkel rush up the middle for a gain of 1 yard to the SUU0, TOUCHDOWN SJS.",
+                            "driveText": "3rd and 1 at SUU1",
+                            "teamId": "1683",
+                            "visitingScore": "0",
+                            "homeScore": "6"
+                        },
+                        {
+                            "scoreText": "#39 M.Mercurio PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#49 T.Schive kickoff 61 yards to the SUU4, #80 J.Cockett return 12 yards to the SUU16  (#24 S.Garrett).",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "958",
+                    "time": "12:18",
+                    "plays": [
+                        {
+                            "scoreText": "SUU drive start at 12:18",
+                            "driveText": "1st and 10 at SUU16",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #30 D.Moore III rush up the middle for a gain of 9 yards to the SUU25 (#0 T.Parker).",
+                            "driveText": "1st and 10 at SUU16",
+                            "teamId": "958",
+                            "visitingScore": "0",
+                            "homeScore": "1"
+                        },
+                        {
+                            "scoreText": "#30 D.Moore III rush to the right for a gain of 8 yards to the SUU33 (#45 K.Harmon;#23 N.Shelton). PENALTY SJS Personal Foul on #45 K.Harmon  enforced 15 yards from the end of the play at the SUU33 to the SUU48 and results in automatic 1ST DOWN.",
+                            "driveText": "2nd and 1 at SUU25",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass to the right complete for 3 yards to #80 J.Cockett caught at the SUU49 and advanced to the SJS49 (#22 T.Jenkins). PENALTY  Before the snap, SUU Illegal Formation on #66 N.Unufe  enforced 5 yards from the SUU48 to the SUU43. NO PLAY (replay the down).",
+                            "driveText": "1st and 10 at SUU48",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #4 J.Miller pass to the right complete for 5 yards to #11 F.Harris III to the SUU48 (#23 N.Shelton).",
+                            "driveText": "1st and 15 at SUU43",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #23 K.Davis rush to the left for a loss of 3 yards to the SUU45 (#27 J.Lenard).",
+                            "driveText": "2nd and 10 at SUU48",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #4 J.Miller pass up the middle complete for 14 yards to #0 B.Schenks caught at the SJS42 and advanced to the SJS41 (#25 C.Bostic III). PENALTY SJS Roughing the Passer on #42 V.Fehoko  enforced 15 yards from the end of the play at the SJS41 to the SJS26 and results in automatic 1ST DOWN.",
+                            "driveText": "3rd and 13 at SUU45",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout San Jose St., clock 09:03.",
+                            "driveText": "1st and 10 at SJS26",
+                            "teamId": "958",
+                            "visitingScore": "0",
+                            "homeScore": "1"
+                        },
+                        {
+                            "scoreText": "[SG] #20 D.Christiansen rush up the middle for a gain of 6 yards to the SJS20 (#45 K.Harmon).",
+                            "driveText": "1st and 10 at SJS26",
+                            "teamId": "958",
+                            "visitingScore": "0",
+                            "homeScore": "1"
+                        },
+                        {
+                            "scoreText": "[SG] #30 D.Moore III rush to the left for a loss of 1 yard to the SJS21 (#91 E.Ane;#4 N.Wright).",
+                            "driveText": "2nd and 4 at SJS20",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #4 J.Miller pass up the middle incomplete intended for #81 B.Hutchings broken up by #12 R.Johnson at the SJS15.",
+                            "driveText": "3rd and 5 at SJS21",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#37 C.Reed field goal attempt from 34 yards NO GOOD (wide left) [kick was spotted at SJS24], clock 07:26.",
+                            "driveText": "4th and 5 at SJS21",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1683",
+                    "time": "07:26",
+                    "plays": [
+                        {
+                            "scoreText": "SJS drive start at 07:26",
+                            "driveText": "1st and 10 at SJS21",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #23 T.Nevens rush to the right for a gain of 27 yards to the SJS48 (#91 F.Bemiy;#21 J.Brown), 1ST DOWN.",
+                            "driveText": "1st and 10 at SJS21",
+                            "teamId": "1683",
+                            "visitingScore": "0",
+                            "homeScore": "1"
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the right complete for 5 yards to #7 C.Ross to the SUU47, out of bounds.",
+                            "driveText": "1st and 10 at SJS48",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #32 K.Robinson rush up the middle for a gain of 2 yards to the SUU45 (#18 A.Stanley;#25 J.Clark).",
+                            "driveText": "2nd and 5 at SUU47",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass up the middle complete for 20 yards to #87 D.Deese, Jr. caught at the SUU30 and advanced to the SUU25 (#3 K.Singleton), 1ST DOWN.",
+                            "driveText": "3rd and 3 at SUU45",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the right incomplete intended for #24 S.Garrett thrown to the SUU23.",
+                            "driveText": "1st and 10 at SUU25",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] QB Keeper #17 N.Starkel rush to the right for a gain of 2 yards to the SUU23, End of Play.",
+                            "driveText": "2nd and 10 at SUU25",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #17 N.Starkel pass to the left complete for 23 yards to #13 J.Braddock caught at the SUU8 and advanced to the SUU0, 1ST DOWN, TOUCHDOWN SJS (Scoring play confirmed).",
+                            "driveText": "3rd and 8 at SUU23",
+                            "teamId": "1683",
+                            "visitingScore": "0",
+                            "homeScore": "14"
+                        },
+                        {
+                            "scoreText": "#39 M.Mercurio PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#49 T.Schive kickoff 61 yards to the SUU4, #80 J.Cockett return 12 yards to the SUU16  (#22 T.Jenkins).",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "958",
+                    "time": "04:14",
+                    "plays": [
+                        {
+                            "scoreText": "SUU drive start at 04:14",
+                            "driveText": "1st and 10 at SUU16",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #20 D.Christiansen rush up the middle for no gain to the SUU16 (#42 V.Fehoko;#41 H.Darden).",
+                            "driveText": "1st and 10 at SUU16",
+                            "teamId": "958",
+                            "visitingScore": "0",
+                            "homeScore": "14"
+                        },
+                        {
+                            "scoreText": "Timeout Southern Utah, clock 03:29.",
+                            "driveText": "2nd and 10 at SUU16",
+                            "teamId": "958",
+                            "visitingScore": "0",
+                            "homeScore": "14"
+                        },
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass up the middle incomplete intended for #80 J.Cockett thrown to the SUU35.",
+                            "driveText": "2nd and 10 at SUU16",
+                            "teamId": "958",
+                            "visitingScore": "0",
+                            "homeScore": "14"
+                        },
+                        {
+                            "scoreText": "PENALTY  Before the snap, SUU False Start on #56 C.Yarro  enforced 5 yards from the SUU16 to the SUU11.",
+                            "driveText": "3rd and 10 at SUU16",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass to the right incomplete intended for #0 B.Schenks thrown to the SUU45.",
+                            "driveText": "3rd and 15 at SUU11",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#31 J.Gerardi punt 70 yards to the SJS19, #24 S.Garrett return 15 yards to the SJS34 (#81 B.Hutchings).",
+                            "driveText": "4th and 15 at SUU11",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1683",
+                    "time": "03:05",
+                    "plays": [
+                        {
+                            "scoreText": "SJS drive start at 03:05",
+                            "driveText": "1st and 10 at SJS34",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass up the middle complete for 43 yards to #13 J.Braddock caught at the SUU26 and advanced to the SUU23, End of Play, 1ST DOWN.",
+                            "driveText": "1st and 10 at SJS34",
+                            "teamId": "1683",
+                            "visitingScore": "0",
+                            "homeScore": "14"
+                        },
+                        {
+                            "scoreText": "[NHSG] #32 K.Robinson rush up the middle for a loss of 10 yards to the SUU33 (#10 G.Rogers;#18 A.Stanley). PENALTY SJS Holding on #87 D.Deese, Jr.  enforced 10 yards from the SUU23 to the SUU33. NO PLAY (replay the down).",
+                            "driveText": "1st and 10 at SUU23",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass up the middle incomplete intended for #88 S.Olson thrown to the SUU0.",
+                            "driveText": "1st and 20 at SUU33",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the left complete for 16 yards to #32 K.Robinson caught at the SUU20 and advanced to the SUU17 (#8 L.Kaho'ohanohano-Davis), out of bounds.",
+                            "driveText": "2nd and 20 at SUU33",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass up the middle complete for 5 yards to #21 J.Simpson to the SUU12 (#32 J.Narayan), 1ST DOWN.",
+                            "driveText": "3rd and 4 at SUU17",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #23 T.Nevens rush to the left for a gain of 12 yards to the SUU0, 1ST DOWN, TOUCHDOWN SJS (Scoring play confirmed).",
+                            "driveText": "1st and 10 at SUU12",
+                            "teamId": "1683",
+                            "visitingScore": "0",
+                            "homeScore": "21"
+                        },
+                        {
+                            "scoreText": "#39 M.Mercurio PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#49 T.Schive kickoff 59 yards to the SUU6, #80 J.Cockett return 17 yards to the SUU23  (#6 J.Balderas).",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "958",
+                    "time": "00:42",
+                    "plays": [
+                        {
+                            "scoreText": "SUU drive start at 00:42",
+                            "driveText": "1st and 10 at SUU23",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #14 L.Lawson rush to the left for no gain to the SUU23 (#91 E.Ane;#45 K.Harmon).",
+                            "driveText": "1st and 10 at SUU23",
+                            "teamId": "958",
+                            "visitingScore": "0",
+                            "homeScore": "21"
+                        },
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass up the middle incomplete intended for #80 J.Cockett broken up by #45 K.Harmon at the SUU28.",
+                            "driveText": "2nd and 10 at SUU23",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1683",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "End of 1st quarter, clock 0:00.",
+                            "driveText": "1st and 10 at SJS30",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                }
+            ],
+            "titleEnum": "FIRST"
+        },
+        {
+            "title": "2ND",
+            "shortTitle": "2nd",
+            "possessions": [
+                {
+                    "teamId": "1683",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "Start of 2nd quarter, clock 15:00.",
+                            "driveText": "1st and 10 at SJS30",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "958",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass up the middle incomplete intended for #80 J.Cockett broken up by #23 N.Shelton at the SUU25; QB hurried by #45 K.Harmon.",
+                            "driveText": "3rd and 10 at SUU23",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#31 J.Gerardi punt 42 yards to the SJS35 return muffed by #24 S.Garrett at the SJS35, recovered by SUU #53 T.Whalen at the SJS31, returned 0 yards to the SJS31, End of Play.",
+                            "driveText": "4th and 10 at SUU23",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "SUU drive start at 14:47",
+                            "driveText": "1st and 10 at SJS31",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass up the middle incomplete intended for #85 P.Brown broken up by #0 T.Parker at the SJS21.",
+                            "driveText": "1st and 10 at SJS31",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#30 D.Moore III rush to the left for a gain of 6 yards to the SJS25 (#41 H.Darden;#45 K.Harmon).",
+                            "driveText": "2nd and 10 at SJS31",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #4 J.Miller sacked for a loss of 8 yards at the SJS33 (#27 J.Lenard). PENALTY SJS Offsides on #44 J.Cobbs  enforced 5 yards from the SJS25 to the SJS20 and results in a 1ST DOWN. NO PLAY (replay the down).",
+                            "driveText": "3rd and 4 at SJS25",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #4 J.Miller pass up the middle complete for 6 yards to #85 P.Brown caught at the SJS19 and advanced to the SJS14 (#44 J.Cobbs).",
+                            "driveText": "1st and 10 at SJS20",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#30 D.Moore III rush up the middle for a gain of 2 yards to the SJS12 (#44 J.Cobbs;#45 K.Harmon).",
+                            "driveText": "2nd and 4 at SJS14",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#30 D.Moore III rush to the right for no gain to the SJS12 (#4 N.Wright;#46 C.Webb).",
+                            "driveText": "3rd and 2 at SJS12",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #80 J.Cockett pass to the right complete for 8 yards to #4 J.Miller to the SJS0, TOUCHDOWN SUU.",
+                            "driveText": "1st and 8 at SJS8",
+                            "teamId": "958",
+                            "visitingScore": "6",
+                            "homeScore": "21"
+                        },
+                        {
+                            "scoreText": "#37 C.Reed PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#37 C.Reed kickoff 56 yards to the SJS9, #24 S.Garrett return 0 yards to the SJS9  (#32 J.Narayan). PENALTY SJS Holding on #9 M.Tago  enforced 10 yards from the SJS40 to the SJS30. NO PLAY (replay the down).",
+                            "driveText": "",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1683",
+                    "time": "10:33",
+                    "plays": [
+                        {
+                            "scoreText": "SJS drive start at 10:33",
+                            "driveText": "1st and 10 at SJS30",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the left complete for 70 yards to #88 S.Olson caught at the SUU48 and advanced to the SUU0, 1ST DOWN, TOUCHDOWN SJS.",
+                            "driveText": "1st and 10 at SJS30",
+                            "teamId": "1683",
+                            "visitingScore": "7",
+                            "homeScore": "27"
+                        },
+                        {
+                            "scoreText": "#39 M.Mercurio PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#49 T.Schive kickoff 65 yards to the SUU0, Touchback .",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "958",
+                    "time": "10:33",
+                    "plays": [
+                        {
+                            "scoreText": "SUU drive start at 10:33",
+                            "driveText": "1st and 10 at SUU25",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #30 D.Moore III rush up the middle for a gain of 1 yard to the SUU26 (#4 N.Wright;#63 T.Smith).",
+                            "driveText": "1st and 10 at SUU25",
+                            "teamId": "958",
+                            "visitingScore": "1",
+                            "homeScore": "22"
+                        },
+                        {
+                            "scoreText": "[NHSG] #14 L.Lawson rush to the right for a loss of 5 yards to the SUU21 (#78 S.Toia).",
+                            "driveText": "2nd and 9 at SUU26",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass to the left complete for 3 yards to #2 T.Duckett caught at the SUU20 and advanced to the SUU24 (#12 R.Johnson).",
+                            "driveText": "3rd and 14 at SUU21",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#31 J.Gerardi punt 41 yards to the SJS35, #24 S.Garrett return 0 yards to the SJS35 (#53 T.Whalen).",
+                            "driveText": "4th and 11 at SUU24",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1683",
+                    "time": "08:39",
+                    "plays": [
+                        {
+                            "scoreText": "SJS drive start at 08:39",
+                            "driveText": "1st and 10 at SJS35",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #23 T.Nevens rush to the left for no gain to the SJS35 (#3 K.Singleton).",
+                            "driveText": "1st and 10 at SJS35",
+                            "teamId": "1683",
+                            "visitingScore": "1",
+                            "homeScore": "22"
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the right incomplete intended for #9 I.Hamilton thrown to the SUU45.",
+                            "driveText": "2nd and 10 at SJS35",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the right complete for 65 yards to #7 C.Ross caught at the SUU47 and advanced to the SUU0, 1ST DOWN, TOUCHDOWN SJS (Scoring play confirmed).",
+                            "driveText": "3rd and 10 at SJS35",
+                            "teamId": "1683",
+                            "visitingScore": "1",
+                            "homeScore": "29"
+                        },
+                        {
+                            "scoreText": "#39 M.Mercurio PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#49 T.Schive kickoff 65 yards to the SUU0, Touchback .",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "958",
+                    "time": "07:45",
+                    "plays": [
+                        {
+                            "scoreText": "SUU drive start at 07:45",
+                            "driveText": "1st and 10 at SUU25",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass up the middle complete for 6 yards to #80 J.Cockett caught at the SUU30 and advanced to the SUU31 (#45 K.Harmon;#1 R.Nixon).",
+                            "driveText": "1st and 10 at SUU25",
+                            "teamId": "958",
+                            "visitingScore": "1",
+                            "homeScore": "29"
+                        },
+                        {
+                            "scoreText": "[NHSG] #30 D.Moore III rush up the middle for a gain of 2 yards to the SUU33 (#27 J.Lenard).",
+                            "driveText": "2nd and 4 at SUU31",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #22 J.Jefferson rush up the middle for a gain of 1 yard to the SUU34 (#16 R.Tolefree).",
+                            "driveText": "3rd and 2 at SUU33",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#31 J.Gerardi punt 63 yards to the SJS3, #18 K.Reed return -1 yard to the SJS2 (#81 B.Hutchings).",
+                            "driveText": "4th and 1 at SUU34",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1683",
+                    "time": "05:24",
+                    "plays": [
+                        {
+                            "scoreText": "SJS drive start at 05:24",
+                            "driveText": "1st and 10 at SJS2",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#23 T.Nevens rush up the middle for a gain of 9 yards to the SJS11 (J.Brown)",
+                            "driveText": "1st and 10 at SJS2",
+                            "teamId": "1683",
+                            "visitingScore": "1",
+                            "homeScore": "29"
+                        },
+                        {
+                            "scoreText": "[NHSG] #23 T.Nevens rush up the middle for a gain of 4 yards to the SJS15 (#43 Q.Murray), 1ST DOWN.",
+                            "driveText": "2nd and 1 at SJS11",
+                            "teamId": "1683",
+                            "visitingScore": "1",
+                            "homeScore": "29"
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass up the middle incomplete intended for #82 T.Loville thrown to the SJS32.",
+                            "driveText": "1st and 10 at SJS15",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the left incomplete intended for #8 C.La Chapelle broken up by #21 J.Brown at the SJS40.",
+                            "driveText": "2nd and 10 at SJS15",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout Southern Utah, clock 04:00.",
+                            "driveText": "3rd and 10 at SJS15",
+                            "teamId": "1683",
+                            "visitingScore": "1",
+                            "homeScore": "29"
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the left intercepted by #3 K.Singleton at the SJS18 intended for #13 J.Braddock. Singleton return for 18 yards to the SJS0, TOUCHDOWN SUU (Scoring play confirmed).",
+                            "driveText": "3rd and 10 at SJS15",
+                            "teamId": "1683",
+                            "visitingScore": "8",
+                            "homeScore": "29"
+                        }
+                    ]
+                },
+                {
+                    "teamId": "958",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "#37 C.Reed PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#37 C.Reed kickoff 40 yards to the SJS25, #9 M.Tago return 12 yards to the SJS37  (#13 D.Atencio).",
+                            "driveText": "",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1683",
+                    "time": "03:49",
+                    "plays": [
+                        {
+                            "scoreText": "Timeout San Jose St., clock 03:49.",
+                            "driveText": "1st and 10 at SJS37",
+                            "teamId": "1683",
+                            "visitingScore": "8",
+                            "homeScore": "29"
+                        },
+                        {
+                            "scoreText": "SJS drive start at 03:49",
+                            "driveText": "1st and 10 at SJS37",
+                            "teamId": "1683",
+                            "visitingScore": "8",
+                            "homeScore": "29"
+                        },
+                        {
+                            "scoreText": "[NHSG] #32 K.Robinson rush to the right for a gain of 11 yards to the SJS48 (#25 J.Clark), out of bounds. PENALTY SJS Holding   enforced 10 yards from the SJS37 to the SJS27. NO PLAY (replay the down).",
+                            "driveText": "1st and 10 at SJS37",
+                            "teamId": "1683",
+                            "visitingScore": "8",
+                            "homeScore": "29"
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the left complete for 47 yards to #9 I.Hamilton caught at the SJS27 and advanced to the SUU26 (#6 D.Yancey), 1ST DOWN.",
+                            "driveText": "1st and 20 at SJS27",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #32 K.Robinson rush to the right for a gain of 4 yards to the SUU22 (#21 J.Brown;#91 F.Bemiy).",
+                            "driveText": "1st and 10 at SUU26",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout San Jose St., clock 02:13.",
+                            "driveText": "2nd and 6 at SUU22",
+                            "teamId": "1683",
+                            "visitingScore": "8",
+                            "homeScore": "29"
+                        },
+                        {
+                            "scoreText": "[NHSG] #32 K.Robinson rush to the right for a gain of 22 yards to the SUU0, TOUCHDOWN SJS, score nullified by penalty. PENALTY SJS Holding on #71 T.Ostrom  enforced 10 yards from the SUU22 to the SUU32. NO PLAY (replay the down).",
+                            "driveText": "2nd and 6 at SUU22",
+                            "teamId": "1683",
+                            "visitingScore": "8",
+                            "homeScore": "29"
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the left incomplete intended for #87 D.Deese, Jr. broken up by #10 G.Rogers at the SUU25.",
+                            "driveText": "2nd and 16 at SUU32",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass up the middle complete for 8 yards to #32 K.Robinson caught at the SUU27 and advanced to the SUU24 (#8 L.Kaho'ohanohano-Davis;#25 J.Clark).",
+                            "driveText": "3rd and 16 at SUU32",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#39 M.Mercurio field goal attempt from 41 yards GOOD [kick was spotted at SUU31], clock 01:12.",
+                            "driveText": "4th and 8 at SUU24",
+                            "teamId": "1683",
+                            "visitingScore": "14",
+                            "homeScore": "32"
+                        },
+                        {
+                            "scoreText": "#49 T.Schive kickoff 65 yards to the SUU0, Touchback .",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "958",
+                    "time": "01:12",
+                    "plays": [
+                        {
+                            "scoreText": "SUU drive start at 01:12",
+                            "driveText": "1st and 10 at SUU25",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass to the right incomplete intended for #80 J.Cockett thrown to the SUU30.",
+                            "driveText": "1st and 10 at SUU25",
+                            "teamId": "958",
+                            "visitingScore": "14",
+                            "homeScore": "32"
+                        },
+                        {
+                            "scoreText": "PENALTY  Before the snap, SUU Delay Of Game on #4 J.Miller  enforced 5 yards from the SUU25 to the SUU20.",
+                            "driveText": "2nd and 10 at SUU25",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#20 D.Christiansen rush to the right for a loss of 1 yard to the SUU19 (#45 K.Harmon).",
+                            "driveText": "2nd and 15 at SUU20",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#5 I.Williams rush to the right for a gain of 18 yards to the SUU37 (#22 T.Jenkins), 1ST DOWN.",
+                            "driveText": "3rd and 16 at SUU19",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1683",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "End of first half, clock 0:00.",
+                            "driveText": "1st and 10 at SJS30",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                }
+            ],
+            "titleEnum": "SECOND"
+        },
+        {
+            "title": "3RD",
+            "shortTitle": "3rd",
+            "possessions": [
+                {
+                    "teamId": "1683",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "Start of 3rd quarter, clock 15:00.",
+                            "driveText": "1st and 10 at SJS30",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "At the start of the second half, SUU will receive and SJS will defend the north goal.",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#49 T.Schive kickoff 65 yards to the SUU0, Touchback .",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "958",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "SUU drive start at 15:00",
+                            "driveText": "1st and 10 at SUU25",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #4 J.Miller pass up the middle complete for -6 yards to #4 J.Miller caught at the SUU11 and advanced to the SUU19 (#14 E.Wood).",
+                            "driveText": "1st and 10 at SUU25",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #20 D.Christiansen rush up the middle for a gain of 1 yard to the SUU20 (#42 V.Fehoko).",
+                            "driveText": "2nd and 16 at SUU19",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #4 J.Miller pass to the left complete for 6 yards to #5 I.Williams caught at the SUU20 and advanced to the SUU26 (#90 L.Grey).",
+                            "driveText": "3rd and 15 at SUU20",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#31 J.Gerardi punt 20 yards to the SUU46 out of bounds.",
+                            "driveText": "4th and 9 at SUU26",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1683",
+                    "time": "12:57",
+                    "plays": [
+                        {
+                            "scoreText": "SJS drive start at 12:57",
+                            "driveText": "1st and 10 at SUU46",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #23 T.Nevens rush up the middle for a gain of 18 yards to the SUU28 (#3 K.Singleton), 1ST DOWN.",
+                            "driveText": "1st and 10 at SUU46",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #23 T.Nevens rush to the right for a gain of 4 yards to the SUU24 (#18 A.Stanley).",
+                            "driveText": "1st and 10 at SUU28",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the right incomplete intended for #24 S.Garrett thrown to the SUU20.",
+                            "driveText": "2nd and 6 at SUU24",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the left complete for 7 yards to #7 C.Ross caught at the SUU20 and advanced to the SUU17, out of bounds, 1ST DOWN.",
+                            "driveText": "3rd and 6 at SUU24",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #23 T.Nevens rush up the middle for a gain of 4 yards to the SUU13 (#18 A.Stanley;#25 J.Clark).",
+                            "driveText": "1st and 10 at SUU17",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #23 T.Nevens rush to the right for a loss of 1 yard to the SUU14 (#91 F.Bemiy).",
+                            "driveText": "2nd and 6 at SUU13",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the left complete for 14 yards to #87 D.Deese, Jr. to the SUU0, 1ST DOWN, TOUCHDOWN SJS.",
+                            "driveText": "3rd and 7 at SUU14",
+                            "teamId": "1683",
+                            "visitingScore": "14",
+                            "homeScore": "38"
+                        },
+                        {
+                            "scoreText": "#39 M.Mercurio PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#49 T.Schive kickoff 65 yards to the SUU0, Touchback .",
+                            "driveText": "",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "958",
+                    "time": "09:45",
+                    "plays": [
+                        {
+                            "scoreText": "SUU drive start at 09:45",
+                            "driveText": "1st and 10 at SUU25",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #20 D.Christiansen rush up the middle for a gain of 8 yards to the SUU33 (#45 K.Harmon).",
+                            "driveText": "1st and 10 at SUU25",
+                            "teamId": "958",
+                            "visitingScore": "14",
+                            "homeScore": "33"
+                        },
+                        {
+                            "scoreText": "[SG] #4 J.Miller pass up the middle complete for 6 yards to #11 F.Harris III caught at the SUU35 and advanced to the SUU39 (#46 C.Webb), 1ST DOWN.",
+                            "driveText": "2nd and 2 at SUU33",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #14 L.Lawson rush to the right for a gain of 3 yards to the SUU42 (#41 H.Darden;#20 T.White).",
+                            "driveText": "1st and 10 at SUU39",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #4 J.Miller pass to the left complete for 7 yards to #5 I.Williams caught at the SUU37 and advanced to the SUU49 (#45 K.Harmon), 1ST DOWN.",
+                            "driveText": "2nd and 7 at SUU42",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #30 D.Moore III rush to the right for a gain of 2 yards to the SJS49 (#41 H.Darden;#46 C.Webb).",
+                            "driveText": "1st and 10 at SUU49",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #4 J.Miller pass up the middle complete for 12 yards to #83 E.Bolingbroke caught at the SJS39 and advanced to the SJS37 (#22 T.Jenkins), 1ST DOWN.",
+                            "driveText": "2nd and 8 at SJS49",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#20 D.Christiansen rush to the left for a gain of 7 yards to the SJS30 (#20 T.White).",
+                            "driveText": "1st and 10 at SJS37",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#23 K.Davis rush up the middle for a loss of 1 yard to the SJS31 (#40 I.Togia).",
+                            "driveText": "2nd and 3 at SJS30",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #4 J.Miller pass to the right incomplete intended for #0 B.Schenks broken up by #5 B.Brown, II at the SJS22.",
+                            "driveText": "3rd and 4 at SJS31",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass up the middle complete for 9 yards to #14 L.Lawson caught at the SJS25 and advanced to the SJS22 (#8 A.Matau;#20 T.White), 1ST DOWN.",
+                            "driveText": "4th and 4 at SJS31",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #5 I.Williams rush to the right for a loss of 3 yards to the SJS25 (#90 L.Grey).",
+                            "driveText": "1st and 10 at SJS22",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #4 J.Miller pass to the left incomplete dropped by #23 K.Davis thrown to the SJS25. PENALTY SUU Holding on #66 N.Unufe  enforced 10 yards from the SJS25 to the SJS35. NO PLAY (replay the down).",
+                            "driveText": "2nd and 13 at SJS25",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass to the left incomplete intended for #14 L.Lawson thrown to the SJS30.",
+                            "driveText": "2nd and 23 at SJS35",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #4 J.Miller pass to the left incomplete intended for #0 B.Schenks thrown to the SJS5.",
+                            "driveText": "3rd and 23 at SJS35",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#37 C.Reed field goal attempt from 53 yards NO GOOD (short left) [kick was spotted at SJS43], clock 02:11.",
+                            "driveText": "4th and 23 at SJS35",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1683",
+                    "time": "02:11",
+                    "plays": [
+                        {
+                            "scoreText": "SJS drive start at 02:11",
+                            "driveText": "1st and 10 at SJS35",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #17 N.Starkel pass to the right incomplete intended for #21 J.Simpson thrown to the SUU18.",
+                            "driveText": "1st and 10 at SJS35",
+                            "teamId": "1683",
+                            "visitingScore": "14",
+                            "homeScore": "33"
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the right incomplete intended for #9 I.Hamilton thrown to the SJS42.",
+                            "driveText": "2nd and 10 at SJS35",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the left complete for 15 yards to #23 T.Nevens caught at the SJS34 and advanced to the SJS50 (#25 J.Clark), 1ST DOWN.",
+                            "driveText": "3rd and 10 at SJS35",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 N.Starkel pass to the right complete for 10 yards to #9 I.Hamilton caught at the SJS48 and advanced to the SUU40 (#25 J.Clark;#32 J.Narayan), 1ST DOWN.",
+                            "driveText": "1st and 10 at SJS50",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "PENALTY  Before the snap, SJS False Start on #21 J.Simpson  enforced 5 yards from the SUU40 to the SUU45.",
+                            "driveText": "1st and 10 at SUU40",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #23 T.Nevens rush up the middle for no gain to the SUU45 (#8 L.Kaho'ohanohano-Davis).",
+                            "driveText": "1st and 15 at SUU45",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "End of 3rd quarter, clock 0:00.",
+                            "driveText": "1st and 10 at SJS30",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                }
+            ],
+            "titleEnum": "THIRD"
+        },
+        {
+            "title": "4TH",
+            "shortTitle": "4th",
+            "possessions": [
+                {
+                    "teamId": "1683",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "Start of 4th quarter, clock 15:00.",
+                            "driveText": "1st and 10 at SJS30",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #3 N.Woods rush to the right for a gain of 2 yards to the SUU43 (#55 M.Kula).",
+                            "driveText": "2nd and 15 at SUU45",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #3 N.Woods pass to the right complete for 0 yards to #12 T.Johnson caught at the SUU44 and advanced to the SUU43 (#8 L.Kaho'ohanohano-Davis). PENALTY SJS Personal Foul on #54 J.Navarro  declined; .",
+                            "driveText": "3rd and 13 at SUU43",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#99 W.Hart punt 32 yards to the SUU11, fair catch by #83 E.Bolingbroke.",
+                            "driveText": "4th and 13 at SUU43",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "958",
+                    "time": "13:50",
+                    "plays": [
+                        {
+                            "scoreText": "SUU drive start at 13:50",
+                            "driveText": "1st and 10 at SUU11",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #30 D.Moore III rush to the right for a gain of 3 yards to the SUU14 (#44 J.Cobbs;#78 S.Toia).",
+                            "driveText": "1st and 10 at SUU11",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #4 J.Miller pass to the left intercepted by #20 T.White at the SUU40 intended for #80 J.Cockett. White return for 40 yards to the SUU0, TOUCHDOWN SJS, score nullified by penalty. PENALTY SJS Offsides on #78 S.Toia  enforced 5 yards from the SUU14 to the SUU19. NO PLAY (replay the down).",
+                            "driveText": "2nd and 7 at SUU14",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #4 J.Miller pass to the left incomplete intended for #80 J.Cockett broken up by #20 T.White at the SUU40.",
+                            "driveText": "2nd and 2 at SUU19",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #22 J.Jefferson rush to the right for a gain of 2 yards to the SUU21 (#78 S.Toia;#10 B.Parham), 1ST DOWN.",
+                            "driveText": "3rd and 2 at SUU19",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass to the right complete for 6 yards to #83 E.Bolingbroke caught at the SUU23 and advanced to the SUU27 (#1 R.Nixon;#10 B.Parham).",
+                            "driveText": "1st and 10 at SUU21",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #4 J.Miller pass to the right complete for 26 yards to #85 P.Brown caught at the SUU37 and advanced to the SJS47 (#1 R.Nixon;#20 T.White), 1ST DOWN.",
+                            "driveText": "2nd and 4 at SUU27",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #23 K.Davis rush to the right for a gain of 28 yards to the SJS19 (#1 R.Nixon), 1ST DOWN.",
+                            "driveText": "1st and 10 at SJS47",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #5 I.Williams rush to the left for a gain of 2 yards to the SJS17 (#9 M.Tago;#77 M.Wilson).",
+                            "driveText": "1st and 10 at SJS19",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #4 J.Miller pass to the left complete for 6 yards to #14 L.Lawson caught at the SJS21 and advanced to the SJS11 (#43 A.Jenkins).",
+                            "driveText": "2nd and 8 at SJS17",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #5 I.Williams rush to the left for a gain of 4 yards to the SJS7 (#10 B.Parham). PENALTY  Before the snap, SUU Illegal Shift on #85 P.Brown  enforced 5 yards from the SJS11 to the SJS16. NO PLAY (replay the down).",
+                            "driveText": "3rd and 2 at SJS11",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout San Jose St., clock 08:01.",
+                            "driveText": "3rd and 7 at SJS16",
+                            "teamId": "958",
+                            "visitingScore": "14",
+                            "homeScore": "51"
+                        },
+                        {
+                            "scoreText": "[NH] #4 J.Miller pass up the middle complete for 11 yards to #13 D.Atencio caught at the SJS12 and advanced to the SJS5 (#20 T.White), 1ST DOWN.",
+                            "driveText": "3rd and 7 at SJS16",
+                            "teamId": "958",
+                            "visitingScore": "14",
+                            "homeScore": "51"
+                        },
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass up the middle incomplete intended for #19 D.Brown broken up by #43 A.Jenkins at the SJS0.",
+                            "driveText": "1st and 5 at SJS5",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #23 K.Davis rush to the left for a gain of 1 yard to the SJS4 (#10 B.Parham).",
+                            "driveText": "2nd and 5 at SJS5",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[SG] #4 J.Miller pass to the right incomplete intended for #13 D.Atencio thrown to the SJS0.",
+                            "driveText": "3rd and 4 at SJS4",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "PENALTY SJS Offsides on #78 S.Toia  enforced  half the distance from the goal, 2 yards from the SJS4 to the SJS2.",
+                            "driveText": "4th and 4 at SJS4",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #4 J.Miller pass up the middle incomplete intended for #85 P.Brown broken up by #43 A.Jenkins at the SJS0; SUU turnover on downs.",
+                            "driveText": "4th and 2 at SJS2",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1683",
+                    "time": "06:18",
+                    "plays": [
+                        {
+                            "scoreText": "SJS drive start at 06:18",
+                            "driveText": "1st and 10 at SJS2",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #32 K.Robinson rush up the middle for a gain of 3 yards to the SJS5 (#22 A.Nellems;#26 I.Fawson).",
+                            "driveText": "1st and 10 at SJS2",
+                            "teamId": "1683",
+                            "visitingScore": "14",
+                            "homeScore": "51"
+                        },
+                        {
+                            "scoreText": "[NHSG] #32 K.Robinson rush to the right for a gain of 2 yards to the SJS7 (#22 A.Nellems;#18 A.Stanley).",
+                            "driveText": "2nd and 7 at SJS5",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #3 N.Woods pass to the left complete for 16 yards to #21 J.Simpson to the SJS23, out of bounds, 1ST DOWN.",
+                            "driveText": "3rd and 5 at SJS7",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #24 S.Garrett rush to the left for a gain of 14 yards to the SJS37 (#18 A.Stanley), 1ST DOWN.",
+                            "driveText": "1st and 10 at SJS23",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #24 S.Garrett rush to the right for a gain of 3 yards to the SJS40 (#22 A.Nellems).",
+                            "driveText": "1st and 10 at SJS37",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] QB Keeper #3 N.Woods rush up the middle for a gain of 5 yards to the SJS45 (#40 T.Johnson).",
+                            "driveText": "2nd and 7 at SJS40",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #3 N.Woods pass up the middle incomplete intended for #21 J.Simpson broken up by #28 J.Thomas at the SUU45; QB hurried by #44 K.Laie.",
+                            "driveText": "3rd and 2 at SJS45",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#99 W.Hart punt 48 yards to the SUU7, #83 E.Bolingbroke return 0 yards to the SUU7 (#5 B.Brown, II).",
+                            "driveText": "4th and 2 at SJS45",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "958",
+                    "time": "02:09",
+                    "plays": [
+                        {
+                            "scoreText": "SUU drive start at 02:09",
+                            "driveText": "1st and 10 at SUU7",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #23 K.Davis rush to the right for a gain of 11 yards to the SUU18 (#2 D.Leonard), 1ST DOWN.",
+                            "driveText": "1st and 10 at SUU7",
+                            "teamId": "958",
+                            "visitingScore": "14",
+                            "homeScore": "51"
+                        },
+                        {
+                            "scoreText": "[SG] #6 T.Skidmore pass up the middle complete for 14 yards to #5 I.Williams caught at the SUU20 and advanced to the SUU32 (#10 B.Parham), 1ST DOWN.",
+                            "driveText": "1st and 10 at SUU18",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #6 T.Skidmore scrambles up the middle for a gain of 8 yards to the SUU40 (#11 E.Lawson).",
+                            "driveText": "1st and 10 at SUU32",
+                            "teamId": "958",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout Southern Utah, clock 00:25.",
+                            "driveText": "2nd and 2 at SUU40",
+                            "teamId": "958",
+                            "visitingScore": "14",
+                            "homeScore": "51"
+                        },
+                        {
+                            "scoreText": "[NHSG] #6 T.Skidmore sacked for a loss of 4 yards at the SUU36 (#48 J.Gomez).",
+                            "driveText": "2nd and 2 at SUU40",
+                            "teamId": "958",
+                            "visitingScore": "14",
+                            "homeScore": "51"
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1683",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "End of game, clock 0:00.",
+                            "driveText": "1st and 10 at SJS30",
+                            "teamId": "1683",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                }
+            ],
+            "titleEnum": "FOURTH"
+        }
+    ]
+}

@@ -1,9 +1,11 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat;
 
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamStats.TeamStatDefensePojo;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamStats.TeamStatOffensePojo;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamStats.TeamStatPenaltyPojo;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamStats.TeamStatSpecialTeamPojo;
+import java.util.Objects;
+
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamstats.TeamStatDefensePojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamstats.TeamStatOffensePojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamstats.TeamStatPenaltyPojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamstats.TeamStatSpecialTeamPojo;
 
 public class TeamStatPojo {
 	private TeamStatOffensePojo offense;
@@ -85,13 +87,7 @@ public class TeamStatPojo {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((defense == null) ? 0 : defense.hashCode());
-		result = prime * result + ((offense == null) ? 0 : offense.hashCode());
-		result = prime * result + ((penalty == null) ? 0 : penalty.hashCode());
-		result = prime * result + ((specialTeam == null) ? 0 : specialTeam.hashCode());
-		return result;
+		return Objects.hash(defense, offense, penalty, specialTeam);
 	}
 
 	@Override
@@ -103,35 +99,8 @@ public class TeamStatPojo {
 			return false;
 		}
 		TeamStatPojo other = (TeamStatPojo) obj;
-		if (defense == null) {
-			if (other.defense != null) {
-				return false;
-			}
-		} else if (!defense.equals(other.defense)) {
-			return false;
-		}
-		if (offense == null) {
-			if (other.offense != null) {
-				return false;
-			}
-		} else if (!offense.equals(other.offense)) {
-			return false;
-		}
-		if (penalty == null) {
-			if (other.penalty != null) {
-				return false;
-			}
-		} else if (!penalty.equals(other.penalty)) {
-			return false;
-		}
-		if (specialTeam == null) {
-			if (other.specialTeam != null) {
-				return false;
-			}
-		} else if (!specialTeam.equals(other.specialTeam)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(defense, other.defense) && Objects.equals(offense, other.offense)
+				&& Objects.equals(penalty, other.penalty) && Objects.equals(specialTeam, other.specialTeam);
 	}
 
 	@Override

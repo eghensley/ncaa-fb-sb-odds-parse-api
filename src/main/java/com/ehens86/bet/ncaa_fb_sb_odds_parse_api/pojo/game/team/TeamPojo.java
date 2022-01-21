@@ -27,22 +27,6 @@ public class TeamPojo {
 		this.playerStat = new PlayerStatPojo();
 	}
 
-	public TeamPojo(String teamName, String teamNameShort, String teamNameSixChar, String teamNameSeo, String teamColor,
-			String logoLink, TeamStatPojo teamStat, String ncaaTeamId, PlayerStatPojo playerStat, String teamNickname, Integer score) {
-		super();
-		this.teamName = teamName;
-		this.teamNameShort = teamNameShort;
-		this.teamNameSixChar = teamNameSixChar;
-		this.teamNameSeo = teamNameSeo;
-		this.teamColor = teamColor;
-		this.logoLink = logoLink;
-		this.teamStat = teamStat;
-		this.ncaaTeamId = ncaaTeamId;
-		this.playerStat = playerStat;
-		this.teamNickname = teamNickname;
-		this.score = score;
-	}
-
 	/**
 	 * @return the teamName
 	 */

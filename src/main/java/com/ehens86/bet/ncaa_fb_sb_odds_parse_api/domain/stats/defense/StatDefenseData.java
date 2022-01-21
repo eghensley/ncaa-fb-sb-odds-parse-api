@@ -61,15 +61,8 @@ public class StatDefenseData extends PlayerStatEntity implements Serializable {
 	private StatDefSpecTeam defenseType;
 
 	public StatDefenseData() {
-
+		// Base constructor
 	}
-
-//	/**
-//	 * @return the playStat
-//	 */
-//	public TeamPlayStatData getPlayStat() {
-//		return playStat;
-//	}
 
 	/**
 	 * @param playStat the playStat to set

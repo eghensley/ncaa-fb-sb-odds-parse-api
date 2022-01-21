@@ -1,6 +1,7 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.boxscore;
 
 import java.util.List;
+import java.util.Objects;
 
 public class BoxScoreTablePojo {
     private String id;
@@ -78,13 +79,7 @@ public class BoxScoreTablePojo {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((data == null) ? 0 : data.hashCode());
-		result = prime * result + ((headerClass == null) ? 0 : headerClass.hashCode());
-		result = prime * result + ((headerColor == null) ? 0 : headerColor.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
+		return Objects.hash(data, headerClass, headerColor, id);
 	}
 
 	@Override
@@ -96,35 +91,8 @@ public class BoxScoreTablePojo {
 			return false;
 		}
 		BoxScoreTablePojo other = (BoxScoreTablePojo) obj;
-		if (data == null) {
-			if (other.data != null) {
-				return false;
-			}
-		} else if (!data.equals(other.data)) {
-			return false;
-		}
-		if (headerClass == null) {
-			if (other.headerClass != null) {
-				return false;
-			}
-		} else if (!headerClass.equals(other.headerClass)) {
-			return false;
-		}
-		if (headerColor == null) {
-			if (other.headerColor != null) {
-				return false;
-			}
-		} else if (!headerColor.equals(other.headerColor)) {
-			return false;
-		}
-		if (id == null) {
-			if (other.id != null) {
-				return false;
-			}
-		} else if (!id.equals(other.id)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(data, other.data) && Objects.equals(headerClass, other.headerClass)
+				&& Objects.equals(headerColor, other.headerColor) && Objects.equals(id, other.id);
 	}
 
 	@Override

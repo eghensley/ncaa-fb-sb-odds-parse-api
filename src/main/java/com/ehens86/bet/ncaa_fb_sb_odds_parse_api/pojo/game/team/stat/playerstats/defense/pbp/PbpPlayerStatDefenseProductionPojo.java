@@ -13,24 +13,11 @@ public class PbpPlayerStatDefenseProductionPojo extends BaseStatDefenseProductio
 	private Integer kickBlock;
 
 	public PbpPlayerStatDefenseProductionPojo() {
-
+		// Base constructor
 	}
 
 	public PbpPlayerStatDefenseProductionPojo(String playerName) {
 		this.playerName = playerName;
-	}
-
-	public PbpPlayerStatDefenseProductionPojo(Double tackleAssist, Integer passBreakUp, Integer fumbleYard,
-			Integer fumbleTouchdown, Integer quarterbackHurry, Integer tackleYard, Integer safety, Integer kickBlock) {
-		super();
-		this.tackleAssist = tackleAssist;
-		this.passBreakUp = passBreakUp;
-		this.fumbleYard = fumbleYard;
-		this.fumbleTouchdown = fumbleTouchdown;
-		this.quarterbackHurry = quarterbackHurry;
-		this.tackleYard = tackleYard;
-		this.safety = safety;
-		this.kickBlock = kickBlock;
 	}
 
 	public void applyBase(String name) {
@@ -118,7 +105,7 @@ public class PbpPlayerStatDefenseProductionPojo extends BaseStatDefenseProductio
 		this.tackleAssist = 0.0;
 		this.tackleTotal = 1;
 		this.tackleYard = yards;
-		if (Objects.nonNull(yards) && yards <= 0) {
+		if (Objects.nonNull(yards) && yards < 0) {
 			this.tackleForLoss = 1;
 		} else {
 			this.tackleForLoss = 0;
@@ -131,7 +118,7 @@ public class PbpPlayerStatDefenseProductionPojo extends BaseStatDefenseProductio
 		this.tackleAssist = 1.0;
 		this.tackleTotal = 1;
 		this.tackleYard = yards;
-		if (Objects.nonNull(yards) && yards <= 0) {
+		if (Objects.nonNull(yards) && yards < 0) {
 			this.tackleForLoss = 1;
 		} else {
 			this.tackleForLoss = 0;

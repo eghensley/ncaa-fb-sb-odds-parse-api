@@ -1,0 +1,1832 @@
+{
+    "inputMD5Sum": "83ebade284c77bc727bd23eaa100bbfd",
+    "updatedTimestamp": "2021-09-03 22:51:11 ET",
+    "meta": {
+        "title": "PLAY-BY-PLAY",
+        "teams": [
+            {
+                "homeTeam": "false",
+                "id": "2120",
+                "color": "#006095",
+                "shortname": "Delaware",
+                "seoName": "delaware",
+                "sixCharAbbr": "DEL"
+            },
+            {
+                "homeTeam": "true",
+                "id": "1835",
+                "color": "#0C2340",
+                "shortname": "Maine",
+                "seoName": "maine",
+                "sixCharAbbr": "MAINE"
+            }
+        ]
+    },
+    "periods": [
+        {
+            "title": "1ST",
+            "shortTitle": "1st",
+            "possessions": [
+                {
+                    "teamId": "2120",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "Start of 1st quarter, clock 15:00.",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "Maine won the toss and has deferred to the second half. DEL will receive and MAI will defend the south goal.",
+                            "driveText": "",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#20 V.Rivas kickoff 55 yards to the DEL10, #33 D.Lee return 35 yards to the DEL45  (#21 A.Ambush).",
+                            "driveText": "",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "14:52",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 14:52",
+                            "driveText": "1st and 10 at DEL45",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #33 D.Lee rush up the middle for no gain to the DEL45 (#7 X.Nurse;#5 J.Lezin).",
+                            "driveText": "1st and 10 at DEL45",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the right complete for 2 yards to #33 D.Lee to the DEL47 (#3 R.Carr).",
+                            "driveText": "2nd and 10 at DEL45",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the left incomplete intended for #13 B.Buckman thrown to the DEL47; QB hurried by #11 K.Manns.",
+                            "driveText": "3rd and 8 at DEL47",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#34 T.Pastula punt 38 yards to the MAI15, #87 J.Hennie return 38 yards to the DEL47.",
+                            "driveText": "4th and 8 at DEL47",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "13:30",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 13:30",
+                            "driveText": "1st and 10 at MAI15",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#1 J.Fagnano pass up the middle incomplete intended for #10 A.Miller thrown to the MAI25. PENALTY DEL Pass Interference on #0 J.Zubillaga  enforced at the spot of the foul for 8 yards from the MAI23 to the MAI23 and results in automatic 1ST DOWN [NHSG]. NO PLAY (replay the down).",
+                            "driveText": "1st and 10 at MAI15",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #20 E.Barnwell rush up the middle for no gain to the MAI23 (#10 A.Toro;#11 L.Trainer).",
+                            "driveText": "1st and 10 at MAI23",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano scrambles up the middle for a loss of 3 yards to the MAI20 (#33 J.Buchanan). PENALTY MAI Illegal use of the hands   enforced 10 yards from the end of the play at the MAI20 to the MAI10.",
+                            "driveText": "2nd and 10 at MAI23",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #20 E.Barnwell rush up the middle for a gain of 1 yard to the MAI12 (#92 T.Walsh;#95 F.Burton).",
+                            "driveText": "2nd and 22 at MAI11",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #20 E.Barnwell rush to the left for no gain to the MAI12 (#98 N.Coomer).",
+                            "driveText": "3rd and 21 at MAI12",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#19 D.Gelb punt 34 yards to the MAI46, fair catch by #17 J.Townsend.",
+                            "driveText": "4th and 21 at MAI12",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "11:11",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 11:11",
+                            "driveText": "1st and 10 at MAI46",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #33 D.Lee rush to the left for a gain of 2 yards to the MAI44 (#9 J.Wiley).",
+                            "driveText": "1st and 10 at MAI46",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the right complete for 24 yards to #5 G.Coleman II caught at the MAI26 and advanced to the MAI20 (#24 F.Bazzie), 1ST DOWN.",
+                            "driveText": "2nd and 8 at MAI44",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the left incomplete intended for #13 B.Buckman thrown to the MAI0.",
+                            "driveText": "1st and 10 at MAI20",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #33 D.Lee rush up the middle for a gain of 5 yards to the MAI15 (#6 R.Miller;#9 J.Wiley).",
+                            "driveText": "2nd and 10 at MAI20",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] QB Keeper #2 N.Henderson rush up the middle for a gain of 15 yards to the MAI0, 1ST DOWN, TOUCHDOWN DEL (Scoring play confirmed).",
+                            "driveText": "3rd and 5 at MAI15",
+                            "teamId": "2120",
+                            "visitingScore": "7",
+                            "homeScore": "0"
+                        },
+                        {
+                            "scoreText": "#40 R.Coe PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#40 R.Coe kickoff 65 yards to the MAI0, Touchback .",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "09:10",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 09:10",
+                            "driveText": "1st and 10 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle complete for 17 yards to #18 S.Bowman caught at the MAI33 and advanced to the MAI42 (#7 D.Darien), 1ST DOWN.",
+                            "driveText": "1st and 10 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "7",
+                            "homeScore": "0"
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the left incomplete dropped by #10 A.Miller thrown to the MAI46.",
+                            "driveText": "1st and 10 at MAI42",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #20 E.Barnwell rush up the middle for a gain of 6 yards to the MAI48 (#1 K.Whitehead).",
+                            "driveText": "2nd and 10 at MAI42",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right incomplete intended for #10 A.Miller broken up by #92 T.Walsh at the DEL49.",
+                            "driveText": "3rd and 4 at MAI48",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#19 D.Gelb punt 30 yards to the DEL22, fair catch by #17 J.Townsend.",
+                            "driveText": "4th and 4 at MAI48",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "07:50",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 07:50",
+                            "driveText": "1st and 10 at DEL22",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the right complete for 18 yards to #1 T.Pitts to the DEL40 (#24 F.Bazzie), 1ST DOWN.",
+                            "driveText": "1st and 10 at DEL22",
+                            "teamId": "2120",
+                            "visitingScore": "7",
+                            "homeScore": "0"
+                        },
+                        {
+                            "scoreText": "[NH] #22 K.Spruill rush to the left for a gain of 12 yards to the MAI48 (#6 R.Miller), out of bounds, 1ST DOWN.",
+                            "driveText": "1st and 10 at DEL40",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] QB Keeper #10 A.Paoletti rush up the middle for no gain to the MAI48 (#9 J.Wiley;#6 R.Miller).",
+                            "driveText": "1st and 10 at MAI48",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #23 Q.Watson rush to the left for a gain of 4 yards to the MAI44 (#3 R.Carr;#5 J.Lezin).",
+                            "driveText": "2nd and 10 at MAI48",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass up the middle complete for 8 yards to #5 G.Coleman II caught at the MAI39 and advanced to the MAI36 (#3 R.Carr), 1ST DOWN.",
+                            "driveText": "3rd and 6 at MAI44",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #22 K.Spruill rush to the left for no gain to the MAI36 (#95 J.Sambu;#16 X.Mitchell).",
+                            "driveText": "1st and 10 at MAI36",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the left incomplete thrown to the MAI30; QB hurried by #6 R.Miller.",
+                            "driveText": "2nd and 10 at MAI36",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the left incomplete intended for #5 G.Coleman II thrown to the MAI29.",
+                            "driveText": "3rd and 10 at MAI36",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#34 T.Pastula punt 36 yards to the MAI0, Touchback.",
+                            "driveText": "4th and 10 at MAI36",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "04:01",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 04:01",
+                            "driveText": "1st and 10 at MAI20",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano scrambles to the left for no gain to the MAI20 (#4 C.Reeder).",
+                            "driveText": "1st and 10 at MAI20",
+                            "teamId": "1835",
+                            "visitingScore": "7",
+                            "homeScore": "0"
+                        },
+                        {
+                            "scoreText": "[NHSG] #20 E.Barnwell rush up the middle for a loss of 1 yard to the MAI19 (#10 A.Toro).",
+                            "driveText": "2nd and 10 at MAI20",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle incomplete thrown to the MAI26; QB hurried by #4 C.Reeder.",
+                            "driveText": "3rd and 11 at MAI19",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#19 D.Gelb punt 29 yards to the MAI48, fair catch by #17 J.Townsend.",
+                            "driveText": "4th and 11 at MAI19",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "02:54",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 02:54",
+                            "driveText": "1st and 10 at MAI48",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #33 D.Lee rush to the right for a gain of 10 yards to the MAI38 (#7 X.Nurse), 1ST DOWN.",
+                            "driveText": "1st and 10 at MAI48",
+                            "teamId": "2120",
+                            "visitingScore": "7",
+                            "homeScore": "0"
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the right incomplete intended for #33 D.Lee thrown to the MAI36.",
+                            "driveText": "1st and 10 at MAI38",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the left complete for 7 yards to #1 T.Pitts caught at the MAI37 and advanced to the MAI31 (#6 R.Miller).",
+                            "driveText": "2nd and 10 at MAI38",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #22 K.Spruill rush to the left for a gain of 4 yards to the MAI27 (#95 J.Sambu), 1ST DOWN.",
+                            "driveText": "3rd and 3 at MAI31",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] QB Keeper #10 A.Paoletti rush to the left for a gain of 8 yards to the MAI19 (#6 R.Miller).",
+                            "driveText": "1st and 10 at MAI27",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the right complete for 2 yards to #1 T.Pitts to the MAI17 (#34 K.Pewee Jr.), 1ST DOWN.",
+                            "driveText": "2nd and 2 at MAI19",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "End of 1st quarter, clock 0:00.",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                }
+            ],
+            "titleEnum": "FIRST"
+        },
+        {
+            "title": "2ND",
+            "shortTitle": "2nd",
+            "possessions": [
+                {
+                    "teamId": "2120",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "Start of 2nd quarter, clock 15:00.",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #33 D.Lee rush up the middle for a gain of 4 yards to the MAI13 (#6 R.Miller;#29 A.Chambers).",
+                            "driveText": "1st and 10 at MAI17",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #2 N.Henderson scrambles to the left for a loss of 2 yards to the MAI15 (#43 C.Eberle), out of bounds.",
+                            "driveText": "2nd and 6 at MAI13",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the right incomplete intended for #7 M.Vandamia broken up by #21 A.Ambush at the MAI6.",
+                            "driveText": "3rd and 8 at MAI15",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#40 R.Coe field goal attempt from 33 yards GOOD [kick was spotted at MAI23], clock 13:36.",
+                            "driveText": "4th and 8 at MAI15",
+                            "teamId": "2120",
+                            "visitingScore": "10",
+                            "homeScore": "0"
+                        },
+                        {
+                            "scoreText": "#40 R.Coe kickoff 46 yards to the MAI19, #2 D.Young return 12 yards to the MAI31  (#33 D.Lee;#44 D.Trainer).",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "13:31",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 13:31",
+                            "driveText": "1st and 10 at MAI31",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #28 F.Brock rush up the middle for a gain of 6 yards to the MAI37 (#11 L.Trainer;#19 M.Palmer).",
+                            "driveText": "1st and 10 at MAI31",
+                            "teamId": "1835",
+                            "visitingScore": "10",
+                            "homeScore": "0"
+                        },
+                        {
+                            "scoreText": "[NHSG] QB Keeper #1 J.Fagnano rush up the middle for a gain of 3 yards to the MAI40 (#92 T.Walsh).",
+                            "driveText": "2nd and 4 at MAI37",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Direct snap to  #17 Z.Scott rush up the middle for no gain to the MAI40 (#93 J.Hall;#95 F.Burton). PENALTY MAI Holding on #74 P.Barr  enforced 10 yards from the MAI40 to the MAI30 [NHSG]. NO PLAY (replay the down).",
+                            "driveText": "3rd and 1 at MAI40",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle intercepted by #22 N.Ware at the MAI43 intended for #2 D.Young. Ware return for -12 yards to the DEL45 (#2 D.Young).",
+                            "driveText": "3rd and 11 at MAI30",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "11:33",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 11:33",
+                            "driveText": "1st and 10 at DEL45",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the left complete for 55 yards to #5 G.Coleman II caught at the MAI20 and advanced to the MAI0, 1ST DOWN, TOUCHDOWN DEL (Scoring play confirmed).",
+                            "driveText": "1st and 10 at DEL45",
+                            "teamId": "2120",
+                            "visitingScore": "17",
+                            "homeScore": "0"
+                        },
+                        {
+                            "scoreText": "#40 R.Coe PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#40 R.Coe kickoff 65 yards to the MAI0, Touchback .",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "11:23",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 11:23",
+                            "driveText": "1st and 10 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #20 E.Barnwell rush up the middle for a gain of 7 yards to the MAI32 (#10 A.Toro;#1 K.Whitehead).",
+                            "driveText": "1st and 10 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "17",
+                            "homeScore": "0"
+                        },
+                        {
+                            "scoreText": "[NHSG] #20 E.Barnwell rush to the left for a gain of 9 yards to the MAI41 (#42 A.Pawlowski), 1ST DOWN.",
+                            "driveText": "2nd and 3 at MAI32",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right complete for 9 yards to #10 A.Miller caught at the MAI49 and advanced to the MAI50 (#21 J.Henley;#12 C.McGowan).",
+                            "driveText": "1st and 10 at MAI41",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right complete for 27 yards to #18 S.Bowman caught at the DEL38 and advanced to the DEL23 (#42 A.Pawlowski), out of bounds, 1ST DOWN.",
+                            "driveText": "2nd and 1 at MAI50",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the left incomplete intended for #10 A.Miller broken up by #21 J.Henley at the DEL0.",
+                            "driveText": "1st and 10 at DEL23",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#1 J.Fagnano pass to the left complete for 18 yards to #87 J.Hennie caught at the DEL18 and advanced to the DEL5 (#21 J.Henley), out of bounds. PENALTY MAI Ineligible Receiver Downfield on Pass   enforced 5 yards from the DEL23 to the DEL28 [NHSG]. NO PLAY (replay the down).",
+                            "driveText": "2nd and 10 at DEL23",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle complete for 28 yards to #83 M.Monios to the DEL0, 1ST DOWN, TOUCHDOWN MAI (Scoring play confirmed).",
+                            "driveText": "2nd and 15 at DEL28",
+                            "teamId": "1835",
+                            "visitingScore": "17",
+                            "homeScore": "7"
+                        },
+                        {
+                            "scoreText": "#37 J.Messina PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#20 V.Rivas kickoff 65 yards to the DEL0, Touchback .",
+                            "driveText": "",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "08:29",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 08:29",
+                            "driveText": "1st and 10 at DEL25",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #33 D.Lee rush up the middle for a gain of 2 yards to the DEL27 (#7 X.Nurse;#9 J.Wiley).",
+                            "driveText": "1st and 10 at DEL25",
+                            "teamId": "2120",
+                            "visitingScore": "17",
+                            "homeScore": "7"
+                        },
+                        {
+                            "scoreText": "[NHSG] #33 D.Lee rush to the left for a gain of 7 yards to the DEL34 (#8 S.St-Lot;#15 B.Lee, Jr.).",
+                            "driveText": "2nd and 8 at DEL27",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout Maine, clock 07:24.",
+                            "driveText": "3rd and 1 at DEL34",
+                            "teamId": "2120",
+                            "visitingScore": "17",
+                            "homeScore": "7"
+                        },
+                        {
+                            "scoreText": "[NH] QB Keeper #2 N.Henderson rush up the middle for a gain of 3 yards to the DEL37 (#29 A.Chambers;#24 F.Bazzie), 1ST DOWN.",
+                            "driveText": "3rd and 1 at DEL34",
+                            "teamId": "2120",
+                            "visitingScore": "17",
+                            "homeScore": "7"
+                        },
+                        {
+                            "scoreText": "[NH] #2 N.Henderson pass to the right incomplete intended for #5 G.Coleman II broken up by #41 S.Smalls at the DEL50.",
+                            "driveText": "1st and 10 at DEL37",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #22 K.Spruill rush up the middle for a loss of 1 yard to the DEL36 (#6 R.Miller).",
+                            "driveText": "2nd and 10 at DEL37",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #2 N.Henderson pass up the middle incomplete intended for #5 G.Coleman II broken up by #3 R.Carr at the MAI49.",
+                            "driveText": "3rd and 11 at DEL36",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#34 T.Pastula punt 26 yards to the MAI38 downed by #42 A.Pawlowski.",
+                            "driveText": "4th and 11 at DEL36",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "05:48",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 05:48",
+                            "driveText": "1st and 10 at MAI38",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the left incomplete intended for #10 A.Miller thrown to the DEL35.",
+                            "driveText": "1st and 10 at MAI38",
+                            "teamId": "1835",
+                            "visitingScore": "17",
+                            "homeScore": "7"
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle complete for 7 yards to #18 S.Bowman caught at the MAI40 and advanced to the MAI45 (#4 C.Reeder).",
+                            "driveText": "2nd and 10 at MAI38",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right incomplete intended for #2 D.Young thrown to the DEL40.",
+                            "driveText": "3rd and 3 at MAI45",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#19 D.Gelb punt 43 yards to the DEL12, fair catch by #17 J.Townsend.",
+                            "driveText": "4th and 3 at MAI45",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "04:55",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 04:55",
+                            "driveText": "1st and 10 at DEL12",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #33 D.Lee rush to the right for a gain of 3 yards to the DEL15 (#9 J.Wiley).",
+                            "driveText": "1st and 10 at DEL12",
+                            "teamId": "2120",
+                            "visitingScore": "17",
+                            "homeScore": "7"
+                        },
+                        {
+                            "scoreText": "[NHSG] #33 D.Lee rush to the right for a gain of 3 yards to the DEL18 (#5 J.Lezin).",
+                            "driveText": "2nd and 7 at DEL15",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass up the middle incomplete intended for #17 J.Townsend thrown to the DEL24.",
+                            "driveText": "3rd and 4 at DEL18",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#34 T.Pastula punt 42 yards to the MAI40, #87 J.Hennie return 1 yard to the MAI41 (#7 M.Vandamia;#42 A.Pawlowski).",
+                            "driveText": "4th and 4 at DEL18",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "03:21",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 03:21",
+                            "driveText": "1st and 10 at MAI41",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the left complete for 59 yards to #17 Z.Scott caught at the DEL44 and advanced to the DEL0, 1ST DOWN, TOUCHDOWN MAI (Scoring play confirmed).",
+                            "driveText": "1st and 10 at MAI41",
+                            "teamId": "1835",
+                            "visitingScore": "17",
+                            "homeScore": "14"
+                        },
+                        {
+                            "scoreText": "#37 J.Messina PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#20 V.Rivas kickoff 65 yards to the DEL0, #33 D.Lee return 16 yards to the DEL16  (#15 B.Lee, Jr.;#33 C.Thomas).",
+                            "driveText": "",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "03:05",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 03:05",
+                            "driveText": "1st and 10 at DEL16",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the right incomplete thrown to the DEL23; QB hurried by #9 J.Wiley.",
+                            "driveText": "1st and 10 at DEL16",
+                            "teamId": "2120",
+                            "visitingScore": "17",
+                            "homeScore": "14"
+                        },
+                        {
+                            "scoreText": "Timeout Maine, clock 03:00.",
+                            "driveText": "2nd and 10 at DEL16",
+                            "teamId": "2120",
+                            "visitingScore": "17",
+                            "homeScore": "14"
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson sacked for a loss of 1 yard at the DEL15 (#96 D.Royal;#6 R.Miller).",
+                            "driveText": "2nd and 10 at DEL16",
+                            "teamId": "2120",
+                            "visitingScore": "17",
+                            "homeScore": "14"
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the left incomplete intended for #17 J.Townsend thrown to the DEL27.",
+                            "driveText": "3rd and 11 at DEL15",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Punt by  at the DEL15 is blocked by #83 M.Monios, recovered by MAI #81 M.Moss at the DEL4, returned 0 yards to the DEL4, TOUCHDOWN MAI (Scoring play confirmed).",
+                            "driveText": "4th and 11 at DEL15",
+                            "teamId": "2120",
+                            "visitingScore": "17",
+                            "homeScore": "21"
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "#37 J.Messina PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#20 V.Rivas kickoff 65 yards to the DEL0, Touchback .",
+                            "driveText": "",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "02:07",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 02:07",
+                            "driveText": "1st and 10 at DEL25",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the left complete for -2 yards to #22 K.Spruill caught at the DEL22 and advanced to the DEL23 (#23 A.Otero).",
+                            "driveText": "1st and 10 at DEL25",
+                            "teamId": "2120",
+                            "visitingScore": "17",
+                            "homeScore": "21"
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the left incomplete intended for #1 T.Pitts thrown to the DEL29.",
+                            "driveText": "2nd and 12 at DEL23",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the right incomplete intended for #7 M.Vandamia thrown to the DEL31.",
+                            "driveText": "3rd and 12 at DEL23",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#34 T.Pastula punt 36 yards to the MAI41, fair catch by #87 J.Hennie.",
+                            "driveText": "4th and 12 at DEL23",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "01:08",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 01:08",
+                            "driveText": "1st and 10 at MAI41",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle complete for 13 yards to #17 Z.Scott caught at the MAI42 and advanced to the DEL46 (#1 K.Whitehead), 1ST DOWN.",
+                            "driveText": "1st and 10 at MAI41",
+                            "teamId": "1835",
+                            "visitingScore": "17",
+                            "homeScore": "21"
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the left complete for 8 yards to #2 D.Young caught at the DEL41 and advanced to the DEL38 (#4 C.Reeder).",
+                            "driveText": "1st and 10 at DEL46",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right complete for 3 yards to #2 D.Young caught at the DEL36 and advanced to the DEL35 (#1 K.Whitehead), out of bounds, 1ST DOWN.",
+                            "driveText": "2nd and 2 at DEL38",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle incomplete intended for #2 D.Young broken up by #0 J.Zubillaga at the DEL26.",
+                            "driveText": "1st and 10 at DEL35",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the left complete for 11 yards to #83 M.Monios caught at the DEL36 and advanced to the DEL24 (#4 C.Reeder), 1ST DOWN.",
+                            "driveText": "2nd and 10 at DEL35",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle complete for 5 yards to #28 F.Brock caught at the DEL20 and advanced to the DEL19 (#33 J.Buchanan).",
+                            "driveText": "1st and 10 at DEL24",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout Maine, clock 00:22.",
+                            "driveText": "2nd and 5 at DEL19",
+                            "teamId": "1835",
+                            "visitingScore": "17",
+                            "homeScore": "21"
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 D.Young rush to the right for a gain of 4 yards to the DEL15 (#12 C.McGowan;#94 J.Morris).",
+                            "driveText": "2nd and 5 at DEL19",
+                            "teamId": "1835",
+                            "visitingScore": "17",
+                            "homeScore": "21"
+                        },
+                        {
+                            "scoreText": "Timeout Delaware, clock 00:05.",
+                            "driveText": "3rd and 1 at DEL15",
+                            "teamId": "1835",
+                            "visitingScore": "17",
+                            "homeScore": "21"
+                        },
+                        {
+                            "scoreText": "#37 J.Messina field goal attempt from 32 yards GOOD [kick was spotted at DEL22], clock 00:00.",
+                            "driveText": "3rd and 1 at DEL15",
+                            "teamId": "1835",
+                            "visitingScore": "17",
+                            "homeScore": "24"
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "End of first half, clock 0:00.",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                }
+            ],
+            "titleEnum": "SECOND"
+        },
+        {
+            "title": "3RD",
+            "shortTitle": "3rd",
+            "possessions": [
+                {
+                    "teamId": "2120",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "At the start of the second half, MAI will receive and DEL will defend the south goal.",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Start of 3rd quarter, clock 15:00.",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#40 R.Coe kickoff 65 yards to the MAI0, Touchback .",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 15:00",
+                            "driveText": "1st and 10 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the left incomplete broken up by #11 L.Trainer at the MAI30.",
+                            "driveText": "1st and 10 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle complete for 13 yards to #83 M.Monios to the MAI38, End of Play, 1ST DOWN.",
+                            "driveText": "2nd and 10 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#28 F.Brock rush to the left for a gain of 12 yards to the MAI50 (#0 J.Zubillaga;#16 N.Hill), 1ST DOWN. PENALTY MAI Holding   enforced 10 yards from the MAI45 to the MAI35 [NHSG]. NO PLAY (replay the down).",
+                            "driveText": "1st and 10 at MAI38",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle complete for 1 yard to #17 Z.Scott to the MAI36 (#42 A.Pawlowski).",
+                            "driveText": "1st and 13 at MAI35",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right incomplete intended for #10 A.Miller thrown to the MAI37.",
+                            "driveText": "2nd and 12 at MAI36",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right complete for 11 yards to #28 F.Brock caught at the MAI34 and advanced to the MAI47 (#0 J.Zubillaga).",
+                            "driveText": "3rd and 12 at MAI36",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] QB Keeper #1 J.Fagnano rush up the middle for a gain of 1 yard to the MAI48 (#92 T.Walsh;#95 F.Burton), 1ST DOWN.",
+                            "driveText": "4th and 1 at MAI47",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] QB Keeper #1 J.Fagnano rush to the right for a gain of 6 yards to the DEL46 (#11 L.Trainer), out of bounds.",
+                            "driveText": "1st and 10 at MAI48",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right incomplete intended for #17 Z.Scott thrown to the DEL39.",
+                            "driveText": "2nd and 4 at DEL46",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#1 J.Fagnano pass up the middle complete for 11 yards to #83 M.Monios caught at the DEL40 and advanced to the DEL35 (#0 J.Zubillaga). PENALTY  Before the snap, MAI Illegal Shift   enforced 5 yards from the DEL46 to the MAI49 [NHSG]. NO PLAY (replay the down).",
+                            "driveText": "3rd and 4 at DEL46",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right incomplete intended for #2 D.Young thrown to the DEL41.",
+                            "driveText": "3rd and 9 at MAI49",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#19 D.Gelb punt 29 yards to the DEL22, fair catch by #17 J.Townsend.",
+                            "driveText": "4th and 9 at MAI49",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "11:26",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 11:26",
+                            "driveText": "1st and 10 at DEL22",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #33 D.Lee rush to the left for a loss of 3 yards to the DEL19 (#6 R.Miller).",
+                            "driveText": "1st and 10 at DEL22",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#2 N.Henderson pass to the left incomplete intended for #1 T.Pitts broken up by #3 R.Carr at the DEL41. PENALTY MAI Pass Interference on #3 R.Carr  enforced 15 yards from the DEL19 to the DEL34 and results in automatic 1ST DOWN [NHSG]. NO PLAY (replay the down).",
+                            "driveText": "2nd and 13 at DEL19",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass up the middle complete for 66 yards to #1 T.Pitts caught at the DEL49 and advanced to the MAI0, 1ST DOWN, TOUCHDOWN DEL (Scoring play confirmed).",
+                            "driveText": "1st and 10 at DEL34",
+                            "teamId": "2120",
+                            "visitingScore": "24",
+                            "homeScore": "24"
+                        },
+                        {
+                            "scoreText": "#40 R.Coe PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#40 R.Coe kickoff 61 yards to the MAI4, #2 D.Young return 19 yards to the MAI23  (#0 J.Zubillaga).",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "10:21",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 10:21",
+                            "driveText": "1st and 10 at MAI23",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the left incomplete intended for #10 A.Miller thrown to the MAI28.",
+                            "driveText": "1st and 10 at MAI23",
+                            "teamId": "1835",
+                            "visitingScore": "24",
+                            "homeScore": "24"
+                        },
+                        {
+                            "scoreText": "[NHSG] QB Keeper #1 J.Fagnano rush to the right for a gain of 2 yards to the MAI25 (#33 J.Buchanan;#16 N.Hill).",
+                            "driveText": "2nd and 10 at MAI23",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle incomplete intended for #2 D.Young thrown to the MAI35; QB hurried by #10 A.Toro.",
+                            "driveText": "3rd and 8 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#19 D.Gelb punt 32 yards to the DEL43, fair catch by #17 J.Townsend.",
+                            "driveText": "4th and 8 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "09:18",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 09:18",
+                            "driveText": "1st and 10 at DEL43",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] DEL fumbled snap, DEL rush up the middle for a loss of 1 yard to the DEL42, End of Play.",
+                            "driveText": "1st and 10 at DEL43",
+                            "teamId": "2120",
+                            "visitingScore": "24",
+                            "homeScore": "24"
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the right complete for 15 yards to #5 G.Coleman II caught at the DEL49 and advanced to the MAI43 (#6 R.Miller), 1ST DOWN.",
+                            "driveText": "2nd and 11 at DEL42",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the right complete for 23 yards to #1 T.Pitts caught at the MAI21 and advanced to the MAI20 (#24 F.Bazzie), out of bounds, 1ST DOWN.",
+                            "driveText": "1st and 10 at MAI43",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] DEL fumbled snap, DEL rush up the middle for no gain to the MAI20, End of Play.",
+                            "driveText": "1st and 10 at MAI20",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #22 K.Spruill rush up the middle for a gain of 9 yards to the MAI11 (#24 F.Bazzie;#7 X.Nurse).",
+                            "driveText": "2nd and 10 at MAI20",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] QB Keeper #10 A.Paoletti rush up the middle for a gain of 6 yards to the MAI5 (#21 A.Ambush;#32 V.Thomas), 1ST DOWN.",
+                            "driveText": "3rd and 1 at MAI11",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #22 K.Spruill rush up the middle for a loss of 2 yards to the MAI7 (#23 A.Otero;#41 S.Smalls).",
+                            "driveText": "1st and 5 at MAI5",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] QB Keeper #10 A.Paoletti rush to the left for a gain of 4 yards to the MAI3 (#24 F.Bazzie).",
+                            "driveText": "2nd and 7 at MAI7",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#2 N.Henderson pass to the right incomplete intended for #7 M.Vandamia thrown to the MAI0.",
+                            "driveText": "3rd and 3 at MAI3",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#40 R.Coe field goal attempt from 20 yards GOOD [kick was spotted at MAI10], clock 04:41.",
+                            "driveText": "4th and 3 at MAI3",
+                            "teamId": "2120",
+                            "visitingScore": "27",
+                            "homeScore": "24"
+                        },
+                        {
+                            "scoreText": "#40 R.Coe kickoff 65 yards to the MAI0, Touchback .",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "04:41",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 04:41",
+                            "driveText": "1st and 10 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right complete for 9 yards to #10 A.Miller caught at the MAI29 and advanced to the MAI34 (#1 K.Whitehead).",
+                            "driveText": "1st and 10 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "27",
+                            "homeScore": "24"
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the left complete for 3 yards to #2 D.Young caught at the MAI31 and advanced to the MAI37 (#0 J.Zubillaga;#4 C.Reeder), 1ST DOWN.",
+                            "driveText": "2nd and 1 at MAI34",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #20 E.Barnwell rush up the middle for a gain of 4 yards to the MAI41 (#42 A.Pawlowski;#0 J.Zubillaga).",
+                            "driveText": "1st and 10 at MAI37",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right complete for 5 yards to #86 S.Petrick to the MAI46 (TEAM).",
+                            "driveText": "2nd and 6 at MAI41",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #17 Z.Scott rush up the middle for a gain of 2 yards to the MAI48 (#98 N.Coomer;#42 A.Pawlowski), 1ST DOWN.",
+                            "driveText": "3rd and 1 at MAI46",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right complete for 13 yards to #2 D.Young to the DEL39 (#26 I.Schoonmaker), 1ST DOWN.",
+                            "driveText": "1st and 10 at MAI48",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #28 F.Brock rush up the middle for a gain of 7 yards to the DEL32 (#0 J.Zubillaga;#98 N.Coomer).",
+                            "driveText": "1st and 10 at DEL39",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle incomplete intended for #2 D.Young thrown to the DEL28.",
+                            "driveText": "2nd and 3 at DEL32",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #20 E.Barnwell rush up the middle for a gain of 7 yards to the DEL25 (#4 C.Reeder), 1ST DOWN.",
+                            "driveText": "3rd and 3 at DEL32",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right complete for 24 yards to #2 D.Young to the DEL1, fumble forced by N.Hill, fumble by D.Young out of bounds, Touchback.",
+                            "driveText": "1st and 10 at DEL25",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "End of 3rd quarter, clock 0:00.",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                }
+            ],
+            "titleEnum": "THIRD"
+        },
+        {
+            "title": "4TH",
+            "shortTitle": "4th",
+            "possessions": [
+                {
+                    "teamId": "2120",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 15:00",
+                            "driveText": "1st and 10 at DEL20",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Start of 4th quarter, clock 15:00.",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #33 D.Lee rush up the middle for a gain of 4 yards to the DEL24 (#6 R.Miller).",
+                            "driveText": "1st and 10 at DEL20",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #33 D.Lee rush up the middle for no gain to the DEL24 (#3 R.Carr).",
+                            "driveText": "2nd and 6 at DEL24",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the right incomplete intended for #17 J.Townsend thrown to the DEL29.",
+                            "driveText": "3rd and 6 at DEL24",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#34 T.Pastula punt 40 yards to the MAI36, fair catch by #83 M.Monios.",
+                            "driveText": "4th and 6 at DEL24",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "13:29",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 13:29",
+                            "driveText": "1st and 10 at MAI36",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle complete for 4 yards to #86 S.Petrick caught at the MAI38 and advanced to the MAI40 (#10 A.Toro).",
+                            "driveText": "1st and 10 at MAI36",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #20 E.Barnwell rush up the middle for a gain of 4 yards to the MAI44 (#33 J.Buchanan;#42 A.Pawlowski).",
+                            "driveText": "2nd and 6 at MAI40",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle incomplete intended for #2 D.Young broken up by #10 A.Toro at the MAI44.",
+                            "driveText": "3rd and 2 at MAI44",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#19 D.Gelb punt 33 yards to the DEL23 downed by #6 R.Miller.",
+                            "driveText": "4th and 2 at MAI44",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "11:57",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 11:57",
+                            "driveText": "1st and 10 at DEL23",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #2 N.Henderson pass to the right complete for 18 yards to #7 M.Vandamia caught at the DEL38 and advanced to the DEL41 (#7 X.Nurse), 1ST DOWN.",
+                            "driveText": "1st and 10 at DEL23",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #37 J.Bruno rush to the left for a gain of 8 yards to the DEL49 (#41 S.Smalls), out of bounds.",
+                            "driveText": "1st and 10 at DEL41",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #2 N.Henderson pass to the right complete for 18 yards to #5 G.Coleman II caught at the MAI37 and advanced to the MAI33 (#21 A.Ambush), out of bounds, 1ST DOWN.",
+                            "driveText": "2nd and 2 at DEL49",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #22 K.Spruill rush to the right for a gain of 4 yards to the MAI29 (#16 X.Mitchell).",
+                            "driveText": "1st and 10 at MAI33",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #2 N.Henderson pass to the right complete for 8 yards to #11 L.Lewis caught at the MAI27 and advanced to the MAI21 (#23 A.Otero), out of bounds, 1ST DOWN. PENALTY MAI Unsportsmanlike Conduct   enforced  half the distance from the goal, 10 yards from the end of the play at the MAI21 to the MAI11 and results in automatic 1ST DOWN.",
+                            "driveText": "2nd and 6 at MAI29",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #5 G.Coleman II rush to the right for a gain of 5 yards to the MAI5 (#24 F.Bazzie;#23 A.Otero).",
+                            "driveText": "1st and 10 at MAI10",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#10 A.Paoletti pass up the middle incomplete intended for #9 B.Brose thrown to the MAI0. PENALTY MAI Pass Interference on #6 R.Miller  enforced 3 yards from the MAI5 to the MAI2 and results in automatic 1ST DOWN [NHSG]. NO PLAY (replay the down).",
+                            "driveText": "2nd and 5 at MAI5",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] #22 K.Spruill rush up the middle for no gain to the MAI2 (#16 X.Mitchell;#5 J.Lezin).",
+                            "driveText": "1st and 2 at MAI2",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#22 K.Spruill rush up the middle for a gain of 2 yards to the MAI0, TOUCHDOWN DEL (Scoring play confirmed).",
+                            "driveText": "2nd and 2 at MAI2",
+                            "teamId": "2120",
+                            "visitingScore": "34",
+                            "homeScore": "24"
+                        },
+                        {
+                            "scoreText": "#40 R.Coe PAT kick attempt  is good.",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#40 R.Coe kickoff 65 yards to the MAI0, Touchback .",
+                            "driveText": "",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "08:01",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 08:01",
+                            "driveText": "1st and 10 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the right complete for 6 yards to #83 M.Monios to the MAI31 (#0 J.Zubillaga).",
+                            "driveText": "1st and 10 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "34",
+                            "homeScore": "24"
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the left complete for 25 yards to #10 A.Miller caught at the DEL46 and advanced to the DEL44 (#16 N.Hill), out of bounds, 1ST DOWN.",
+                            "driveText": "2nd and 4 at MAI31",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "#1 J.Fagnano pass up the middle complete for 6 yards to #10 A.Miller caught at the DEL38 and advanced to the DEL38, out of bounds. PENALTY MAI Ineligible Receiver Downfield on Pass   enforced 5 yards from the DEL44 to the DEL49 [NHSG]. NO PLAY (replay the down).",
+                            "driveText": "1st and 10 at DEL44",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle intercepted by #4 C.Reeder at the DEL42 intended for #2 D.Young. Reeder return for 9 yards to the MAI49 (#76 T.Francois;#66 M.Staalsoe).",
+                            "driveText": "1st and 15 at DEL49",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "06:16",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 06:16",
+                            "driveText": "1st and 10 at MAI49",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #33 D.Lee rush up the middle for a gain of 7 yards to the MAI42 (#21 A.Ambush;#24 F.Bazzie).",
+                            "driveText": "1st and 10 at MAI49",
+                            "teamId": "2120",
+                            "visitingScore": "34",
+                            "homeScore": "24"
+                        },
+                        {
+                            "scoreText": "[NHSG] #33 D.Lee rush up the middle for a gain of 5 yards to the MAI37 (#7 X.Nurse;#44 R.Salamone), 1ST DOWN.",
+                            "driveText": "2nd and 3 at MAI42",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #33 D.Lee rush up the middle for a gain of 5 yards to the MAI32 (#7 X.Nurse).",
+                            "driveText": "1st and 10 at MAI37",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #22 K.Spruill rush up the middle for a gain of 2 yards to the MAI30 (#9 J.Wiley;#5 J.Lezin).",
+                            "driveText": "2nd and 5 at MAI32",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #22 K.Spruill rush up the middle for a gain of 1 yard to the MAI29 (#23 A.Otero;#3 R.Carr).",
+                            "driveText": "3rd and 3 at MAI30",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout Maine, clock 03:04.",
+                            "driveText": "4th and 2 at MAI29",
+                            "teamId": "2120",
+                            "visitingScore": "34",
+                            "homeScore": "24"
+                        },
+                        {
+                            "scoreText": "[NHSG] #22 K.Spruill rush to the left for a gain of 1 yard to the MAI28 (#9 J.Wiley); DEL turnover on downs.",
+                            "driveText": "4th and 2 at MAI29",
+                            "teamId": "2120",
+                            "visitingScore": "34",
+                            "homeScore": "24"
+                        }
+                    ]
+                },
+                {
+                    "teamId": "1835",
+                    "time": "02:59",
+                    "plays": [
+                        {
+                            "scoreText": "MAI drive start at 02:59",
+                            "driveText": "1st and 10 at MAI28",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass to the left complete for -3 yards to #2 D.Young to the MAI25 (#7 D.Darien).",
+                            "driveText": "1st and 10 at MAI28",
+                            "teamId": "1835",
+                            "visitingScore": "34",
+                            "homeScore": "24"
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano pass up the middle complete for 6 yards to #10 A.Miller to the MAI31 (#16 N.Hill).",
+                            "driveText": "2nd and 13 at MAI25",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano sacked for a loss of 9 yards at the MAI22 (#98 N.Coomer;#4 C.Reeder).",
+                            "driveText": "3rd and 7 at MAI31",
+                            "teamId": "1835",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout Maine, clock 01:46.",
+                            "driveText": "4th and 16 at MAI22",
+                            "teamId": "1835",
+                            "visitingScore": "34",
+                            "homeScore": "24"
+                        },
+                        {
+                            "scoreText": "[NHSG] #1 J.Fagnano sacked for a loss of 8 yards at the MAI14 (#10 A.Toro); MAI turnover on downs.",
+                            "driveText": "4th and 16 at MAI22",
+                            "teamId": "1835",
+                            "visitingScore": "34",
+                            "homeScore": "24"
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2120",
+                    "time": "01:39",
+                    "plays": [
+                        {
+                            "scoreText": "DEL drive start at 01:39",
+                            "driveText": "1st and 10 at MAI14",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NHSG] #33 D.Lee rush to the left for a gain of 5 yards to the MAI9 (#6 R.Miller;#21 A.Ambush).",
+                            "driveText": "1st and 10 at MAI14",
+                            "teamId": "2120",
+                            "visitingScore": "34",
+                            "homeScore": "24"
+                        },
+                        {
+                            "scoreText": "[NH] Kneel down by #2 N.Henderson at MAI10 (team loss of 1).",
+                            "driveText": "2nd and 5 at MAI9",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "[NH] Kneel down by #2 N.Henderson at MAI12 (team loss of 2).",
+                            "driveText": "3rd and 6 at MAI10",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "End of game, clock 0:00.",
+                            "driveText": "4th and 8 at MAI12",
+                            "teamId": "2120",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                }
+            ],
+            "titleEnum": "FOURTH"
+        }
+    ]
+}

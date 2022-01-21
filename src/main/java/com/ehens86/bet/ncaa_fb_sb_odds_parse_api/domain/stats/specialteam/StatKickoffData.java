@@ -42,15 +42,8 @@ public class StatKickoffData extends PlayerStatEntity implements Serializable {
 	private Integer kickoffLandYard;
 
 	public StatKickoffData() {
-
+		// Base constructor
 	}
-
-//	/**
-//	 * @return the playStat
-//	 */
-//	public TeamPlayStatData getPlayStat() {
-//		return playStat;
-//	}
 
 	/**
 	 * @param playStat the playStat to set

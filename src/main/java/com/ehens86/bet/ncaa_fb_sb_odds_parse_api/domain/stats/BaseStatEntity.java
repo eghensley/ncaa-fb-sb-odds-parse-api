@@ -20,7 +20,7 @@ public class BaseStatEntity extends OidAuditEntity implements Serializable {
 	protected StatTypeEnum statType;
 	
 	public BaseStatEntity() {
-		
+		// Base constructor
 	}
 	
 	/**

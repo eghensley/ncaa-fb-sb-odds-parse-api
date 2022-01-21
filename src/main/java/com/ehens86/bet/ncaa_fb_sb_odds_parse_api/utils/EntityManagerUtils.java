@@ -41,7 +41,6 @@ public class EntityManagerUtils {
 		for (Field field : dto.getClass().getDeclaredFields()) { // getSuperclass
 			if(field.getAnnotation(Id.class) != null) {
 				try {
-					field.setAccessible(true);
 					return field.get(dto);
 				} catch (IllegalAccessException e) {
 					throw new IllegalArgumentException(e);
@@ -65,7 +64,6 @@ public class EntityManagerUtils {
 		for (Field field : dto.getClass().getDeclaredFields()) { // getSuperclass
 			if(field.getAnnotation(Id.class) != null) {
 				try {
-					field.setAccessible(true);
 					return field.get(dto);
 				} catch (IllegalAccessException e) {
 					throw new IllegalArgumentException(e);

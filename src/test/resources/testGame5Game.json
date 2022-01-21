@@ -1,0 +1,265 @@
+{
+    "teamHome": {
+        "teamName": "Maine",
+        "teamNameShort": "Maine",
+        "teamNameSixChar": "MAINE",
+        "teamNameSeo": "maine",
+        "teamNickname": "Black Bears",
+        "teamColor": "#0C2340",
+        "logoLink": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/maine.svg",
+        "teamStat": {
+            "offense": {
+                "offenseRushing": {
+                    "rushingFirstDown": null,
+                    "rushingYard": null,
+                    "rushingAttempt": null,
+                    "rushingTouchdown": null
+                },
+                "offensePassing": {
+                    "passingFirstDown": null,
+                    "passingYard": null,
+                    "passingAttempt": null,
+                    "passingCompletion": null,
+                    "passingTouchdown": null,
+                    "passingInterception": null,
+                    "passingInterceptionYard": 0,
+                    "passingInterceptionTouchdown": 0
+                },
+                "offenseFumble": {
+                    "fumble": null,
+                    "fumbleLost": null,
+                    "fumbleYard": 0,
+                    "fumbleTouchdown": 0
+                },
+                "offenseConversion": {
+                    "thirdDownAttempt": null,
+                    "thirdDownConversion": null,
+                    "fourthDownAttempt": null,
+                    "fourthDownConversion": null
+                },
+                "offenseFirstDownPenalty": null
+            },
+            "defense": {
+                "defenseRushing": {
+                    "rushingFirstDown": null,
+                    "rushingYard": null,
+                    "rushingAttempt": null,
+                    "rushingTouchdown": null
+                },
+                "defensePassing": {
+                    "passingFirstDown": null,
+                    "passingYard": null,
+                    "passingAttempt": null,
+                    "passingCompletion": null,
+                    "passingTouchdown": null,
+                    "passingInterception": null,
+                    "passingInterceptionYard": 0,
+                    "passingInterceptionTouchdown": 0
+                },
+                "defenseFumble": {
+                    "fumble": null,
+                    "fumbleLost": null,
+                    "fumbleYard": 0,
+                    "fumbleTouchdown": 0
+                },
+                "defenseConversion": {
+                    "thirdDownAttempt": null,
+                    "thirdDownConversion": null,
+                    "fourthDownAttempt": null,
+                    "fourthDownConversion": null
+                },
+                "defenseFirstDownPenalty": null
+            },
+            "penalty": {
+                "penalty": null,
+                "penaltyYards": null
+            },
+            "specialTeam": {
+                "punt": {
+                    "punt": null,
+                    "puntYards": null,
+                    "puntReturnYards": null,
+                    "puntReturnTouchdown": 0
+                },
+                "puntReturn": {
+                    "punt": null,
+                    "puntYards": null,
+                    "puntReturnYards": null,
+                    "puntReturnTouchdown": 0
+                },
+                "kickoff": {
+                    "kickoff": null,
+                    "kickoffYards": null,
+                    "kickoffReturnYards": null,
+                    "kickoffReturnTouchdown": 0
+                },
+                "kickoffReturn": {
+                    "kickoff": null,
+                    "kickoffYards": null,
+                    "kickoffReturnYards": null,
+                    "kickoffReturnTouchdown": 0
+                }
+            }
+        },
+        "ncaaTeamId": "1835",
+        "playerStat": {
+            "offense": {
+                "rushingStat": [],
+                "passingStat": [],
+                "receivingStat": []
+            },
+            "defense": {
+                "defenseProduction": []
+            },
+            "specialTeam": {
+                "kicking": [],
+                "punting": [],
+                "puntReturn": [],
+                "kickReturn": [],
+                "kickCoverage": [],
+                "puntCoverage": [],
+                "kickoff": []
+            },
+            "penalty": []
+        },
+        "score": null
+    },
+    "teamAway": {
+        "teamName": "Delaware",
+        "teamNameShort": "Delaware",
+        "teamNameSixChar": "DEL",
+        "teamNameSeo": "delaware",
+        "teamNickname": "Blue Hens",
+        "teamColor": "#006095",
+        "logoLink": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/delaware.svg",
+        "teamStat": {
+            "offense": {
+                "offenseRushing": {
+                    "rushingFirstDown": null,
+                    "rushingYard": null,
+                    "rushingAttempt": null,
+                    "rushingTouchdown": null
+                },
+                "offensePassing": {
+                    "passingFirstDown": null,
+                    "passingYard": null,
+                    "passingAttempt": null,
+                    "passingCompletion": null,
+                    "passingTouchdown": null,
+                    "passingInterception": null,
+                    "passingInterceptionYard": 0,
+                    "passingInterceptionTouchdown": 0
+                },
+                "offenseFumble": {
+                    "fumble": null,
+                    "fumbleLost": null,
+                    "fumbleYard": 0,
+                    "fumbleTouchdown": 0
+                },
+                "offenseConversion": {
+                    "thirdDownAttempt": null,
+                    "thirdDownConversion": null,
+                    "fourthDownAttempt": null,
+                    "fourthDownConversion": null
+                },
+                "offenseFirstDownPenalty": null
+            },
+            "defense": {
+                "defenseRushing": {
+                    "rushingFirstDown": null,
+                    "rushingYard": null,
+                    "rushingAttempt": null,
+                    "rushingTouchdown": null
+                },
+                "defensePassing": {
+                    "passingFirstDown": null,
+                    "passingYard": null,
+                    "passingAttempt": null,
+                    "passingCompletion": null,
+                    "passingTouchdown": null,
+                    "passingInterception": null,
+                    "passingInterceptionYard": 0,
+                    "passingInterceptionTouchdown": 0
+                },
+                "defenseFumble": {
+                    "fumble": null,
+                    "fumbleLost": null,
+                    "fumbleYard": 0,
+                    "fumbleTouchdown": 0
+                },
+                "defenseConversion": {
+                    "thirdDownAttempt": null,
+                    "thirdDownConversion": null,
+                    "fourthDownAttempt": null,
+                    "fourthDownConversion": null
+                },
+                "defenseFirstDownPenalty": null
+            },
+            "penalty": {
+                "penalty": null,
+                "penaltyYards": null
+            },
+            "specialTeam": {
+                "punt": {
+                    "punt": null,
+                    "puntYards": null,
+                    "puntReturnYards": null,
+                    "puntReturnTouchdown": 0
+                },
+                "puntReturn": {
+                    "punt": null,
+                    "puntYards": null,
+                    "puntReturnYards": null,
+                    "puntReturnTouchdown": 0
+                },
+                "kickoff": {
+                    "kickoff": null,
+                    "kickoffYards": null,
+                    "kickoffReturnYards": null,
+                    "kickoffReturnTouchdown": 0
+                },
+                "kickoffReturn": {
+                    "kickoff": null,
+                    "kickoffYards": null,
+                    "kickoffReturnYards": null,
+                    "kickoffReturnTouchdown": 0
+                }
+            }
+        },
+        "ncaaTeamId": "2120",
+        "playerStat": {
+            "offense": {
+                "rushingStat": [],
+                "passingStat": [],
+                "receivingStat": []
+            },
+            "defense": {
+                "defenseProduction": []
+            },
+            "specialTeam": {
+                "kicking": [],
+                "punting": [],
+                "puntReturn": [],
+                "kickReturn": [],
+                "kickCoverage": [],
+                "puntCoverage": [],
+                "kickoff": []
+            },
+            "penalty": []
+        },
+        "score": null
+    },
+    "gameDate": "2021-09-02",
+    "ncaaGameId": "5851544",
+    "gameTime": "19:00",
+    "division": "FCS",
+    "season": 2021,
+    "winner": "AWAY",
+    "valid": true,
+    "venue": {
+        "city": "Orono",
+        "name": "Morse Field at Alfond Stadium",
+        "state": "ME"
+    },
+    "plays": null
+}

@@ -1,5 +1,7 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.gameinfo;
 
+import java.util.Objects;
+
 public class GameInfoTabsPojo {
     private boolean preview;
     private boolean boxscore;
@@ -109,15 +111,7 @@ public class GameInfoTabsPojo {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (boxscore ? 1231 : 1237);
-		result = prime * result + (pbp ? 1231 : 1237);
-		result = prime * result + (preview ? 1231 : 1237);
-		result = prime * result + (recap ? 1231 : 1237);
-		result = prime * result + (scoringSummary ? 1231 : 1237);
-		result = prime * result + (teamStats ? 1231 : 1237);
-		return result;
+		return Objects.hash(boxscore, pbp, preview, recap, scoringSummary, teamStats);
 	}
 
 	@Override
@@ -129,25 +123,8 @@ public class GameInfoTabsPojo {
 			return false;
 		}
 		GameInfoTabsPojo other = (GameInfoTabsPojo) obj;
-		if (boxscore != other.boxscore) {
-			return false;
-		}
-		if (pbp != other.pbp) {
-			return false;
-		}
-		if (preview != other.preview) {
-			return false;
-		}
-		if (recap != other.recap) {
-			return false;
-		}
-		if (scoringSummary != other.scoringSummary) {
-			return false;
-		}
-		if (teamStats != other.teamStats) {
-			return false;
-		}
-		return true;
+		return boxscore == other.boxscore && pbp == other.pbp && preview == other.preview && recap == other.recap
+				&& scoringSummary == other.scoringSummary && teamStats == other.teamStats;
 	}
 
 	@Override

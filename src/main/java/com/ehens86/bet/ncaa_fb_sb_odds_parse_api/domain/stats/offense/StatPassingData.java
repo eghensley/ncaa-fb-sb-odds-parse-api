@@ -25,30 +25,18 @@ public class StatPassingData extends PlayerStatEntity implements Serializable {
 	private static final long serialVersionUID = 4122868029529159462L;
 	@OneToOne(mappedBy = "passStat")
 	private TeamPlayStatData playStat;
-//	@Column(name = "PASS_COMPLETION", nullable = false)
-//	private Integer passingCompletion;
 	@Column(name = "PASS_ATTEMPT", nullable = false)
 	private Integer passingAttempt;
 	@Column(name = "PASS_INTERCEPTION", nullable = false)
 	private Integer passingInterception;
-//	@Column(name = "PASS_YARD", nullable = false)
-//	private Integer passingYard;
-//	@Column(name = "PASS_TOUCHDOWN", nullable = false)
-//	private Integer passingTouchdown;
 	@Column(name = "PASS_INTERCEPTION_YARD", nullable = false)
 	private Integer passingInterceptionYard;
 	@Column(name = "PASS_INTERCEPTION_TD", nullable = false)
 	private Integer passingInterceptionTouchdown;
 	@Column(name = "PASS_BREAKUP", nullable = false)
 	private Integer passingBreakup;
-//	@Column(name = "PASS_FIRSTDOWN", nullable = false)
-//	private Integer passingFirstDown;
 	@Column(name = "PASS_DIRECTION", nullable = false)
 	private PlayDirectionEnum passingDirection;
-//	@Column(name = "PASS_DROP", nullable = false)
-//	private Integer passingDrop;
-//	@Column(name = "PASS_YARD_AFTER_CATCH", nullable = false)
-//	private Integer passingYardAfterCatch;
 	@Column(name = "PASS_YARD_THROWN", nullable = true)
 	private Integer passingYardThrownTo;
 	@Column(name = "PASS_HURRY", nullable = false)
@@ -61,28 +49,17 @@ public class StatPassingData extends PlayerStatEntity implements Serializable {
 	private Integer passingFumbleLost;
 	@Column(name = "PASS_SACK_YARD", nullable = false)
 	private Integer passingSackYard;
-//	@Column(name = "PASS_SAFETY", nullable = false)
-//	private Integer passingSafety;
 	@Column(name = "PASS_SPIKE", nullable = false)
 	private Integer passingSpike;
-//	@Column(name = "PASS_TWO_POINT_CONV", nullable = false)
-//	private Integer passingTwoPointConversion;
-	@Column(name = "PASS_AIR_LESS_NEEDED", nullable = false)
+	@Column(name = "PASS_AIR_LESS_NEEDED", nullable = true)
 	private Integer passingAirLessNeeded;
 	@OneToOne(fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
 	@JoinColumn(name = "RECEIVING_OID", referencedColumnName = "OID", nullable = true)
 	private StatReceivingData receiving;
 
 	public StatPassingData() {
-
+		// Base constructor
 	}
-
-//	/**
-//	 * @return the playStat
-//	 */
-//	public TeamPlayStatData getPlayStat() {
-//		return playStat;
-//	}
 
 	/**
 	 * @param playStat the playStat to set

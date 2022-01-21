@@ -2,8 +2,6 @@ package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service.casablanca.pbp;
 
 import java.util.Objects;
 
-import org.springframework.stereotype.Service;
-
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.constants.NcaaConstants;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.KickMissReasonEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayCallTypeEnum;
@@ -13,17 +11,13 @@ import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.pbp.PbpServiceReq
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils.LoggingUtils;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils.PbpParsingUtils;
 
-@Service
-public class PbpFieldGoalParseService {
-	private final PbpParsingUtils pbpParsingUtils;
-	private final LoggingUtils loggingUtils;
-
-	public PbpFieldGoalParseService(PbpParsingUtils pbpParsingUtils, LoggingUtils loggingUtils) {
-		this.pbpParsingUtils = pbpParsingUtils;
-		this.loggingUtils = loggingUtils;
+public final class PbpFieldGoalParseService {
+	// private static static constructor to prevent instantiation
+	private PbpFieldGoalParseService() {
+		throw new UnsupportedOperationException();
 	}
 
-	public boolean parseFieldGoal(PbpServiceRequestPojo params, boolean updated) {
+	public static boolean parseFieldGoal(PbpServiceRequestPojo params, boolean updated) {
 		try {
 			if (params.getPlayRaw().getScoreText().toUpperCase().contains("FIELD GOAL ATTEMPT")
 					|| params.getPlayRawText().toUpperCase().contains(" PAT ")
@@ -39,19 +33,20 @@ public class PbpFieldGoalParseService {
 			}
 			return updated;
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 			throw new IllegalArgumentException(e.toString());
 		}
 	}
 
-	private void parsePatBasic(PbpServiceRequestPojo params) {
+	private static void parsePatBasic(PbpServiceRequestPojo params) {
 		try {
-			String patString = pbpParsingUtils.extractCustom(params.getPlayRawText(), String.format(
-					"%s (?:PAT )?kick attempt (?:is )?(?i)(GOOD|BLOCKED|MISSED|NO GOOD|FAILED \\(BLOCKED\\))(.*(((?:wide)|(?:short)) ((?:left)|(?:right)|(?:middle)))|.*(off crossbar)|.*(((?:left)|(?:right)) upright))?",
+			String patString = PbpParsingUtils.extractCustom(params.getPlayRawText(), String.format(
+					"%s (?:PAT )?kick attempt (?:is )?(?i)(GOOD|BLOCKED|MISSED|NO GOOD|FAILED \\(BLOCKED\\)|FAILED)(.*(((?:wide)|(?:short)) ((?:left)|(?:right)|(?:middle)))|.*(off crossbar)|.*(((?:left)|(?:right)) upright))?",
 					NcaaConstants.PLAYER_NAME_REGEX), 15);
 			String[] patStringArray = patString.split("\\|")[0].split("\\~");
 
-			PbpPlayerStatKickingPojo patStat = new PbpPlayerStatKickingPojo(pbpParsingUtils.formatName(patStringArray[0]));
+			PbpPlayerStatKickingPojo patStat = new PbpPlayerStatKickingPojo(
+					PbpParsingUtils.formatName(patStringArray[0]));
 
 			patStat.setExtraPointYard(100 - params.getPlay().getPlayStartYard());
 			patStat.setExtraPointAttempt(1);
@@ -61,7 +56,8 @@ public class PbpFieldGoalParseService {
 			patStat.setFieldGoalMiss(0);
 			patStat.setFieldGoalAttempt(0);
 
-			if ("MISSED".equalsIgnoreCase(patStringArray[7]) || "NO GOOD".equalsIgnoreCase(patStringArray[7])) {
+			if ("MISSED".equalsIgnoreCase(patStringArray[7]) || "NO GOOD".equalsIgnoreCase(patStringArray[7])
+					|| "FAILED".equalsIgnoreCase(patStringArray[7])) {
 				patStat.setExtraPointMiss(1);
 				patStat.setExtraPointBlock(0);
 				patStat.setExtraPoint(0);
@@ -80,7 +76,7 @@ public class PbpFieldGoalParseService {
 				patStat.setTotalPoint(0);
 			} else {
 				String logInfo = String.format("Play text: %s", params.getPlayRawText());
-				loggingUtils.logInfo(logInfo);
+				LoggingUtils.logInfo(logInfo);
 				throw new IllegalArgumentException("PAT did not evaluate");
 			}
 
@@ -95,20 +91,20 @@ public class PbpFieldGoalParseService {
 
 			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKicking().add(patStat);
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 
 		}
 	}
 
-	private void parseFieldGoalBasic(PbpServiceRequestPojo params) {
+	private static void parseFieldGoalBasic(PbpServiceRequestPojo params) {
 		try {
-			String fgString = pbpParsingUtils.extractCustom(params.getPlayRawText(), String.format(
+			String fgString = PbpParsingUtils.extractCustom(params.getPlayRawText(), String.format(
 					"%s field goal attempt from (\\d{1,2})( yards?)? (GOOD|BLOCKED|MISSED|NO GOOD)(.*(((?:wide)|(?:short)) ((?:left)|(?:right)|(?:middle)))|.*(off crossbar)|.*(((?:left)|(?:right)) upright))?",
 					NcaaConstants.PLAYER_NAME_REGEX), 15);
 			String[] fgStringArray = fgString.split("\\|")[0].split("\\~");
 
 			PbpPlayerStatKickingPojo fieldGoalStat = new PbpPlayerStatKickingPojo(
-					pbpParsingUtils.formatName(fgStringArray[0]));
+					PbpParsingUtils.formatName(fgStringArray[0]));
 
 			Integer yards = Integer.valueOf(fgStringArray[7]);
 			fieldGoalStat.setFieldGoalYard(yards);
@@ -127,8 +123,6 @@ public class PbpFieldGoalParseService {
 				if (Objects.isNull(params.getPlay().getPlayResult().getPlayResultYardLine())) {
 					params.getPlay().getPlayResult().setPlayResultYardLine(params.getPlay().getPlayStartYard());
 				}
-				params.getPlay().getPlayResult().setPlayResultYard(
-						params.getPlay().getPlayResult().getPlayResultYardLine() - params.getPlay().getPlayStartYard());
 			} else if ("GOOD".equals(fgStringArray[9])) {
 				fieldGoalStat.setFieldGoalMiss(0);
 				fieldGoalStat.setFieldGoalBlock(0);
@@ -136,7 +130,6 @@ public class PbpFieldGoalParseService {
 				fieldGoalStat.setTotalPoint(3);
 				params.getPlay().getPlayResult().setPlayResultPoints(3);
 				params.getPlay().getPlayResult().setPlayResultYardLine(params.getPlay().getPlayStartYard());
-				params.getPlay().getPlayResult().setPlayResultYard(0);
 			} else if ("BLOCKED".equals(fgStringArray[9])) {
 				fieldGoalStat.setFieldGoalMiss(0);
 				fieldGoalStat.setFieldGoalBlock(1);
@@ -156,19 +149,19 @@ public class PbpFieldGoalParseService {
 			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getSpecialTeam().getKicking()
 					.add(fieldGoalStat);
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 
 		}
 	}
 
-	private void parseFieldGoalBlocked(PbpServiceRequestPojo params) {
+	private static void parseFieldGoalBlocked(PbpServiceRequestPojo params) {
 		try {
 			if (params.getPlayRawText().toUpperCase().contains("BLOCK")) {
-				String kickBlockString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
+				String kickBlockString = PbpParsingUtils.extractCustom(params.getPlayRawText(),
 						String.format("\\(?(?i)block(?:ed)? by %s\\)?", NcaaConstants.PLAYER_NAME_REGEX), 7);
 				String kickBlockName = kickBlockString.split("\\~")[0];
 				PbpPlayerStatDefenseProductionPojo blocker = new PbpPlayerStatDefenseProductionPojo();
-				blocker.applyBase(pbpParsingUtils.formatName(kickBlockName));
+				blocker.applyBase(PbpParsingUtils.formatName(kickBlockName));
 				blocker.setKickBlock(1);
 
 				if (params.getPlay().getPlayCallType() == PlayCallTypeEnum.FG) {
@@ -186,7 +179,7 @@ public class PbpFieldGoalParseService {
 						.add(blocker);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 		}
 	}
 

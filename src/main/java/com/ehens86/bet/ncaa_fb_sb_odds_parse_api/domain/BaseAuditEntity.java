@@ -39,7 +39,7 @@ public class BaseAuditEntity {
 	private Date updateTs;
 
 	public BaseAuditEntity() {
-
+		// Base constructor
 	}
 
 	public Integer getVersion() {

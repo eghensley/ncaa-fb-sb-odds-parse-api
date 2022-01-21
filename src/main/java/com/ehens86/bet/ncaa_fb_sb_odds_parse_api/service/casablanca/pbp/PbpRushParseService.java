@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 
 import org.apache.logging.log4j.ThreadContext;
-import org.springframework.stereotype.Service;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.constants.NcaaConstants;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayDirectionEnum;
@@ -14,74 +13,72 @@ import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.pbp.PbpServiceReq
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils.LoggingUtils;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils.PbpParsingUtils;
 
-@Service
-public class PbpRushParseService {
+public final class PbpRushParseService {
 
-	private final PbpParsingUtils pbpParsingUtils;
-	private final LoggingUtils loggingUtils;
+	// private static static constructor to prevent instantiation
+    private PbpRushParseService() {
+        throw new UnsupportedOperationException();
+    }
 
-	public PbpRushParseService(PbpParsingUtils pbpParsingUtils, LoggingUtils loggingUtils) {
-		this.pbpParsingUtils = pbpParsingUtils;
-		this.loggingUtils = loggingUtils;
-	}
-
-	public boolean parseRush(PbpServiceRequestPojo params, boolean updated) {
+	public static boolean parseRush(PbpServiceRequestPojo params, boolean updated) {
 		try {
-			if (params.getPlayRawText().contains(" rush ")
-					|| params.getPlayRawText().contains("rush for")
+			if (params.getPlayRawText().contains(" rush ") || params.getPlayRawText().contains("rush for")
 					|| params.getPlayRawText().toUpperCase().contains("KNEEL")
 					|| params.getPlayRawText().toUpperCase().contains("RUSHING ATTEMPT")
 					|| params.getPlayRawText().toUpperCase().contains("SCRAMBLES")) {
 				cleanUpRushingString(params);
 
-				if (params.getPlayRawText().toUpperCase().startsWith("KNEEL DOWN ")) {
-					parseKneel(params);
-				} else if (params.getPlayRawText().toUpperCase().contains("RUSHING ATTEMPT")) {
-					parsePatRush(params);
-				} else {
-					parseRushingBasic(params);
-				}
-				
-				
+				parseRushHelper(params);
+
 				if (NcaaConstants.CONTEXT_DEBUG_VALUE_TRUE.equals(ThreadContext.get(NcaaConstants.CONTEXT_DEBUG_KEY))) {
 					String offTeam = params.getPossessionTeam();
 					String defTeam = params.getDefenseTeam();
-					PbpPlayerStatRushingPojo rushingInfo = params.getPlay().getPlayerStat().get(offTeam).getOffense().getRushingStat().get(0);
-					List<PbpPlayerStatDefenseProductionPojo> defenseInfo = params.getPlay().getPlayerStat().get(defTeam).getDefense().getDefenseProduction();
-					
-					loggingUtils.logInfo( "- [parseRush] Results -");
-					loggingUtils.logInfo(
-							String.format("Offense Team: %s", params.getTeamAbbrevDict().get(offTeam).getShortname()));	
-//					loggingUtils.logInfo( String.format("Rush Yards: %s", rushingInfo.getRushingYard()));
-//					loggingUtils.logInfo( String.format("Rush Fumble: %s", rushingInfo.getRushingFumble()));
-//					loggingUtils.logInfo( String.format("Rush Fumble Lost: %s", rushingInfo.getRushingFumbleLost()));
-//					loggingUtils.logInfo( String.format("Rush Touchdown: %s", rushingInfo.getRushingTouchdown()));
-					loggingUtils.logInfo( String.format("Rush Info: %s", rushingInfo.toString()));
-					
-					loggingUtils.logInfo(
-							String.format("Defense Team: %s", params.getTeamAbbrevDict().get(defTeam).getShortname()));	
+					PbpPlayerStatRushingPojo rushingInfo = params.getPlay().getPlayerStat().get(offTeam).getOffense()
+							.getRushingStat().get(0);
+					List<PbpPlayerStatDefenseProductionPojo> defenseInfo = params.getPlay().getPlayerStat().get(defTeam)
+							.getDefense().getDefenseProduction();
+
+					LoggingUtils.logInfo("- [parseRush] Results -");
+					LoggingUtils.logInfo(
+							String.format("Offense Team: %s", params.getTeamAbbrevDict().get(offTeam).getShortname()));
+					LoggingUtils.logInfo(String.format("Rush Info: %s", rushingInfo.toString()));
+
+					LoggingUtils.logInfo(
+							String.format("Defense Team: %s", params.getTeamAbbrevDict().get(defTeam).getShortname()));
 					if (!defenseInfo.isEmpty()) {
-						for (PbpPlayerStatDefenseProductionPojo def: defenseInfo) {
-//							loggingUtils.logInfo( String.format("Defense Name: %s", def.getPlayerName()));
-//							loggingUtils.logInfo( String.format("Defense Forced Fumble: %s", def.getFumbleForced()));
-//							loggingUtils.logInfo( String.format("Defense Tackle: %s", def.getTackleTotal()));
-							loggingUtils.logInfo( String.format("Defense Info: %s", def.toString()));
+						for (PbpPlayerStatDefenseProductionPojo def : defenseInfo) {
+							LoggingUtils.logInfo(String.format("Defense Info: %s", def.toString()));
 						}
-					} else { 
-						loggingUtils.logInfo( "Defense: None");
+					} else {
+						LoggingUtils.logInfo("Defense: None");
 					}
 				}
-				
+
 				updated = true;
 			}
 			return updated;
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 			throw new IllegalArgumentException(e.toString());
 		}
 	}
 
-	private void cleanUpRushingString(PbpServiceRequestPojo params) {
+	private static void parseRushHelper(PbpServiceRequestPojo params) {
+		try {
+			if (params.getPlayRawText().toUpperCase().startsWith("KNEEL DOWN ")) {
+				parseKneel(params);
+			} else if (params.getPlayRawText().toUpperCase().contains("RUSHING ATTEMPT")) {
+				parsePatRush(params);
+			} else {
+				parseRushingBasic(params);
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.getLocalizedMessage());
+			throw new IllegalArgumentException(e.toString());
+		}
+	}
+
+	private static void cleanUpRushingString(PbpServiceRequestPojo params) {
 		try {
 			params.setPlayRawText(params.getPlayRawText().replace("no gain", "0 yards"));
 
@@ -123,10 +120,10 @@ public class PbpRushParseService {
 					"SMU rush up the middle for a loss of 11 yards to the SMU47, End of Play",
 					"TEAM, SMU rush up the middle for a loss of 11 yards to the SMU47, End of Play"));
 
-			params.setPlayRawText(params.getPlayRawText().replaceAll("^([aA-zZ]+) rush",
+			params.setPlayRawText(params.getPlayRawText().replaceAll("^([a-z|A-Z]+) rush",
 					String.format("TEAM,%s rush", params.getTeamAbbrevDict().get(params.getPossessionTeam())
 							.getSeoName().replace(" ", "").replace("-", ""))));
-			params.setPlayRawText(params.getPlayRawText().replaceAll("Kneel down by ([aA-zZ]+) at",
+			params.setPlayRawText(params.getPlayRawText().replaceAll("Kneel down by ([a-z|A-Z]+) at",
 					String.format("Kneel down by TEAM,%s at", params.getTeamAbbrevDict().get(params.getPossessionTeam())
 							.getSeoName().replace(" ", "").replace("-", ""))));
 			params.setPlayRawText(params.getPlayRawText().replace("Kneel down at",
@@ -145,13 +142,13 @@ public class PbpRushParseService {
 				params.getPlay().setDriveText("3rd and 0 at ALCORN0");
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 		}
 	}
 
-	private void parsePatRush(PbpServiceRequestPojo params) {
+	private static void parsePatRush(PbpServiceRequestPojo params) {
 		try {
-			String rushString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
+			String rushString = PbpParsingUtils.extractCustom(params.getPlayRawText(),
 					String.format(
 							"%s rushing attempt ((?:is good)|(?:failed))(; conversion is no good \\[down at the%s\\])?",
 							NcaaConstants.PLAYER_NAME_REGEX, NcaaConstants.TEAM_YARD_REGEX),
@@ -159,7 +156,7 @@ public class PbpRushParseService {
 			String[] rushStringArray = rushString.split("\\|")[0].split("\\~");
 
 			PbpPlayerStatRushingPojo rushingStat = new PbpPlayerStatRushingPojo(
-					pbpParsingUtils.formatName(rushStringArray[0]));
+					PbpParsingUtils.formatName(rushStringArray[0]));
 			rushingStat.setRushingDirection(PlayDirectionEnum.MISSING);
 
 			if ("is good".equals(rushStringArray[7])) {
@@ -168,7 +165,7 @@ public class PbpRushParseService {
 				rushingStat.setRushingTwoPointConversion(1);
 				params.getPlay().getPlayResult().setPlayResultPoints(2);
 			} else if ("failed".equals(rushStringArray[7])) {
-				Integer yards = pbpParsingUtils.formatYardLine(rushStringArray[9], params.getPossessionTeam(),
+				Integer yards = PbpParsingUtils.formatYardLine(rushStringArray[9], params.getPossessionTeam(),
 						params.getDefenseTeam(), params.getTeamAbbrevDict()) - params.getPlay().getPlayStartYard();
 				rushingStat.setRushingYard(yards);
 				params.getPlay().getPlayResult().setPlayResultYard(yards);
@@ -183,45 +180,52 @@ public class PbpRushParseService {
 			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getRushingStat()
 					.add(rushingStat);
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 		}
 	}
 
-	private void parseKneel(PbpServiceRequestPojo params) {
+	private static void parseKneel(PbpServiceRequestPojo params) {
 		try {
-			String rushString = pbpParsingUtils.extractCustom(params.getPlayRawText(),
+			String rushString = PbpParsingUtils.extractCustom(params.getPlayRawText(),
 					String.format("Kneel down by %s at%s \\(?[aA-zZ]+ loss of (\\d{1,2})",
 							NcaaConstants.PLAYER_NAME_REGEX, NcaaConstants.TEAM_YARD_REGEX),
 					9);
 			String[] rushStringArray = rushString.split("\\|")[0].split("\\~");
 
 			PbpPlayerStatRushingPojo rushingStat = new PbpPlayerStatRushingPojo(
-					pbpParsingUtils.formatName(rushStringArray[0]));
+					PbpParsingUtils.formatName(rushStringArray[0]));
 			rushingStat.setRushingDirection(PlayDirectionEnum.MISSING);
 
 			Integer yardGain = Integer.valueOf(rushStringArray[8]) * -1;
 			rushingStat.setRushingYard(yardGain);
 			rushingStat.setRushingKneel(1);
 			rushingStat.setRushingTwoPointConversion(0);
-
+			rushingStat.setRushingLineYard(0.0);
+			rushingStat.setRushingStuff(false);
+			rushingStat.setRushingOpenField(false);
+			rushingStat.setRushingPower(false);
+			rushingStat.setRushingSecondLevel(false);
 			params.setPlayTackles(null);
 			params.getPlay().getPlayResult().setPlayResultYard(yardGain);
 			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getRushingStat()
 					.add(rushingStat);
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, params.getPlayRawText());
 		}
 	}
 
-	private void parseRushingBasic(PbpServiceRequestPojo params) {
+	private static void parseRushingBasic(PbpServiceRequestPojo params) {
 		try {
-			String rushString = pbpParsingUtils.extractCustom(params.getPlayRawText(), String.format(
+			Integer yardGain;
+			boolean loss = false;
+			PbpPlayerStatRushingPojo rushingStat;
+			String[] rushStringArray;
+			String rushString = PbpParsingUtils.extractCustom(params.getPlayRawText(), String.format(
 					"%s (?:(?:rush)|(?:scrambles)) ?((?:up (?:the )?middle)|(?:to the (?:(?:right)|(?:left)))|(?:over (?:(?:left)|(?:right)) end))? for( a? ?(loss|gain) of)? (\\d{1,3}) yards? ?(loss|gain|)(.?)",
 					NcaaConstants.PLAYER_NAME_REGEX), 13);
-			String[] rushStringArray = rushString.split("\\|")[0].split("\\~");
+			rushStringArray = rushString.split("\\|")[0].split("\\~");
 
-			PbpPlayerStatRushingPojo rushingStat = new PbpPlayerStatRushingPojo(
-					pbpParsingUtils.formatName(rushStringArray[0]));
+			rushingStat = new PbpPlayerStatRushingPojo(PbpParsingUtils.formatName(rushStringArray[0]));
 			if (!"null".equals(rushStringArray[7])) {
 				if (rushStringArray[7].endsWith(" end")) {
 					rushingStat.setRushingDirection(PlayDirectionEnum
@@ -237,8 +241,8 @@ public class PbpRushParseService {
 			} else {
 				rushingStat.setRushingDirection(PlayDirectionEnum.MISSING);
 			}
-			Integer yardGain = Integer.valueOf(rushStringArray[10]);
-			boolean loss = false;
+
+			yardGain = Integer.valueOf(rushStringArray[10]);
 			if (("loss".equals(rushStringArray[11]) || "loss".equals(rushStringArray[9]))) {
 				loss = true;
 				yardGain *= -1;
@@ -255,7 +259,18 @@ public class PbpRushParseService {
 			} else {
 				params.getPlay().getPlayResult().updatePenaltyPlayResultYard(yardGain);
 			}
-			
+
+			parseRushingBasicExtraStatHelper(yardGain, rushingStat);
+
+			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getRushingStat()
+					.add(rushingStat);
+		} catch (Exception e) {
+			LoggingUtils.logException(e, params.getPlayRawText());
+		}
+	}
+
+	private static void parseRushingBasicExtraStatHelper(Integer yardGain, PbpPlayerStatRushingPojo rushingStat) {
+		try {
 			Double rushingLineYard;
 			Integer rushingOpenFieldYard = null;
 			boolean rushingOpenField = false;
@@ -263,10 +278,6 @@ public class PbpRushParseService {
 			boolean rushingSecondLevel = false;
 			boolean rushingStuff = false;
 
-			
-			
-			
-			
 			if (yardGain <= 0) {
 				rushingStuff = true;
 				rushingLineYard = 1.2 * yardGain;
@@ -279,24 +290,19 @@ public class PbpRushParseService {
 			} else {
 				rushingSecondLevel = true;
 				rushingOpenField = true;
-				rushingOpenFieldYard  = yardGain - 10;
+				rushingOpenFieldYard = yardGain - 10;
 				rushingLineYard = 7.0;
 				rushingSecondLevelYard = 5;
 			}
-			
+
 			rushingStat.setRushingLineYard(rushingLineYard);
 			rushingStat.setRushingOpenField(rushingOpenField);
 			rushingStat.setRushingOpenFieldYard(rushingOpenFieldYard);
 			rushingStat.setRushingSecondLevel(rushingSecondLevel);
 			rushingStat.setRushingSecondLevelYard(rushingSecondLevelYard);
 			rushingStat.setRushingStuff(rushingStuff);
-
-			
-			
-			params.getPlay().getPlayerStat().get(params.getPossessionTeam()).getOffense().getRushingStat()
-					.add(rushingStat);
 		} catch (Exception e) {
-			loggingUtils.logException(e, params.getPlayRawText());
+			LoggingUtils.logException(e, e.getMessage());
 		}
 	}
 

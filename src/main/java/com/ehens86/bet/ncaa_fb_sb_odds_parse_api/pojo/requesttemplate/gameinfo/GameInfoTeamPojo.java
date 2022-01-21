@@ -1,25 +1,27 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.gameinfo;
 
+import java.util.Objects;
+
 public class GameInfoTeamPojo {
 	private int score;
 	private GameInfoTeamNamePojo names;
 	private String color;
 	private String seed;
-	private String record;
+	private String teamRecord;
     private String rank;
     
     public GameInfoTeamPojo() {
     	
     }
 
-	public GameInfoTeamPojo(int score, GameInfoTeamNamePojo names, String color, String seed, String record,
+	public GameInfoTeamPojo(int score, GameInfoTeamNamePojo names, String color, String seed, String teamRecord,
 			String rank) {
 		super();
 		this.score = score;
 		this.names = names;
 		this.color = color;
 		this.seed = seed;
-		this.record = record;
+		this.teamRecord = teamRecord;
 		this.rank = rank;
 	}
 
@@ -82,15 +84,15 @@ public class GameInfoTeamPojo {
 	/**
 	 * @return the record
 	 */
-	public String getRecord() {
-		return record;
+	public String getTeamRecord() {
+		return teamRecord;
 	}
 
 	/**
 	 * @param record the record to set
 	 */
-	public void setRecord(String record) {
-		this.record = record;
+	public void setRecord(String teamRecord) {
+		this.teamRecord = teamRecord;
 	}
 
 	/**
@@ -109,15 +111,7 @@ public class GameInfoTeamPojo {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((color == null) ? 0 : color.hashCode());
-		result = prime * result + ((names == null) ? 0 : names.hashCode());
-		result = prime * result + ((rank == null) ? 0 : rank.hashCode());
-		result = prime * result + ((record == null) ? 0 : record.hashCode());
-		result = prime * result + score;
-		result = prime * result + ((seed == null) ? 0 : seed.hashCode());
-		return result;
+		return Objects.hash(color, names, rank, score, seed, teamRecord);
 	}
 
 	@Override
@@ -129,51 +123,15 @@ public class GameInfoTeamPojo {
 			return false;
 		}
 		GameInfoTeamPojo other = (GameInfoTeamPojo) obj;
-		if (color == null) {
-			if (other.color != null) {
-				return false;
-			}
-		} else if (!color.equals(other.color)) {
-			return false;
-		}
-		if (names == null) {
-			if (other.names != null) {
-				return false;
-			}
-		} else if (!names.equals(other.names)) {
-			return false;
-		}
-		if (rank == null) {
-			if (other.rank != null) {
-				return false;
-			}
-		} else if (!rank.equals(other.rank)) {
-			return false;
-		}
-		if (record == null) {
-			if (other.record != null) {
-				return false;
-			}
-		} else if (!record.equals(other.record)) {
-			return false;
-		}
-		if (score != other.score) {
-			return false;
-		}
-		if (seed == null) {
-			if (other.seed != null) {
-				return false;
-			}
-		} else if (!seed.equals(other.seed)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(color, other.color) && Objects.equals(names, other.names)
+				&& Objects.equals(rank, other.rank) && score == other.score && Objects.equals(seed, other.seed)
+				&& Objects.equals(teamRecord, other.teamRecord);
 	}
 
 	@Override
 	public String toString() {
 		return "GameInfoTeamPojo [score=" + score + ", names=" + names + ", color=" + color + ", seed=" + seed
-				+ ", record=" + record + ", rank=" + rank + "]";
+				+ ", teamRecord=" + teamRecord + ", rank=" + rank + "]";
 	}
     
     

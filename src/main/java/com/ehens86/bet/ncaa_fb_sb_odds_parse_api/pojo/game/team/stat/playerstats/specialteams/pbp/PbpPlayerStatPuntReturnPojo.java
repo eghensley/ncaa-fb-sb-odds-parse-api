@@ -133,7 +133,9 @@ public class PbpPlayerStatPuntReturnPojo extends BaseStatPuntReturnPojo {
 			this.puntReturnBlock = 0;
 		}
 		this.puntReturnFairCatch = 0;
-		this.puntReturnStartYard = startYard;
+		if (Objects.isNull(this.puntReturnStartYard) || this.puntReturnStartYard == 0) {
+			this.puntReturnStartYard = startYard;
+		}
 	}
 
 	/**

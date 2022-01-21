@@ -1,6 +1,7 @@
 package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.pbp;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class PlayByPlayPojo {
@@ -85,13 +86,7 @@ public class PlayByPlayPojo {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((inputMD5Sum == null) ? 0 : inputMD5Sum.hashCode());
-		result = prime * result + ((meta == null) ? 0 : meta.hashCode());
-		result = prime * result + ((periods == null) ? 0 : periods.hashCode());
-		result = prime * result + ((updatedTimestamp == null) ? 0 : updatedTimestamp.hashCode());
-		return result;
+		return Objects.hash(inputMD5Sum, meta, periods, updatedTimestamp);
 	}
 
 	@Override
@@ -103,35 +98,8 @@ public class PlayByPlayPojo {
 			return false;
 		}
 		PlayByPlayPojo other = (PlayByPlayPojo) obj;
-		if (inputMD5Sum == null) {
-			if (other.inputMD5Sum != null) {
-				return false;
-			}
-		} else if (!inputMD5Sum.equals(other.inputMD5Sum)) {
-			return false;
-		}
-		if (meta == null) {
-			if (other.meta != null) {
-				return false;
-			}
-		} else if (!meta.equals(other.meta)) {
-			return false;
-		}
-		if (periods == null) {
-			if (other.periods != null) {
-				return false;
-			}
-		} else if (!periods.equals(other.periods)) {
-			return false;
-		}
-		if (updatedTimestamp == null) {
-			if (other.updatedTimestamp != null) {
-				return false;
-			}
-		} else if (!updatedTimestamp.equals(other.updatedTimestamp)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(inputMD5Sum, other.inputMD5Sum) && Objects.equals(meta, other.meta)
+				&& Objects.equals(periods, other.periods) && Objects.equals(updatedTimestamp, other.updatedTimestamp);
 	}
 
 	@Override

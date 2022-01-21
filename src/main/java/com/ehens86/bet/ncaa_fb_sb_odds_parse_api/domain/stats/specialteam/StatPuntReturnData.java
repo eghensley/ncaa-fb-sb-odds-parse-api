@@ -40,15 +40,8 @@ public class StatPuntReturnData extends PlayerStatEntity implements Serializable
 	private Integer puntReturnSafety;
 
 	public StatPuntReturnData() {
-
+		// Base constructor
 	}
-
-//	/**
-//	 * @return the playStat
-//	 */
-//	public TeamPlayStatData getPlayStat() {
-//		return playStat;
-//	}
 
 	/**
 	 * @param playStat the playStat to set

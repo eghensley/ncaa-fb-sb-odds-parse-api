@@ -39,7 +39,8 @@ public enum PenaltyEnum {
 	DO(true, 5),
 	HD(false, 5),
 	OF(false, 5),
-	PLAYER_DISQUALIFICATION(false, 15)
+	PLAYER_DISQUALIFICATION(false, 15),
+	KICK_CATCHING_INTERFERENCE(false, 15)
 	;
 
 	private boolean noPlay;

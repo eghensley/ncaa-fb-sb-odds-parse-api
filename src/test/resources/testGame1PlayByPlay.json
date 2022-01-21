@@ -1,0 +1,1597 @@
+{
+    "inputMD5Sum": "e947668c82ee87c4a7de713a005efa11",
+    "updatedTimestamp": "2021-08-29 22:50:46 ET",
+    "meta": {
+        "title": "PLAY-BY-PLAY",
+        "teams": [
+            {
+                "homeTeam": "false",
+                "id": "2205",
+                "color": "#512D6D",
+                "shortname": "Alcorn",
+                "seoName": "alcorn",
+                "sixCharAbbr": "ALCORN"
+            },
+            {
+                "homeTeam": "true",
+                "id": "912",
+                "color": "#862633",
+                "shortname": "N.C. Central",
+                "seoName": "nc-central",
+                "sixCharAbbr": "NC CEN"
+            }
+        ]
+    },
+    "periods": [
+        {
+            "title": "1ST",
+            "shortTitle": "1st",
+            "possessions": [
+                {
+                    "teamId": "2205",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "Central won the toss and elected to defer till second half",
+                            "driveText": "1st and 10 at ALCORN35",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "NCCU ball on NCCU35.",
+                            "driveText": "1st and 10 at ALCORN35",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "912",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "Adrian Olivo kickoff 30 yards to the ALCORN35, out-of-bounds, PENALTY NCCU IP 0 yards to the ALCORN35, 1st and 10.",
+                            "driveText": "",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2205",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "F.Harper pass complete to C.J.Bolar for 6 yards to the ALCORN41 (Manny Smith).",
+                            "driveText": "1st and 10 at ALCORN35",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass incomplete to L.Pringle.",
+                            "driveText": "2nd and 4 at ALCORN41",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to N.Duffey for 4 yards to the ALCORN45, 1ST DOWN ALCORN (Manny Smith).",
+                            "driveText": "3rd and 4 at ALCORN41",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "N.Duffey rush for 1 yard to the ALCORN46 (KBurgess-Martin).",
+                            "driveText": "1st and 10 at ALCORN45",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to L.Pringle for 16 yards to the NCCU38, 1ST DOWN ALCORN (Manny Smith).",
+                            "driveText": "2nd and 9 at ALCORN46",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper sacked for loss of 12 yards to the 50 yardline (CameronSaunders).",
+                            "driveText": "1st and 10 at NCCU38",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "S.Anderson rush for 3 yards to the NCCU47 (Stephen Stokes;Rainbow-Douglas).",
+                            "driveText": "2nd and 22 at ALCORN50",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to J.Anthony for 7 yards to the NCCU40, out-of-bounds (Bra. Codrington).",
+                            "driveText": "3rd and 19 at NCCU47",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to J.Anthony for 20 yards to the NCCU20, 1ST DOWN ALCORN (Devon Beckford).",
+                            "driveText": "4th and 12 at NCCU40",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to J.Anthony for 20 yards to the NCCU0, 1ST DOWN ALCORN, TOUCHDOWN, clock 10:25.",
+                            "driveText": "1st and 10 at NCCU20",
+                            "teamId": "2205",
+                            "visitingScore": "7",
+                            "homeScore": "0"
+                        },
+                        {
+                            "scoreText": "C.Thompson kick attempt good.",
+                            "driveText": "1st and 0 at -",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "C.Thompson kickoff 65 yards to the NCCU0, touchback.",
+                            "driveText": "",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "912",
+                    "time": "10:25",
+                    "plays": [
+                        {
+                            "scoreText": "NC CENTRAL drive start at 10:25.",
+                            "driveText": "1st and 10 at NCCU25",
+                            "teamId": "912",
+                            "visitingScore": "7",
+                            "homeScore": "0"
+                        },
+                        {
+                            "scoreText": "Davius Richard rush for 8 yards to the NCCU33 (K.Kinsler;E.Woods).",
+                            "driveText": "1st and 10 at NCCU25",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for 2 yards to the NCCU35, 1ST DOWN NCCU (J.Wren;M.Means).",
+                            "driveText": "2nd and 2 at NCCU33",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to Isiah Macklin for 14 yards to the NCCU49, 1ST DOWN NCCU (J.Taylor).",
+                            "driveText": "1st and 10 at NCCU35",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for 11 yards to the ALCORN40, 1ST DOWN NCCU (J.Taylor;K.Kinsler).",
+                            "driveText": "1st and 10 at NCCU49",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for 10 yards to the ALCORN30, 1ST DOWN NCCU (K.Kinsler;M.Means).",
+                            "driveText": "1st and 10 at ALCORN40",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "PENALTY NCCU false start (Robert Mitchell) 5 yards to the ALCORN35.",
+                            "driveText": "1st and 10 at ALCORN30",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to Ryan McDaniel for no gain to the ALCORN35 (E.Woods;C.Cherelus).",
+                            "driveText": "1st and 15 at ALCORN35",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "JCurrie-Elliott rush for 2 yards to the ALCORN33 (S.Wise).",
+                            "driveText": "2nd and 15 at ALCORN35",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass incomplete to E.J. Hicks.",
+                            "driveText": "3rd and 13 at ALCORN33",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard punt 30 yards to the ALCORN3, downed.",
+                            "driveText": "4th and 13 at ALCORN33",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2205",
+                    "time": "05:50",
+                    "plays": [
+                        {
+                            "scoreText": "ALCORN drive start at 05:50.",
+                            "driveText": "1st and 10 at ALCORN3",
+                            "teamId": "2205",
+                            "visitingScore": "7",
+                            "homeScore": "0"
+                        },
+                        {
+                            "scoreText": "S.Anderson rush for 68 yards to the NCCU29, 1ST DOWN ALCORN (J Vukobradovich).",
+                            "driveText": "1st and 10 at ALCORN3",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to J.Anthony for 11 yards to the NCCU18, 1ST DOWN ALCORN.",
+                            "driveText": "1st and 10 at NCCU29",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "PENALTY NCCU personal foul (CameronSaunders) 9 yards to the NCCU9, 1ST DOWN ALCORN.",
+                            "driveText": "1st and 10 at NCCU18",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper sacked for loss of 4 yards to the NCCU13 (Colby Warrior).",
+                            "driveText": "1st and 0 at NCCU9",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper rush for 3 yards to the NCCU10, fumble forced by Colby Warrior, fumble by F.Harper recovered by ALCORN F.Harper at NCCU10.",
+                            "driveText": "2nd and 0 at NCCU13",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout ALCORN, clock 03:05.",
+                            "driveText": "3rd and 0 at NCCU10",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "PENALTY ALCORN false start (W.Ready) 5 yards to the NCCU15.",
+                            "driveText": "3rd and 0 at NCCU10",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass incomplete to J.Anthony.",
+                            "driveText": "3rd and 0 at NCCU15",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "C.Thompson field goal attempt from 32 MISSED - wide left, spot at NCCU20, clock 02:57.",
+                            "driveText": "4th and 0 at NCCU15",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "912",
+                    "time": "02:57",
+                    "plays": [
+                        {
+                            "scoreText": "NC CENTRAL drive start at 02:57.",
+                            "driveText": "1st and 10 at NCCU20",
+                            "teamId": "912",
+                            "visitingScore": "7",
+                            "homeScore": "0"
+                        },
+                        {
+                            "scoreText": "Davius Richard rush for no gain to the NCCU20 (T.Edgeston;M.Holbert).",
+                            "driveText": "1st and 10 at NCCU20",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to Ryan McDaniel for 11 yards to the NCCU31, 1ST DOWN NCCU, out-of-bounds (T.Wilson), PENALTY ALCORN offside declined.",
+                            "driveText": "2nd and 10 at NCCU20",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for loss of 1 yard to the NCCU30 (T.Edgeston;C.Cherelus).",
+                            "driveText": "1st and 10 at NCCU31",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to Isiah Macklin for 2 yards to the NCCU32 (M.Magee).",
+                            "driveText": "2nd and 11 at NCCU30",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard rush for 11 yards to the NCCU43, 1ST DOWN NCCU, out-of-bounds (K.Kinsler).",
+                            "driveText": "3rd and 9 at NCCU32",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Jorden Freeman rush for 8 yards to the ALCORN49 (C.Key).",
+                            "driveText": "1st and 10 at NCCU43",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                }
+            ],
+            "titleEnum": "FIRST"
+        },
+        {
+            "title": "2ND",
+            "shortTitle": "2nd",
+            "possessions": [
+                {
+                    "teamId": "912",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "Start of 2nd quarter, clock 15:00.",
+                            "driveText": "2nd and 2 at ALCORN49",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Jorden Freeman rush for 4 yards to the ALCORN45, 1ST DOWN NCCU (M.Magee;C.Cherelus).",
+                            "driveText": "2nd and 2 at ALCORN49",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass incomplete to Treveyon Pratt, PENALTY NCCU holding (Da'Quan Thomas) 10 yards to the NCCU45, NO PLAY.",
+                            "driveText": "1st and 10 at ALCORN45",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Jorden Freeman rush for 6 yards to the ALCORN49 (C.Key).",
+                            "driveText": "1st and 20 at NCCU45",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to E.J. Hicks for 9 yards to the ALCORN40 (M.Magee), PENALTY ALCORN offside declined.",
+                            "driveText": "2nd and 14 at ALCORN49",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass incomplete to Daesh. Stephens (J.Taylor).",
+                            "driveText": "3rd and 5 at ALCORN40",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Juan  Velarde punt 40 yards to the ALCORN0, touchback.",
+                            "driveText": "4th and 5 at ALCORN40",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2205",
+                    "time": "12:44",
+                    "plays": [
+                        {
+                            "scoreText": "ALCORN drive start at 12:44.",
+                            "driveText": "1st and 10 at ALCORN20",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "N.Duffey rush for 2 yards to the ALCORN22 (Chidi Okonya).",
+                            "driveText": "1st and 10 at ALCORN20",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "N.Duffey rush for 20 yards to the ALCORN42, 1ST DOWN ALCORN (J Vukobradovich).",
+                            "driveText": "2nd and 8 at ALCORN22",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to A.McNair for 10 yards to the NCCU48, 1ST DOWN ALCORN (J Vukobradovich).",
+                            "driveText": "1st and 10 at ALCORN42",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass incomplete to C.Green.",
+                            "driveText": "1st and 10 at NCCU48",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "N.Duffey rush for 6 yards to the NCCU42 (Jessie Malit).",
+                            "driveText": "2nd and 10 at NCCU48",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "N.Duffey rush for 2 yards to the NCCU40 (CameronSaunders;KBurgess-Martin).",
+                            "driveText": "3rd and 4 at NCCU42",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "S.Anderson rush for 2 yards to the NCCU38, 1ST DOWN ALCORN (CameronSaunders;KBurgess-Martin).",
+                            "driveText": "4th and 2 at NCCU40",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to C.Cherelus for 19 yards to the NCCU19, out-of-bounds (J Vukobradovich), PENALTY ALCORN personal foul 15 yards to the ALCORN47, NO PLAY.",
+                            "driveText": "1st and 10 at NCCU38",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "S.Anderson rush for 9 yards to the NCCU44 (JustinNicholson).",
+                            "driveText": "1st and 25 at ALCORN47",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout NC Central, clock 08:55.",
+                            "driveText": "2nd and 16 at NCCU44",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "PENALTY NCCU offside 5 yards to the NCCU39.",
+                            "driveText": "2nd and 16 at NCCU44",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "S.Anderson rush for 20 yards to the NCCU19, 1ST DOWN ALCORN (JustinNicholson).",
+                            "driveText": "2nd and 11 at NCCU39",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper sacked for loss of 6 yards to the NCCU25 (Manny Smith), fumble by F.Harper recovered by NCCU Manny Smith at NCCU40.",
+                            "driveText": "1st and 10 at NCCU19",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "912",
+                    "time": "08:03",
+                    "plays": [
+                        {
+                            "scoreText": "NC CENTRAL drive start at 08:03.",
+                            "driveText": "1st and 10 at NCCU40",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to JCurrie-Elliott for 2 yards to the NCCU42 (J.Anthony).",
+                            "driveText": "1st and 10 at NCCU40",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "JCurrie-Elliott rush for 1 yard to the NCCU43 (M.Holbert).",
+                            "driveText": "2nd and 8 at NCCU42",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to Andrew  Smith for 12 yards to the ALCORN45, 1ST DOWN NCCU (N.Herron).",
+                            "driveText": "3rd and 7 at NCCU43",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass incomplete to Andrew  Smith (E.J.Thomas).",
+                            "driveText": "1st and 10 at ALCORN45",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass incomplete to Treveyon Pratt (D.Anderson).",
+                            "driveText": "2nd and 10 at ALCORN45",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass incomplete to Daesh. Stephens.",
+                            "driveText": "3rd and 10 at ALCORN45",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Juan  Velarde punt 11 yards to the ALCORN34, out-of-bounds.",
+                            "driveText": "4th and 10 at ALCORN45",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2205",
+                    "time": "05:48",
+                    "plays": [
+                        {
+                            "scoreText": "ALCORN drive start at 05:48.",
+                            "driveText": "1st and 10 at ALCORN34",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "PENALTY NCCU US 15 yards to the ALCORN49, 1ST DOWN ALCORN.",
+                            "driveText": "1st and 10 at ALCORN34",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "M.Jones rush for no gain to the ALCORN49 (Jessie Malit;J Vukobradovich).",
+                            "driveText": "1st and 10 at ALCORN49",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "E.Dabney rush for 3 yards to the NCCU48 (Cole Williams).",
+                            "driveText": "2nd and 10 at ALCORN49",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "PENALTY ALCORN holding off-setting, PENALTY NCCU holding off-setting, NO PLAY.",
+                            "driveText": "3rd and 7 at NCCU48",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper rush for 6 yards to the NCCU42 (Rainbow-Douglas).",
+                            "driveText": "3rd and 7 at NCCU48",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "S.Anderson rush for loss of 1 yard to the NCCU43 (Stephen Stokes).",
+                            "driveText": "4th and 1 at NCCU42",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "912",
+                    "time": "03:05",
+                    "plays": [
+                        {
+                            "scoreText": "NC CENTRAL drive start at 03:05.",
+                            "driveText": "1st and 10 at NCCU43",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for loss of 1 yard to the NCCU42 (C.Cherelus).",
+                            "driveText": "1st and 10 at NCCU43",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "PENALTY NCCU false start (Da'Quan Thomas) 5 yards to the NCCU37.",
+                            "driveText": "2nd and 11 at NCCU42",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to Ryan McDaniel for 15 yards to the ALCORN48, out-of-bounds (C.Key).",
+                            "driveText": "2nd and 16 at NCCU37",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for 7 yards to the ALCORN41, 1ST DOWN NCCU (M.Means;J.Taylor).",
+                            "driveText": "3rd and 1 at ALCORN48",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for 2 yards to the ALCORN39 (C.Cherelus;J.Wren).",
+                            "driveText": "1st and 10 at ALCORN41",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to Daesh. Stephens for 33 yards to the ALCORN6, 1ST DOWN NCCU, out-of-bounds (K.Kinsler).",
+                            "driveText": "2nd and 8 at ALCORN39",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout ALCORN, clock 00:38.",
+                            "driveText": "1st and 0 at ALCORN6",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass incomplete to Isiah Macklin.",
+                            "driveText": "1st and 0 at ALCORN6",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass incomplete to E.J. Hicks, QB hurry by C.Cherelus.",
+                            "driveText": "2nd and 0 at ALCORN6",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard rush for 6 yards to the ALCORN0, TOUCHDOWN, clock 00:23, Adrian Olivo kick attempt good.",
+                            "driveText": "3rd and 0 at -",
+                            "teamId": "912",
+                            "visitingScore": "7",
+                            "homeScore": "7"
+                        },
+                        {
+                            "scoreText": "Adrian Olivo kickoff 37 yards to the ALCORN28, E.Dabney return 11 yards to the ALCORN39 (Khalil Baker).",
+                            "driveText": "",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2205",
+                    "time": "00:19",
+                    "plays": [
+                        {
+                            "scoreText": "ALCORN drive start at 00:19.",
+                            "driveText": "1st and 10 at ALCORN39",
+                            "teamId": "2205",
+                            "visitingScore": "7",
+                            "homeScore": "7"
+                        },
+                        {
+                            "scoreText": "S.Anderson rush for 4 yards to the ALCORN43 (Cole Williams).",
+                            "driveText": "1st and 10 at ALCORN39",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "End of half, clock 00:00.",
+                            "driveText": "2nd and 6 at ALCORN43",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                }
+            ],
+            "titleEnum": "SECOND"
+        },
+        {
+            "title": "3RD",
+            "shortTitle": "3rd",
+            "possessions": [
+                {
+                    "teamId": "2205",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "Start of 3rd quarter, clock 15:00, ALCORN ball on ALCORN35.",
+                            "driveText": "2nd and 6 at ALCORN43",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "C.Thompson kickoff 65 yards to the NCCU0, touchback.",
+                            "driveText": "",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "912",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "NC CENTRAL drive start at 15:00.",
+                            "driveText": "1st and 10 at NCCU25",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to Ryan McDaniel for 5 yards to the NCCU30 (T.Wilson).",
+                            "driveText": "1st and 10 at NCCU25",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to E.J. Hicks for 25 yards to the ALCORN45, 1ST DOWN NCCU (K.Kinsler).",
+                            "driveText": "2nd and 5 at NCCU30",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Latrell Collier rush for loss of 2 yards to the ALCORN47 (T.Edgeston;J.Wren).",
+                            "driveText": "1st and 10 at ALCORN45",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to E.J. Hicks for 3 yards to the ALCORN44 (J.Taylor).",
+                            "driveText": "2nd and 12 at ALCORN47",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard rush for 17 yards to the ALCORN27, 1ST DOWN NCCU (T.Edgeston;C.Cherelus).",
+                            "driveText": "3rd and 9 at ALCORN44",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "JCurrie-Elliott rush for 3 yards to the ALCORN24 (D.Anderson;S.Wise).",
+                            "driveText": "1st and 10 at ALCORN27",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "JCurrie-Elliott rush for 20 yards to the ALCORN4, 1ST DOWN NCCU (J.Taylor).",
+                            "driveText": "2nd and 7 at ALCORN24",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "JCurrie-Elliott rush for 1 yard to the ALCORN3 (T.Martin;J.Taylor).",
+                            "driveText": "1st and 0 at ALCORN4",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "PENALTY ALCORN illegal participation 2 yards to the ALCORN1.",
+                            "driveText": "2nd and 0 at ALCORN3",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard rush for 1 yard to the ALCORN0, TOUCHDOWN, clock 10:25.",
+                            "driveText": "2nd and 0 at ALCORN1",
+                            "teamId": "912",
+                            "visitingScore": "7",
+                            "homeScore": "13"
+                        },
+                        {
+                            "scoreText": "Adrian Olivo kick attempt failed (blocked) (blocked by TEAM).",
+                            "driveText": "1st and 0 at -",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Adrian Olivo kickoff 57 yards to the ALCORN8, N.Duffey return 17 yards to the ALCORN25 (Travon Wallace).",
+                            "driveText": "",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2205",
+                    "time": "10:20",
+                    "plays": [
+                        {
+                            "scoreText": "ALCORN drive start at 10:20.",
+                            "driveText": "1st and 10 at ALCORN25",
+                            "teamId": "2205",
+                            "visitingScore": "7",
+                            "homeScore": "13"
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to L.Pringle for 7 yards to the ALCORN32, out-of-bounds.",
+                            "driveText": "1st and 10 at ALCORN25",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "S.Anderson rush for 3 yards to the ALCORN35, 1ST DOWN ALCORN (Jessie Malit;Rainbow-Douglas).",
+                            "driveText": "2nd and 3 at ALCORN32",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass incomplete to J.Anthony.",
+                            "driveText": "1st and 10 at ALCORN35",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "S.Anderson rush for 3 yards to the ALCORN38 (KBurgess-Martin;Manny Smith).",
+                            "driveText": "2nd and 10 at ALCORN35",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper rush for 4 yards to the ALCORN42 (Rainbow-Douglas).",
+                            "driveText": "3rd and 7 at ALCORN38",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "T.Adams punt 48 yards to the NCCU10, Quentin Chaplin return 28 yards to the NCCU38, out-of-bounds (L.Pringle).",
+                            "driveText": "4th and 3 at ALCORN42",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "912",
+                    "time": "07:34",
+                    "plays": [
+                        {
+                            "scoreText": "NC CENTRAL drive start at 07:34.",
+                            "driveText": "1st and 10 at NCCU38",
+                            "teamId": "912",
+                            "visitingScore": "7",
+                            "homeScore": "13"
+                        },
+                        {
+                            "scoreText": "Davius Richard rush for 7 yards to the NCCU45 (T.Edgeston).",
+                            "driveText": "1st and 10 at NCCU38",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for 16 yards to the ALCORN39 (T.Wilson), PENALTY NCCU holding (Kideam Diouf) 10 yards to the NCCU35, NO PLAY.",
+                            "driveText": "2nd and 3 at NCCU45",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard rush for 11 yards to the NCCU46, out-of-bounds (J.Taylor).",
+                            "driveText": "2nd and 13 at NCCU35",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "JCurrie-Elliott rush for loss of 2 yards to the NCCU44 (T.Edgeston).",
+                            "driveText": "3rd and 2 at NCCU46",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Juan  Velarde rush for loss of 16 yards to the NCCU28, fumble forced by S.Rice, fumble by Juan  Velarde recovered by ALCORN S.Rice at NCCU28.",
+                            "driveText": "4th and 4 at NCCU44",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2205",
+                    "time": "04:57",
+                    "plays": [
+                        {
+                            "scoreText": "ALCORN drive start at 04:57.",
+                            "driveText": "1st and 10 at NCCU28",
+                            "teamId": "2205",
+                            "visitingScore": "7",
+                            "homeScore": "13"
+                        },
+                        {
+                            "scoreText": "F.Harper pass incomplete to C.J.Bolar.",
+                            "driveText": "1st and 10 at NCCU28",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "N.Duffey rush for 19 yards to the NCCU9, 1ST DOWN ALCORN (Manny Smith).",
+                            "driveText": "2nd and 10 at NCCU28",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to A.McNair for 2 yards to the NCCU7.",
+                            "driveText": "1st and 0 at NCCU9",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper rush for 5 yards to the NCCU2 (Manny Smith).",
+                            "driveText": "2nd and 0 at NCCU7",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper rush for loss of 2 yards to the NCCU4 (Jessie Malit;CameronSaunders).",
+                            "driveText": "3rd and 0 at NCCU2",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to N.Duffey for 4 yards to the NCCU0, TOUCHDOWN, clock 02:19.",
+                            "driveText": "4th and 0 at NCCU4",
+                            "teamId": "2205",
+                            "visitingScore": "14",
+                            "homeScore": "13"
+                        },
+                        {
+                            "scoreText": "C.Thompson kick attempt good.",
+                            "driveText": "1st and 0 at -",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "C.Thompson kickoff 65 yards to the NCCU0, touchback.",
+                            "driveText": "",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "912",
+                    "time": "02:19",
+                    "plays": [
+                        {
+                            "scoreText": "NC CENTRAL drive start at 02:19.",
+                            "driveText": "1st and 10 at NCCU25",
+                            "teamId": "912",
+                            "visitingScore": "14",
+                            "homeScore": "13"
+                        },
+                        {
+                            "scoreText": "Jorden Freeman rush for 30 yards to the ALCORN45, 1ST DOWN NCCU (M.Jones).",
+                            "driveText": "1st and 10 at NCCU25",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Jorden Freeman rush for 3 yards to the ALCORN42 (M.Holbert;I.White).",
+                            "driveText": "1st and 10 at ALCORN45",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to Isiah Macklin for 12 yards to the ALCORN30, 1ST DOWN NCCU (E.Woods).",
+                            "driveText": "2nd and 7 at ALCORN42",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Jorden Freeman rush for 14 yards to the ALCORN16, 1ST DOWN NCCU (J.Taylor).",
+                            "driveText": "1st and 10 at ALCORN30",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard rush for 3 yards to the ALCORN13 (K.W.Jones;I.White).",
+                            "driveText": "1st and 10 at ALCORN16",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                }
+            ],
+            "titleEnum": "THIRD"
+        },
+        {
+            "title": "4TH",
+            "shortTitle": "4th",
+            "possessions": [
+                {
+                    "teamId": "912",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "Start of 4th quarter, clock 15:00.",
+                            "driveText": "2nd and 7 at ALCORN13",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to Jorden Freeman for no gain to the ALCORN13 (J.Boulden).",
+                            "driveText": "2nd and 7 at ALCORN13",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Jorden Freeman rush for 2 yards to the ALCORN11 (M.Magee).",
+                            "driveText": "3rd and 7 at ALCORN13",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Adrian Olivo field goal attempt from 28 GOOD, clock 13:39.",
+                            "driveText": "4th and 5 at ALCORN11",
+                            "teamId": "912",
+                            "visitingScore": "14",
+                            "homeScore": "16"
+                        },
+                        {
+                            "scoreText": "Adrian Olivo kickoff 58 yards to the ALCORN7, N.Duffey return 19 yards to the ALCORN26 (Kareem Gaulden).",
+                            "driveText": "",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2205",
+                    "time": "13:30",
+                    "plays": [
+                        {
+                            "scoreText": "ALCORN drive start at 13:30.",
+                            "driveText": "1st and 10 at ALCORN26",
+                            "teamId": "2205",
+                            "visitingScore": "14",
+                            "homeScore": "16"
+                        },
+                        {
+                            "scoreText": "S.Anderson rush for 3 yards to the ALCORN29 (Rainbow-Douglas;Tyrique Alston).",
+                            "driveText": "1st and 10 at ALCORN26",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to T.Griffin for 9 yards to the ALCORN38, 1ST DOWN ALCORN (JustinNicholson;Matt Stevens).",
+                            "driveText": "2nd and 7 at ALCORN29",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass incomplete to C.J.Bolar.",
+                            "driveText": "1st and 10 at ALCORN38",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass incomplete to C.J.Bolar, PENALTY ALCORN intentional grounding (F.Harper) 18 yards to the ALCORN20, NO PLAY.",
+                            "driveText": "2nd and 10 at ALCORN38",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "S.Anderson rush for 14 yards to the ALCORN34 (Manny Smith).",
+                            "driveText": "3rd and 28 at ALCORN20",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "T.Adams punt 43 yards to the NCCU23, Bra. Codrington return 77 yards to the ALCORN0, TOUCHDOWN, clock 11:21.",
+                            "driveText": "4th and 14 at ALCORN34",
+                            "teamId": "2205",
+                            "visitingScore": "14",
+                            "homeScore": "23"
+                        }
+                    ]
+                },
+                {
+                    "teamId": "912",
+                    "time": "15:00",
+                    "plays": [
+                        {
+                            "scoreText": "PENALTY NCCU delay of game 4 yards to the ALCORN7.",
+                            "driveText": "1st and 0 at ALCORN3",
+                            "teamId": "912",
+                            "visitingScore": "14",
+                            "homeScore": "16"
+                        },
+                        {
+                            "scoreText": "Adrian Olivo kick attempt good.",
+                            "driveText": "1st and 0 at -",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Adrian Olivo kickoff 57 yards to the ALCORN8, N.Duffey return 6 yards to the ALCORN14 (Kole Jones;Quentin McCall).",
+                            "driveText": "",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2205",
+                    "time": "11:14",
+                    "plays": [
+                        {
+                            "scoreText": "ALCORN drive start at 11:14.",
+                            "driveText": "1st and 10 at ALCORN14",
+                            "teamId": "2205",
+                            "visitingScore": "14",
+                            "homeScore": "23"
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to J.Anthony for 8 yards to the ALCORN22 (Rainbow-Douglas).",
+                            "driveText": "1st and 10 at ALCORN14",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "N.Duffey rush for 10 yards to the ALCORN32, 1ST DOWN ALCORN (KBurgess-Martin;JustinNicholson).",
+                            "driveText": "2nd and 2 at ALCORN22",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to T.Griffin for 8 yards to the ALCORN40 (Bra. Codrington).",
+                            "driveText": "1st and 10 at ALCORN32",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "N.Duffey rush for 3 yards to the ALCORN43, 1ST DOWN ALCORN (Manny Smith).",
+                            "driveText": "2nd and 2 at ALCORN40",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper rush for 9 yards to the NCCU48, out-of-bounds.",
+                            "driveText": "1st and 10 at ALCORN43",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "E.Dabney rush for 5 yards to the NCCU43, 1ST DOWN ALCORN (J Vukobradovich;Manny Smith).",
+                            "driveText": "2nd and 1 at NCCU48",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass incomplete to L.Pringle (J Vukobradovich).",
+                            "driveText": "1st and 10 at NCCU43",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass incomplete to J.Anthony.",
+                            "driveText": "2nd and 10 at NCCU43",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass incomplete to L.Pringle (J Vukobradovich).",
+                            "driveText": "3rd and 10 at NCCU43",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "T.Adams punt 13 yards to the NCCU30, out-of-bounds.",
+                            "driveText": "4th and 10 at NCCU43",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "912",
+                    "time": "08:10",
+                    "plays": [
+                        {
+                            "scoreText": "NC CENTRAL drive start at 08:10.",
+                            "driveText": "1st and 10 at NCCU30",
+                            "teamId": "912",
+                            "visitingScore": "14",
+                            "homeScore": "23"
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for 5 yards to the NCCU35, out-of-bounds (C.Key).",
+                            "driveText": "1st and 10 at NCCU30",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "PENALTY NCCU holding 10 yards to the NCCU25.",
+                            "driveText": "2nd and 5 at NCCU35",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass incomplete to E.J. Hicks.",
+                            "driveText": "2nd and 15 at NCCU25",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass intercepted by K.Kinsler at the ALCORN44, K.Kinsler return 0 yards to the ALCORN44.",
+                            "driveText": "3rd and 15 at NCCU25",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2205",
+                    "time": "07:22",
+                    "plays": [
+                        {
+                            "scoreText": "ALCORN drive start at 07:22.",
+                            "driveText": "1st and 10 at ALCORN44",
+                            "teamId": "2205",
+                            "visitingScore": "14",
+                            "homeScore": "23"
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to M.Jones for 4 yards to the ALCORN48, out-of-bounds (Cole Williams).",
+                            "driveText": "1st and 10 at ALCORN44",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to L.Pringle for 13 yards to the NCCU39, 1ST DOWN ALCORN (Bra. Codrington;Rainbow-Douglas).",
+                            "driveText": "2nd and 6 at ALCORN48",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "N.Duffey rush for no gain to the NCCU39 (KBurgess-Martin).",
+                            "driveText": "1st and 10 at NCCU39",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "PENALTY ALCORN unsportsmanlike conduct 15 yards to the ALCORN46.",
+                            "driveText": "2nd and 10 at NCCU39",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass complete to L.Pringle for 5 yards to the NCCU49 (Stephen Stokes).",
+                            "driveText": "2nd and 25 at ALCORN46",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "F.Harper pass incomplete to C.J.Bolar.",
+                            "driveText": "3rd and 20 at NCCU49",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "T.Adams punt 39 yards to the NCCU10, Bra. Codrington return 5 yards to the NCCU15 (T.Edgeston).",
+                            "driveText": "4th and 20 at NCCU49",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "912",
+                    "time": "05:18",
+                    "plays": [
+                        {
+                            "scoreText": "NC CENTRAL drive start at 05:18.",
+                            "driveText": "1st and 10 at NCCU15",
+                            "teamId": "912",
+                            "visitingScore": "14",
+                            "homeScore": "23"
+                        },
+                        {
+                            "scoreText": "JCurrie-Elliott rush for 4 yards to the NCCU19 (D.Anderson;J.Wren).",
+                            "driveText": "1st and 10 at NCCU15",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "JCurrie-Elliott rush for 2 yards to the NCCU21 (J.Boulden;D.Anderson).",
+                            "driveText": "2nd and 6 at NCCU19",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout ALCORN, clock 04:26.",
+                            "driveText": "3rd and 4 at NCCU21",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to Ryan McDaniel for 33 yards to the ALCORN46, 1ST DOWN NCCU.",
+                            "driveText": "3rd and 4 at NCCU21",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Jorden Freeman rush for 1 yard to the ALCORN45 (D.Dawson;K.Kinsler).",
+                            "driveText": "1st and 10 at ALCORN46",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Jorden Freeman rush for 4 yards to the ALCORN41 (D.Anderson).",
+                            "driveText": "2nd and 9 at ALCORN45",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Timeout ALCORN, clock 03:01.",
+                            "driveText": "3rd and 5 at ALCORN41",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Davius Richard pass complete to Ryan McDaniel for 8 yards to the ALCORN33, 1ST DOWN NCCU (T.Martin;K.Kinsler).",
+                            "driveText": "3rd and 5 at ALCORN41",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for 2 yards to the ALCORN31 (D.Dawson).",
+                            "driveText": "1st and 10 at ALCORN33",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "PENALTY NCCU false start 5 yards to the ALCORN36.",
+                            "driveText": "2nd and 8 at ALCORN31",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for 14 yards to the ALCORN22 (I.White), PENALTY NCCU personal foul 15 yards to the ALCORN37.",
+                            "driveText": "2nd and 13 at ALCORN36",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "2nd and 14.",
+                            "driveText": "2nd and 14 at ALCORN37",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for 3 yards to the ALCORN34 (K.Kinsler), PENALTY NCCU holding 10 yards to the ALCORN44.",
+                            "driveText": "2nd and 14 at ALCORN37",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "2nd and 21.",
+                            "driveText": "2nd and 21 at ALCORN44",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for no gain to the ALCORN44 (K.Kinsler).",
+                            "driveText": "2nd and 21 at ALCORN44",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Isaiah Totten rush for 4 yards to the ALCORN40 (M.Magee;D.Anderson).",
+                            "driveText": "3rd and 21 at ALCORN44",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "Juan  Velarde punt 32 yards to the ALCORN8, fair catch by M.Jones.",
+                            "driveText": "4th and 17 at ALCORN40",
+                            "teamId": "912",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                },
+                {
+                    "teamId": "2205",
+                    "time": "00:18",
+                    "plays": [
+                        {
+                            "scoreText": "ALCORN drive start at 00:18.",
+                            "driveText": "1st and 10 at ALCORN8",
+                            "teamId": "2205",
+                            "visitingScore": "14",
+                            "homeScore": "23"
+                        },
+                        {
+                            "scoreText": "N.Duffey rush for 4 yards to the ALCORN12 (Matt Stevens;Khalil Baker), PENALTY NCCU offside 5 yards to the ALCORN13, NO PLAY.",
+                            "driveText": "1st and 10 at ALCORN8",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "E.Dabney rush for 2 yards to the ALCORN15 (CameronSaunders).",
+                            "driveText": "1st and 5 at ALCORN13",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        },
+                        {
+                            "scoreText": "End of game, clock 00:00.",
+                            "driveText": "2nd and 3 at ALCORN15",
+                            "teamId": "2205",
+                            "visitingScore": "",
+                            "homeScore": ""
+                        }
+                    ]
+                }
+            ],
+            "titleEnum": "FOURTH"
+        }
+    ]
+}

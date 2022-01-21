@@ -43,7 +43,7 @@ public class StatReceivingData extends PlayerStatEntity implements Serializable 
 	private Integer receivingTwoPointConversion;
 
 	public StatReceivingData() {
-
+		// Base constructor
 	}
 
 	/**

@@ -23,6 +23,7 @@ import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.domain.stats.specialteam.StatKi
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.domain.stats.specialteam.StatKickoffReturnData;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.domain.stats.specialteam.StatPuntData;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.domain.stats.specialteam.StatPuntReturnData;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.domain.stats.team.StatTeamDefenseData;
 
 @Entity
 @Table(name = "TEAM_PLAY_DATA")
@@ -67,6 +68,10 @@ public class TeamPlayStatData extends OidAuditEntity implements Serializable {
 	@OneToMany(mappedBy = "playStat",  cascade = CascadeType.ALL)
 	private List<StatPenaltyData> penaltyStat;
 	
+	@OneToOne(fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
+	@JoinColumn(name = "DEFENSE_UNIT_OID", referencedColumnName = "OID", nullable = true)
+	private StatTeamDefenseData defenseUnitStat;
+	
 	public TeamPlayStatData() {
 		this.penaltyStat = new ArrayList<>();
 		this.defenseStat = new ArrayList<>();
@@ -85,13 +90,6 @@ public class TeamPlayStatData extends OidAuditEntity implements Serializable {
 	public void setTeam(TeamData team) {
 		this.team = team;
 	}
-
-//	/**
-//	 * @return the play
-//	 */
-//	public PlayData getPlay() {
-//		return play;
-//	}
 
 	/**
 	 * @param play the play to set
@@ -247,12 +245,26 @@ public class TeamPlayStatData extends OidAuditEntity implements Serializable {
 		penaltyStat.setPlayStat(this);
 	}
 
+	/**
+	 * @return the defenseUnitStat
+	 */
+	public StatTeamDefenseData getDefenseUnitStat() {
+		return defenseUnitStat;
+	}
+
+	/**
+	 * @param defenseUnitStat the defenseUnitStat to set
+	 */
+	public void setDefenseUnitStat(StatTeamDefenseData defenseUnitStat) {
+		this.defenseUnitStat = defenseUnitStat;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Objects.hash(defenseStat, kickStat, kickoffReturnStat, kickoffStat, passStat,
-				penaltyStat, play, puntReturnStat, puntStat, rushStat, team);
+		result = prime * result + Objects.hash(defenseStat, defenseUnitStat, kickStat, kickoffReturnStat, kickoffStat,
+				passStat, penaltyStat, play, puntReturnStat, puntStat, rushStat, team);
 		return result;
 	}
 
@@ -268,7 +280,8 @@ public class TeamPlayStatData extends OidAuditEntity implements Serializable {
 			return false;
 		}
 		TeamPlayStatData other = (TeamPlayStatData) obj;
-		return Objects.equals(defenseStat, other.defenseStat) && Objects.equals(kickStat, other.kickStat)
+		return Objects.equals(defenseStat, other.defenseStat) && Objects.equals(defenseUnitStat, other.defenseUnitStat)
+				&& Objects.equals(kickStat, other.kickStat)
 				&& Objects.equals(kickoffReturnStat, other.kickoffReturnStat)
 				&& Objects.equals(kickoffStat, other.kickoffStat) && Objects.equals(passStat, other.passStat)
 				&& Objects.equals(penaltyStat, other.penaltyStat) && Objects.equals(play, other.play)
@@ -281,7 +294,7 @@ public class TeamPlayStatData extends OidAuditEntity implements Serializable {
 		return "TeamPlayStatData [team=" + team + ", play=" + play + ", passStat=" + passStat + ", rushStat=" + rushStat
 				+ ", defenseStat=" + defenseStat + ", kickStat=" + kickStat + ", kickoffStat=" + kickoffStat
 				+ ", kickoffReturnStat=" + kickoffReturnStat + ", puntStat=" + puntStat + ", puntReturnStat="
-				+ puntReturnStat + ", penaltyStat=" + penaltyStat + "]";
+				+ puntReturnStat + ", penaltyStat=" + penaltyStat + ", defenseUnitStat=" + defenseUnitStat + "]";
 	}
 
 }

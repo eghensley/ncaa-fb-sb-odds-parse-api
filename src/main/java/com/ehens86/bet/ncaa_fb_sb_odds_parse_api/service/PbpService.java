@@ -5,11 +5,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.domain.DriveData;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.domain.GameData;
@@ -27,7 +28,10 @@ import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.domain.stats.specialteam.StatKi
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.domain.stats.specialteam.StatKickoffReturnData;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.domain.stats.specialteam.StatPuntData;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.domain.stats.specialteam.StatPuntReturnData;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.domain.stats.team.StatTeamDefenseData;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.KickTypeEnum;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayCallTypeEnum;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PlayTypeEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.StatDefSpecTeam;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.StatPosNegEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.StatTypeEnum;
@@ -47,8 +51,8 @@ import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerstats
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerstats.specialteams.pbp.PbpPlayerStatPuntingPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.ParseRequest;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.internal.ParseResponse;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.pbp.PlayByPlayPlayPojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.pbp.PlayByPlayPojo;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.repository.TeamRepository;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service.casablanca.PlayByPlayService;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils.LoggingUtils;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils.MappingUtils;
@@ -56,23 +60,16 @@ import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils.UrlUtils;
 
 @Service
 public class PbpService {
-	private final UrlUtils urlUtils;
-	private final PlayByPlayService playByPlayService;
 	private final GameService gameService;
-	private final LoggingUtils loggingUtils;
 	private final MappingUtils mappingUtils;
-	private final TeamRepository teamRepo;
+	private final TeamService teamService;
 	private final PlayerService playerService;
 
-	public PbpService(PlayByPlayService playByPlayService, UrlUtils urlUtils, GameService gameService,
-			LoggingUtils loggingUtils, MappingUtils mappingUtils, TeamRepository teamRepo,
+	public PbpService(GameService gameService, MappingUtils mappingUtils, TeamService teamService,
 			PlayerService playerService) {
-		this.playByPlayService = playByPlayService;
-		this.urlUtils = urlUtils;
 		this.gameService = gameService;
-		this.loggingUtils = loggingUtils;
 		this.mappingUtils = mappingUtils;
-		this.teamRepo = teamRepo;
+		this.teamService = teamService;
 		this.playerService = playerService;
 	}
 
@@ -84,7 +81,6 @@ public class PbpService {
 		Integer infoCompleted = 0;
 
 		try {
-
 			game = gameService.getGame(req.getGameId().toString());
 			if (game.isPbpComplete()) {
 				String gamePbpParseComplete = String.format(pbpParseCompleteLogStr, req.getGameId(),
@@ -95,30 +91,39 @@ public class PbpService {
 			String playByPlayUrl = String.format("https://data.ncaa.com/casablanca/game/%s/pbp.json",
 					game.getNcaaGameId());
 
-			PlayByPlayPojo playByPlayRaw = (PlayByPlayPojo) urlUtils.get(playByPlayUrl, PlayByPlayPojo.class);
+			PlayByPlayPojo playByPlayRaw = (PlayByPlayPojo) UrlUtils.get(playByPlayUrl, PlayByPlayPojo.class);
 			GamePojo gamePojo = (GamePojo) mappingUtils.mapToDto(game, GamePojo.class);
 
-			playByPlayService.parsePbP(playByPlayRaw, gamePojo);
+			if ("5850699".equals(gamePojo.getNcaaGameId())) {
+				playByPlayRaw.getPeriods().get(1).getPossessions().get(6).getPlays().get(0)
+						.setDriveText("1st and 10 at SJS2");
+				PlayByPlayPlayPojo missingPlay = new PlayByPlayPlayPojo();
+				missingPlay.setDriveText("1st and 10 at SJS2");
+				missingPlay.setHomeScore("29");
+				missingPlay
+						.setScoreText("#23 T.Nevens rush up the middle for a gain of 9 yards to the SJS11 (J.Brown)");
+				missingPlay.setTeamId("1683");
+				missingPlay.setVisitingScore("1");
+				playByPlayRaw.getPeriods().get(1).getPossessions().get(6).getPlays().add(1, missingPlay);
+			} else if ("5851544".equals(gamePojo.getNcaaGameId())) {
+				PlayByPlayPlayPojo missingPlay = new PlayByPlayPlayPojo();
+				missingPlay.setDriveText("1st and 10 at DEL25");
+				missingPlay.setHomeScore("");
+				missingPlay.setScoreText(
+						"[NHSG] #1 J.Fagnano pass to the right complete for 24 yards to #2 D.Young to the DEL1, fumble forced by N.Hill, fumble by D.Young out of bounds, Touchback.");
+				missingPlay.setTeamId("1835");
+				missingPlay.setVisitingScore("");
+				playByPlayRaw.getPeriods().get(2).getPossessions().get(5).getPlays().add(missingPlay);
+			}
 
-			Map<String, TeamData> teamMap = new HashMap<>();
-			Optional<TeamData> homeTeamDataOpt = teamRepo.findByNcaaTeamId(gamePojo.getTeamHome().getNcaaTeamId());
-			Optional<TeamData> awayTeamDataOpt = teamRepo.findByNcaaTeamId(gamePojo.getTeamAway().getNcaaTeamId());
-			if (homeTeamDataOpt.isPresent()) {
-				teamMap.put(gamePojo.getTeamHome().getNcaaTeamId(), homeTeamDataOpt.get());
-			} else {
-				throw new IllegalArgumentException(
-						String.format("Team not found: %s", gamePojo.getTeamHome().getNcaaTeamId()));
-			}
-			if (awayTeamDataOpt.isPresent()) {
-				teamMap.put(gamePojo.getTeamAway().getNcaaTeamId(), awayTeamDataOpt.get());
-			} else {
-				throw new IllegalArgumentException(
-						String.format("Team not found: %s", gamePojo.getTeamAway().getNcaaTeamId()));
-			}
+			PlayByPlayService.parsePbP(playByPlayRaw, gamePojo);
+
+			Map<String, TeamData> teamMap = teamService.compileTeamMap(gamePojo.getTeamHome().getNcaaTeamId(),
+					gamePojo.getTeamAway().getNcaaTeamId());
 
 			Map<String, Set<String>> teamPlayerMap = new HashMap<>();
-			teamPlayerMap.put(gamePojo.getTeamHome().getNcaaTeamId(), new HashSet<String>());
-			teamPlayerMap.put(gamePojo.getTeamAway().getNcaaTeamId(), new HashSet<String>());
+			teamPlayerMap.put(gamePojo.getTeamHome().getNcaaTeamId(), new HashSet<>());
+			teamPlayerMap.put(gamePojo.getTeamAway().getNcaaTeamId(), new HashSet<>());
 			Map<String, List<PlayerData>> teamPlayerDataMap = new HashMap<>();
 
 			pullPlayerListFromPlays(teamPlayerMap, gamePojo);
@@ -126,8 +131,7 @@ public class PbpService {
 			Set<String> intersection = new HashSet<>(teamPlayerMap.get(gamePojo.getTeamHome().getNcaaTeamId()));
 			intersection.retainAll(teamPlayerMap.get(gamePojo.getTeamAway().getNcaaTeamId()));
 			if (!intersection.isEmpty()) {
-				throw new IllegalArgumentException(
-						String.format("Player overlap found between teams: %s", intersection));
+				LoggingUtils.logInfo(String.format("Player overlap found between teams: %s", intersection));
 			}
 
 			Set<String> playTeamIdsx = teamPlayerMap.keySet();
@@ -135,10 +139,7 @@ public class PbpService {
 				addTeamPlayers(teamPlayerDataMap, teamPlayerMap, playTeamId, teamMap.get(playTeamId));
 			}
 
-			StatPosNegEnum posNeg = StatPosNegEnum.POS;
 			StatTypeEnum statType = StatTypeEnum.PLAYER;
-
-//			Hibernate.initialize(game.getDrives());
 
 			Integer homeScore = 0;
 			Integer awayScore = 0;
@@ -154,9 +155,14 @@ public class PbpService {
 							teamMap.get(play.getPlayResult().getPlayResultPossessionTeamId()));
 					Set<String> playTeamIds = play.getPlayerStat().keySet();
 					for (String playTeamId : playTeamIds) {
-						TeamPlayStatData teamPlayStatData = addTeamPlayStats(playTeamId, play, posNeg, statType,
-								teamPlayerDataMap, teamMap.get(playTeamId));
+						String negPlayTeamId = playTeamIds.stream().filter(t -> !playTeamId.equals(t))
+								.collect(Collectors.toList()).get(0);
+						TeamPlayStatData teamPlayStatData = addTeamPlayStats(playTeamId, play, StatPosNegEnum.POS,
+								statType, teamPlayerDataMap, teamMap.get(playTeamId));
+						TeamPlayStatData teamPlayNegStatData = addTeamPlayStats(negPlayTeamId, play, StatPosNegEnum.NEG,
+								statType, teamPlayerDataMap, teamMap.get(negPlayTeamId));
 						playData.addPlayStat(teamPlayStatData);
+						playData.addPlayStat(teamPlayNegStatData);
 					}
 					driveData.addPlay(playData);
 				}
@@ -165,25 +171,32 @@ public class PbpService {
 				game.addDrive(driveData);
 			}
 
-			if (game.getHomeScore() != homeScore) {
-				throw new IllegalArgumentException("game.getHomeScore() != homeScore");
-			}
-			if (game.getAwayScore() != awayScore) {
-				throw new IllegalArgumentException("game.getAwayScore() != awayScore");
-			}
-
+			addPbpDataPreSaveValidation(game, homeScore, awayScore);
 			game.setPbpComplete(true);
-//			gameService.saveGame(game);
-			// TODO add offensive line
-			// TODO add team game summary stats
-			// TODO add player game summary stats
-			// TODO add indicator features
+			gameService.saveGame(game);
 
 			infoCompleted += 1;
 			return new ParseResponse(req, infoFound, infoCompleted, HttpStatus.OK, "");
+		} catch (HttpClientErrorException hcee) {
+			gameService.invalidGameUpdate(req.getGameId().toString());
+			LoggingUtils.logExceptionTop(hcee, String.format("ERROR: PBP Parse failed for ID: %s", req.getGameId()));
+			return new ParseResponse(req, infoFound, infoCompleted, HttpStatus.BAD_REQUEST, hcee.toString());
 		} catch (Exception e) {
-			loggingUtils.logException(e, String.format("ERROR: PBP Parse failed for ID: %s", req.getGameId()));
+			LoggingUtils.logExceptionTop(e, String.format("ERROR: PBP Parse failed for ID: %s", req.getGameId()));
 			return new ParseResponse(req, infoFound, infoCompleted, HttpStatus.BAD_REQUEST, e.toString());
+		}
+	}
+
+	private void addPbpDataPreSaveValidation(GameData game, Integer homeScore, Integer awayScore) {
+		try {
+			if (!game.getHomeScore().equals(homeScore)) {
+				throw new IllegalArgumentException("game.getHomeScore() != homeScore");
+			}
+			if (!game.getAwayScore().equals(awayScore)) {
+				throw new IllegalArgumentException("game.getAwayScore() != awayScore");
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, e.toString());
 		}
 	}
 
@@ -218,9 +231,11 @@ public class PbpService {
 			translateKickoff(stats, posNeg, statType, teamPlayerDataMap.get(playTeamId), teamPlayStat, teamNickname);
 			translateKick(stats, posNeg, statType, teamPlayerDataMap.get(playTeamId), teamPlayStat, teamNickname);
 			translatePass(stats, posNeg, statType, teamPlayerDataMap.get(playTeamId), teamPlayStat, teamNickname);
+			translateTeamDefense(posNeg, statType, play, teamPlayStat);
+
 			return teamPlayStat;
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, playTeamId));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, playTeamId));
 			return null;
 		}
 	}
@@ -236,7 +251,7 @@ public class PbpService {
 				translatePlayer(teamPlayerDataMap, team, playTeamId, name);
 			}
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, playTeamId));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, playTeamId));
 		}
 	}
 
@@ -244,23 +259,38 @@ public class PbpService {
 			String name) {
 		String innerErrorMsg = "Player data translation failed - %s";
 		try {
+			String[] formattedName = playerNameFormat(name, team.getTeamNickname());
+			PlayerData player = playerService.resolvePlayer(formattedName[0], formattedName[1], team);
+			teamPlayerDataMap.get(playTeamId).add(player);
+		} catch (Exception ee) {
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, name));
+		}
+	}
+
+	private String[] playerNameFormat(String name, String teamNickname) {
+		String innerErrorMsg = "Player name format failed - %s";
+		try {
 			String[] nameSplit = name.split(" ");
 			String firstName;
 			String lastName;
 			if (nameSplit.length > 2) {
-				throw new IllegalArgumentException("long name!");
+				if (nameSplit.length == 3 && nameSplit[0].length() == 1) {
+					nameSplit = new String[] { nameSplit[1], nameSplit[2] };
+				} else {
+					throw new IllegalArgumentException("long name!");
+				}
 			}
 			if (nameSplit.length < 2) {
 				firstName = nameSplit[0];
-				lastName = team.getTeamNickname();
+				lastName = teamNickname;
 			} else {
 				firstName = nameSplit[0];
 				lastName = nameSplit[1];
 			}
-			PlayerData player = playerService.resolvePlayer(firstName, lastName, team);
-			teamPlayerDataMap.get(playTeamId).add(player);
+			return new String[] { firstName, lastName };
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, name));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, name));
+			return new String[] {};
 		}
 	}
 
@@ -272,50 +302,73 @@ public class PbpService {
 					Set<String> playTeamIds = play.getPlayerStat().keySet();
 
 					for (String playTeamId : playTeamIds) {
-
-						PbpPlayerStatPojo stats = play.getPlayerStat().get(playTeamId);
-						for (PlayerStatPenaltyPojo pen : stats.getPenalty()) {
-							teamPlayerMap.get(playTeamId).add(pen.getPlayerName());
-						}
-
-						for (PbpPlayerStatDefenseProductionPojo def : stats.getDefense().getDefenseProduction()) {
-							teamPlayerMap.get(playTeamId).add(def.getPlayerName());
-						}
-						for (PbpPlayerStatRushingPojo rush : stats.getOffense().getRushingStat()) {
-							teamPlayerMap.get(playTeamId).add(rush.getPlayerName());
-						}
-						for (PbpPlayerStatPassingPojo pass : stats.getOffense().getPassingStat()) {
-							teamPlayerMap.get(playTeamId).add(pass.getPlayerName());
-						}
-						for (PbpPlayerStatReceivingPojo rec : stats.getOffense().getReceivingStat()) {
-							teamPlayerMap.get(playTeamId).add(rec.getPlayerName());
-						}
-						for (PbpPlayerStatDefenseProductionPojo kcov : stats.getSpecialTeam().getKickCoverage()) {
-							teamPlayerMap.get(playTeamId).add(kcov.getPlayerName());
-						}
-						for (PbpPlayerStatKickingPojo kick : stats.getSpecialTeam().getKicking()) {
-							teamPlayerMap.get(playTeamId).add(kick.getPlayerName());
-						}
-						for (PbpPlayerStatKickoffPojo ko : stats.getSpecialTeam().getKickoff()) {
-							teamPlayerMap.get(playTeamId).add(ko.getPlayerName());
-						}
-						for (PbpPlayerStatKickReturnPojo kret : stats.getSpecialTeam().getKickReturn()) {
-							teamPlayerMap.get(playTeamId).add(kret.getPlayerName());
-						}
-						for (PbpPlayerStatDefenseProductionPojo pcov : stats.getSpecialTeam().getPuntCoverage()) {
-							teamPlayerMap.get(playTeamId).add(pcov.getPlayerName());
-						}
-						for (PbpPlayerStatPuntingPojo punt : stats.getSpecialTeam().getPunting()) {
-							teamPlayerMap.get(playTeamId).add(punt.getPlayerName());
-						}
-						for (PbpPlayerStatPuntReturnPojo pret : stats.getSpecialTeam().getPuntReturn()) {
-							teamPlayerMap.get(playTeamId).add(pret.getPlayerName());
-						}
+						pullPlayerListFromPlaysHelper(teamPlayerMap, play, playTeamId);
 					}
 				}
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, errorMsg);
+			LoggingUtils.logException(e, errorMsg);
+		}
+	}
+
+	private void pullPlayerListFromPlaysHelper(Map<String, Set<String>> teamPlayerMap, PlayPojo play,
+			String playTeamId) {
+		PbpPlayerStatPojo stats = play.getPlayerStat().get(playTeamId);
+		for (PlayerStatPenaltyPojo pen : stats.getPenalty()) {
+			teamPlayerMap.get(playTeamId).add(pen.getPlayerName());
+		}
+		for (PbpPlayerStatDefenseProductionPojo def : stats.getDefense().getDefenseProduction()) {
+			teamPlayerMap.get(playTeamId).add(def.getPlayerName());
+		}
+		for (PbpPlayerStatRushingPojo rush : stats.getOffense().getRushingStat()) {
+			teamPlayerMap.get(playTeamId).add(rush.getPlayerName());
+		}
+		for (PbpPlayerStatPassingPojo pass : stats.getOffense().getPassingStat()) {
+			teamPlayerMap.get(playTeamId).add(pass.getPlayerName());
+		}
+		for (PbpPlayerStatReceivingPojo rec : stats.getOffense().getReceivingStat()) {
+			teamPlayerMap.get(playTeamId).add(rec.getPlayerName());
+		}
+		for (PbpPlayerStatDefenseProductionPojo kcov : stats.getSpecialTeam().getKickCoverage()) {
+			teamPlayerMap.get(playTeamId).add(kcov.getPlayerName());
+		}
+		for (PbpPlayerStatKickingPojo kick : stats.getSpecialTeam().getKicking()) {
+			teamPlayerMap.get(playTeamId).add(kick.getPlayerName());
+		}
+		for (PbpPlayerStatKickoffPojo ko : stats.getSpecialTeam().getKickoff()) {
+			teamPlayerMap.get(playTeamId).add(ko.getPlayerName());
+		}
+		for (PbpPlayerStatKickReturnPojo kret : stats.getSpecialTeam().getKickReturn()) {
+			teamPlayerMap.get(playTeamId).add(kret.getPlayerName());
+		}
+		for (PbpPlayerStatDefenseProductionPojo pcov : stats.getSpecialTeam().getPuntCoverage()) {
+			teamPlayerMap.get(playTeamId).add(pcov.getPlayerName());
+		}
+		for (PbpPlayerStatPuntingPojo punt : stats.getSpecialTeam().getPunting()) {
+			teamPlayerMap.get(playTeamId).add(punt.getPlayerName());
+		}
+		for (PbpPlayerStatPuntReturnPojo pret : stats.getSpecialTeam().getPuntReturn()) {
+			teamPlayerMap.get(playTeamId).add(pret.getPlayerName());
+		}
+	}
+
+	private void translateTeamDefense(StatPosNegEnum posNeg, StatTypeEnum statType, PlayPojo play,
+			TeamPlayStatData teamPlayStat) {
+		String errorMsg = "Defense unit data translation failed";
+		try {
+			if (PlayTypeEnum.OFFENSE.equals(play.getPlayType())
+					&& !PlayCallTypeEnum.FG.equals(play.getPlayCallType())) {
+				StatTeamDefenseData statData = new StatTeamDefenseData();
+				statData.setPosNeg(posNeg);
+				statData.setStatType(statType);
+				statData.setDefeat(play.getDefeat());
+				statData.setHavoc(play.getHavoc());
+				statData.setHavocDb(play.getHavocDb());
+				statData.setHavocFront(play.getHavocFront());
+				teamPlayStat.setDefenseUnitStat(statData);
+			}
+		} catch (Exception e) {
+			LoggingUtils.logException(e, errorMsg);
 		}
 	}
 
@@ -327,7 +380,7 @@ public class PbpService {
 				translatePassHelper(stats, posNeg, statType, posMatches, teamPlayStat, stat, teamNickname);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, errorMsg);
+			LoggingUtils.logException(e, errorMsg);
 		}
 	}
 
@@ -344,7 +397,7 @@ public class PbpService {
 			translateReceiver(stats, posNeg, statType, posMatches, statData, teamNickname);
 			teamPlayStat.setPassStat(statData);
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
 		}
 	}
 
@@ -356,7 +409,7 @@ public class PbpService {
 				translateReceiverHelper(posNeg, statType, posMatches, passData, stat, teamNickname);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, errorMsg);
+			LoggingUtils.logException(e, errorMsg);
 		}
 	}
 
@@ -371,7 +424,7 @@ public class PbpService {
 			statData.setPlayer(matchName(stat.getPlayerName(), teamNickname, posMatches));
 			passData.setReceiving(statData);
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
 		}
 
 	}
@@ -384,7 +437,7 @@ public class PbpService {
 				translateKickHelper(posNeg, statType, posMatches, teamPlayStat, stat, teamNickname);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, errorMsg);
+			LoggingUtils.logException(e, errorMsg);
 		}
 	}
 
@@ -417,7 +470,7 @@ public class PbpService {
 			statData.setPlayer(matchName(stat.getPlayerName(), teamNickname, posMatches));
 			teamPlayStat.setKickStat(statData);
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
 		}
 	}
 
@@ -429,7 +482,7 @@ public class PbpService {
 				translateKickoffHelper(posNeg, statType, posMatches, teamPlayStat, stat, teamNickname);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, errorMsg);
+			LoggingUtils.logException(e, errorMsg);
 		}
 	}
 
@@ -444,7 +497,7 @@ public class PbpService {
 			statData.setPlayer(matchName(stat.getPlayerName(), teamNickname, posMatches));
 			teamPlayStat.setKickoffStat(statData);
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
 		}
 
 	}
@@ -457,7 +510,7 @@ public class PbpService {
 				translateKickoffReturnHelper(posNeg, statType, posMatches, teamPlayStat, stat, teamNickname);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, errorMsg);
+			LoggingUtils.logException(e, errorMsg);
 		}
 	}
 
@@ -472,7 +525,7 @@ public class PbpService {
 			statData.setPlayer(matchName(stat.getPlayerName(), teamNickname, posMatches));
 			teamPlayStat.setKickoffReturnStat(statData);
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
 		}
 	}
 
@@ -484,7 +537,7 @@ public class PbpService {
 				translatePuntHelper(posNeg, statType, posMatches, teamPlayStat, stat, teamNickname);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, errorMsg);
+			LoggingUtils.logException(e, errorMsg);
 		}
 	}
 
@@ -515,7 +568,7 @@ public class PbpService {
 			}
 			teamPlayStat.setPuntStat(statData);
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
 		}
 
 	}
@@ -528,7 +581,7 @@ public class PbpService {
 				translatePuntReturnHelper(posNeg, statType, posMatches, teamPlayStat, stat, teamNickname);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, errorMsg);
+			LoggingUtils.logException(e, errorMsg);
 		}
 	}
 
@@ -542,7 +595,7 @@ public class PbpService {
 			statData.setPlayer(matchName(stat.getPlayerName(), teamNickname, posMatches));
 			teamPlayStat.setPuntReturnStat(statData);
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
 		}
 	}
 
@@ -554,7 +607,7 @@ public class PbpService {
 				translatePenaltyHelper(posNeg, statType, posMatches, teamPlayStat, stat, teamNickname);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, errorMsg);
+			LoggingUtils.logException(e, errorMsg);
 		}
 	}
 
@@ -568,7 +621,7 @@ public class PbpService {
 			statData.setPlayer(matchName(stat.getPlayerName(), teamNickname, posMatches));
 			teamPlayStat.addPenaltyStat(statData);
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
 		}
 
 	}
@@ -584,7 +637,7 @@ public class PbpService {
 			statData.setDefenseType(defType);
 			teamPlayStat.addDefenseStat(statData);
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
 		}
 	}
 
@@ -596,7 +649,7 @@ public class PbpService {
 				translateRushHelper(posNeg, statType, posMatches, teamPlayStat, stat, teamNickname);
 			}
 		} catch (Exception e) {
-			loggingUtils.logException(e, errorMsg);
+			LoggingUtils.logException(e, errorMsg);
 		}
 	}
 
@@ -610,33 +663,25 @@ public class PbpService {
 			statData.setPlayer(matchName(stat.getPlayerName(), teamNickname, posMatches));
 			teamPlayStat.setRushStat(statData);
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, stat.toString()));
 		}
 	}
 
 	private PlayerData matchName(String name, String teamNickname, List<PlayerData> posMatches) {
-		String first;
-		String last;
 		String innerErrorMsg = "Player match failed - %s";
 
 		try {
-			String[] splitName = name.split(" ");
-			if (splitName.length == 2) {
-				first = splitName[0];
-				last = splitName[1];
-			} else {
-				first = splitName[0];
-				last = teamNickname;
-			}
+			String[] formattedName = playerNameFormat(name, teamNickname);
 
 			for (PlayerData posMatch : posMatches) {
-				if (posMatch.getFirstName().equals(first) && posMatch.getLastName().equals(last)) {
+				if (posMatch.getFirstName().equals(formattedName[0])
+						&& posMatch.getLastName().equals(formattedName[1])) {
 					return posMatch;
 				}
 			}
 			throw new IllegalArgumentException(String.format("No player match found for %s", name));
 		} catch (Exception ee) {
-			loggingUtils.logException(ee, String.format(innerErrorMsg, name));
+			LoggingUtils.logException(ee, String.format(innerErrorMsg, name));
 			return null;
 		}
 	}

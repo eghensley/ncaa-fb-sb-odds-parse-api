@@ -32,6 +32,9 @@ public class PlayPojo {
 	protected Boolean passingDown;
 	protected FieldZoneEnum playFieldZone;
 	protected Boolean defeat;
+	protected Boolean havoc;
+	protected Boolean havocDb;
+	protected Boolean havocFront;
 
 	public PlayPojo() {
 		this.playResult = new PlayResultPojo();
@@ -303,11 +306,53 @@ public class PlayPojo {
 	public void setDefeat(Boolean defeat) {
 		this.defeat = defeat;
 	}
-	
+
+	/**
+	 * @return the havoc
+	 */
+	public Boolean getHavoc() {
+		return havoc;
+	}
+
+	/**
+	 * @param havoc the havoc to set
+	 */
+	public void setHavoc(Boolean havoc) {
+		this.havoc = havoc;
+	}
+
+	/**
+	 * @return the havocDb
+	 */
+	public Boolean getHavocDb() {
+		return havocDb;
+	}
+
+	/**
+	 * @param havocDb the havocDb to set
+	 */
+	public void setHavocDb(Boolean havocDb) {
+		this.havocDb = havocDb;
+	}
+
+	/**
+	 * @return the havocFront
+	 */
+	public Boolean getHavocFront() {
+		return havocFront;
+	}
+
+	/**
+	 * @param havocFront the havocFront to set
+	 */
+	public void setHavocFront(Boolean havocFront) {
+		this.havocFront = havocFront;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(defeat, driveText, garbageTime, noPlayPenalty, passingDown, period, playCallType,
-				playFieldZone, playResult, playStartAwayScore, playStartDown, playStartHomeScore,
+		return Objects.hash(defeat, driveText, garbageTime, havoc, havocDb, havocFront, noPlayPenalty, passingDown,
+				period, playCallType, playFieldZone, playResult, playStartAwayScore, playStartDown, playStartHomeScore,
 				playStartPossessionTeamId, playStartYard, playTempo, playText, playType, playYardToGain, playerStat);
 	}
 
@@ -321,9 +366,10 @@ public class PlayPojo {
 		}
 		PlayPojo other = (PlayPojo) obj;
 		return Objects.equals(defeat, other.defeat) && Objects.equals(driveText, other.driveText)
-				&& Objects.equals(garbageTime, other.garbageTime) && Objects.equals(noPlayPenalty, other.noPlayPenalty)
-				&& Objects.equals(passingDown, other.passingDown) && period == other.period
-				&& playCallType == other.playCallType && playFieldZone == other.playFieldZone
+				&& Objects.equals(garbageTime, other.garbageTime) && Objects.equals(havoc, other.havoc)
+				&& Objects.equals(havocDb, other.havocDb) && Objects.equals(havocFront, other.havocFront)
+				&& Objects.equals(noPlayPenalty, other.noPlayPenalty) && Objects.equals(passingDown, other.passingDown)
+				&& period == other.period && playCallType == other.playCallType && playFieldZone == other.playFieldZone
 				&& Objects.equals(playResult, other.playResult)
 				&& Objects.equals(playStartAwayScore, other.playStartAwayScore) && playStartDown == other.playStartDown
 				&& Objects.equals(playStartHomeScore, other.playStartHomeScore)
@@ -341,7 +387,8 @@ public class PlayPojo {
 				+ ", playerStat=" + playerStat + ", noPlayPenalty=" + noPlayPenalty + ", playTempo=" + playTempo
 				+ ", playStartPossessionTeamId=" + playStartPossessionTeamId + ", playStartHomeScore="
 				+ playStartHomeScore + ", playStartAwayScore=" + playStartAwayScore + ", garbageTime=" + garbageTime
-				+ ", passingDown=" + passingDown + ", playFieldZone=" + playFieldZone + ", defeat=" + defeat + "]";
+				+ ", passingDown=" + passingDown + ", playFieldZone=" + playFieldZone + ", defeat=" + defeat
+				+ ", havoc=" + havoc + ", havocDb=" + havocDb + ", havocFront=" + havocFront + "]";
 	}
 
 }

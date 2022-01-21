@@ -62,6 +62,13 @@ public class BaseStatRushingPojo {
 	public void setRushingYard(Integer rushingYard) {
 		this.rushingYard = rushingYard;
 	}
+	
+	/**
+	 * @param rushingYard the rushingYard to set
+	 */
+	public void addRushingYard(Integer rushingYard) {
+		this.rushingYard += rushingYard;
+	}
 
 	/**
 	 * @return the rushingTouchdown

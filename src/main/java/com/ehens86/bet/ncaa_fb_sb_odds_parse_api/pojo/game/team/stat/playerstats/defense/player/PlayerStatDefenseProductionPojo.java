@@ -20,11 +20,7 @@ public class PlayerStatDefenseProductionPojo extends BaseStatDefenseProductionPo
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
-		}
-		if (!super.equals(obj)) {
-			return false;
-		}
-		if (!(obj instanceof PlayerStatDefenseProductionPojo)) {
+		} else if (!super.equals(obj) || !(obj instanceof PlayerStatDefenseProductionPojo)) {
 			return false;
 		}
 		return true;

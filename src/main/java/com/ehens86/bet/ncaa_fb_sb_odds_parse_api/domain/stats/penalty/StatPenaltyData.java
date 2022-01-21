@@ -33,15 +33,8 @@ public class StatPenaltyData extends PlayerStatEntity implements Serializable {
 	private PenaltyEnum penaltyName;
 	
 	public StatPenaltyData() {
-		
+		// Base constructor
 	}
-
-//	/**
-//	 * @return the playStat
-//	 */
-//	public TeamPlayStatData getPlayStat() {
-//		return playStat;
-//	}
 
 	/**
 	 * @param playStat the playStat to set

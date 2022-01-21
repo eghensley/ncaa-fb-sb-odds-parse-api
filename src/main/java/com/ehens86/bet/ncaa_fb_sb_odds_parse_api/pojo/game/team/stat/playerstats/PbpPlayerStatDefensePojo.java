@@ -31,8 +31,13 @@ public class PbpPlayerStatDefensePojo {
 	}
 
 	public PbpPlayerStatDefenseProductionPojo findDefenseWithFumbleRecovery() {
-		return this.defenseProduction.stream().filter(name -> name.getFumbleRecovered() == 1)
-				.collect(Collectors.toList()).get(0);
+		List<PbpPlayerStatDefenseProductionPojo> turnoverDef =  this.defenseProduction.stream().filter(name -> name.getFumbleRecovered() == 1)
+				.collect(Collectors.toList());
+		if (turnoverDef.isEmpty()) {
+			return null;
+		} else {
+			return turnoverDef.get(0);
+		}
 	}
 
 	public PbpPlayerStatDefenseProductionPojo findDefenseWithTurnover() {

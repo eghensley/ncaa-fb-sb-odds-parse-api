@@ -35,20 +35,7 @@ public class TeamData  extends BaseAuditEntity implements Serializable{
 	private String logoLink;
 
 	public TeamData() {
-
-	}
-
-	public TeamData(String teamName, String teamNameShort, String teamNameSixChar, String teamNameSeo,
-			String teamNickname, String teamColor, String logoLink, String ncaaTeamId) {
-		super();
-		this.teamName = teamName;
-		this.teamNameShort = teamNameShort;
-		this.teamNameSixChar = teamNameSixChar;
-		this.teamNameSeo = teamNameSeo;
-		this.teamNickname = teamNickname;
-		this.teamColor = teamColor;
-		this.logoLink = logoLink;
-		this.ncaaTeamId = ncaaTeamId;
+		// Base constructor
 	}
 
 	/**

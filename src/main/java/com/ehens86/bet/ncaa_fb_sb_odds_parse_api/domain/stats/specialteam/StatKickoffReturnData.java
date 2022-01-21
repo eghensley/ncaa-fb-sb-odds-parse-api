@@ -38,21 +38,7 @@ public class StatKickoffReturnData extends PlayerStatEntity implements Serializa
 	private Integer kickoffReturnSafety;
 
 	public StatKickoffReturnData() {
-
-	}
-
-//	/**
-//	 * @return the playStat
-//	 */
-//	public TeamPlayStatData getPlayStat() {
-//		return playStat;
-//	}
-
-	/**
-	 * @param playStat the playStat to set
-	 */
-	public void setPlayStat(TeamPlayStatData playStat) {
-		this.playStat = playStat;
+		// Base constructor
 	}
 
 	/**
@@ -63,24 +49,10 @@ public class StatKickoffReturnData extends PlayerStatEntity implements Serializa
 	}
 
 	/**
-	 * @param kickoffReturn the kickoffReturn to set
-	 */
-	public void setKickoffReturn(Integer kickoffReturn) {
-		this.kickoffReturn = kickoffReturn;
-	}
-
-	/**
 	 * @return the kickoffReturnYard
 	 */
 	public Integer getKickoffReturnYard() {
 		return kickoffReturnYard;
-	}
-
-	/**
-	 * @param kickoffReturnYard the kickoffReturnYard to set
-	 */
-	public void setKickoffReturnYard(Integer kickoffReturnYard) {
-		this.kickoffReturnYard = kickoffReturnYard;
 	}
 
 	/**
@@ -91,24 +63,10 @@ public class StatKickoffReturnData extends PlayerStatEntity implements Serializa
 	}
 
 	/**
-	 * @param kickoffReturnTouchdown the kickoffReturnTouchdown to set
-	 */
-	public void setKickoffReturnTouchdown(Integer kickoffReturnTouchdown) {
-		this.kickoffReturnTouchdown = kickoffReturnTouchdown;
-	}
-
-	/**
 	 * @return the kickoffReturnFairCatch
 	 */
 	public Integer getKickoffReturnFairCatch() {
 		return kickoffReturnFairCatch;
-	}
-
-	/**
-	 * @param kickoffReturnFairCatch the kickoffReturnFairCatch to set
-	 */
-	public void setKickoffReturnFairCatch(Integer kickoffReturnFairCatch) {
-		this.kickoffReturnFairCatch = kickoffReturnFairCatch;
 	}
 
 	/**
@@ -119,24 +77,10 @@ public class StatKickoffReturnData extends PlayerStatEntity implements Serializa
 	}
 
 	/**
-	 * @param kickoffReturnStartYard the kickoffReturnStartYard to set
-	 */
-	public void setKickoffReturnStartYard(Integer kickoffReturnStartYard) {
-		this.kickoffReturnStartYard = kickoffReturnStartYard;
-	}
-
-	/**
 	 * @return the kickoffReturnFumble
 	 */
 	public Integer getKickoffReturnFumble() {
 		return kickoffReturnFumble;
-	}
-
-	/**
-	 * @param kickoffReturnFumble the kickoffReturnFumble to set
-	 */
-	public void setKickoffReturnFumble(Integer kickoffReturnFumble) {
-		this.kickoffReturnFumble = kickoffReturnFumble;
 	}
 
 	/**
@@ -147,13 +91,6 @@ public class StatKickoffReturnData extends PlayerStatEntity implements Serializa
 	}
 
 	/**
-	 * @param kickoffReturnFumbleLost the kickoffReturnFumbleLost to set
-	 */
-	public void setKickoffReturnFumbleLost(Integer kickoffReturnFumbleLost) {
-		this.kickoffReturnFumbleLost = kickoffReturnFumbleLost;
-	}
-
-	/**
 	 * @return the kickoffReturnSafety
 	 */
 	public Integer getKickoffReturnSafety() {
@@ -161,10 +98,10 @@ public class StatKickoffReturnData extends PlayerStatEntity implements Serializa
 	}
 
 	/**
-	 * @param kickoffReturnSafety the kickoffReturnSafety to set
+	 * @param playStat the playStat to set
 	 */
-	public void setKickoffReturnSafety(Integer kickoffReturnSafety) {
-		this.kickoffReturnSafety = kickoffReturnSafety;
+	public void setPlayStat(TeamPlayStatData playStat) {
+		this.playStat = playStat;
 	}
 
 	/**
@@ -232,7 +169,7 @@ public class StatKickoffReturnData extends PlayerStatEntity implements Serializa
 				kickoffReturnYard, playStat);
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

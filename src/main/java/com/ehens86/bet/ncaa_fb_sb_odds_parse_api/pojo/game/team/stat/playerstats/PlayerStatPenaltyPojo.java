@@ -3,7 +3,7 @@ package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.playerstat
 import java.util.Objects;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.PenaltyEnum;
-import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamStats.TeamStatPenaltyPojo;
+import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.team.stat.teamstats.TeamStatPenaltyPojo;
 
 public class PlayerStatPenaltyPojo extends TeamStatPenaltyPojo {
 	private Integer penaltyFirstDown;

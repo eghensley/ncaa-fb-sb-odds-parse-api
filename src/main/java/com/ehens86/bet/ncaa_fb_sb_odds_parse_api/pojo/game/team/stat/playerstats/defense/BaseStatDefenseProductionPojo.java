@@ -23,24 +23,6 @@ public class BaseStatDefenseProductionPojo {
 		// Constructor
 	}
 
-
-
-	public BaseStatDefenseProductionPojo(String playerName, Integer tackleTotal, Double tackleSolo, Double sack,
-			Integer tackleForLoss, Integer interception, Integer fumbleForced, Integer fumbleRecovered,
-			Integer fumbleYard, Integer fumbleTouchdown) {
-		super();
-		this.playerName = playerName;
-		this.tackleTotal = tackleTotal;
-		this.tackleSolo = tackleSolo;
-		this.sack = sack;
-		this.tackleForLoss = tackleForLoss;
-		this.interception = interception;
-		this.fumbleForced = fumbleForced;
-		this.fumbleRecovered = fumbleRecovered;
-		this.fumbleYard = fumbleYard;
-		this.fumbleTouchdown = fumbleTouchdown;
-	}
-
 	/**
 	 * @return the fumbleTouchdown
 	 */

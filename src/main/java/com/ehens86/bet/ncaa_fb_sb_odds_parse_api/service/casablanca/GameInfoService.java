@@ -3,19 +3,21 @@ package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.service.casablanca;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.springframework.stereotype.Service;
-
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.DivisionEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.enums.HomeAwayEnum;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.game.GamePojo;
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.pojo.requesttemplate.gameinfo.GameInfoPojo;
 
-@Service
-public class GameInfoService {
+public final class GameInfoService {
 	private static final Logger LOG = Logger.getLogger(GameInfoService.class.toString());
 	private static final String ERROR_S_FAILED_WITH_S = "ERROR: [%s] failed with %s";
 
-	public GamePojo parseGameInfo(GameInfoPojo gameInfoRaw, GamePojo game) {
+	// private static static constructor to prevent instantiation
+    private GameInfoService() {
+        throw new UnsupportedOperationException();
+    }
+    
+	public static GamePojo parseGameInfo(GameInfoPojo gameInfoRaw, GamePojo game) {
 		try {
 			game.setDivision(DivisionEnum.valueOf(gameInfoRaw.getChampionship().getDivision().toUpperCase()));
 			game.setSeason(Integer.valueOf(gameInfoRaw.getChampionship().getYear()));

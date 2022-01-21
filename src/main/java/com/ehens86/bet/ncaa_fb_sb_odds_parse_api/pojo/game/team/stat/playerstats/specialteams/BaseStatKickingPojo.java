@@ -10,7 +10,7 @@ public class BaseStatKickingPojo {
 	protected Integer totalPoint;
 
 	public BaseStatKickingPojo() {
-
+		// Base constructor
 	}
 
 	/**

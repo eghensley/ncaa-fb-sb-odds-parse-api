@@ -13,7 +13,7 @@ import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.domain.PlayerData;
 public interface PlayerRepository extends JpaRepository<PlayerData, String> {
 
 	@Query(value = "SELECT * FROM ncaafb.player p \n" + 
-			"WHERE p.first_name=:firstName \n" + 
+			"WHERE p.team_id=:teamId AND p.first_name=:firstName \n" + 
 			"AND p.last_name=:lastName", nativeQuery = true)
-	Optional<PlayerData> findPlayerByNames(@Param("firstName") String firstName, @Param("lastName") String lastName);
+	Optional<PlayerData> findPlayerByNamesAndTeam(@Param("firstName") String firstName, @Param("lastName") String lastName, @Param("teamId") String teamId);
 }

@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class NcaaConstants {
+public final class NcaaConstants {
 	public static final String CONTEXT_DEBUG_KEY = "F_DEBUG";
 	public static final String CONTEXT_DEBUG_VALUE_TRUE = "TRUE";
 	public static final String CONTEXT_DEBUG_VALUE_FALSE = "FALSE";
@@ -21,12 +21,17 @@ public class NcaaConstants {
 	public static final String ERROR_S_FAILED_WITH_S = "ERROR: [%s] failed with %s";
 
 	public static final Map<String, List<String>> TEAM_ID_YARD_ABBREV_DICT = loadJson();
-
+	
+    // Private constructor to prevent instantiation
+    private NcaaConstants() {
+        throw new UnsupportedOperationException();
+    }
+    
 	@SuppressWarnings("unchecked")
 	private static Map<String, List<String>> loadJson() {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			return mapper.readValue(new File("/home/ehens86/git/ncaa-fb-sb-odds-parse-api/src/main/resources/teamIdAcroynmMap.json"), Map.class);
+			return mapper.readValue(new File("src/main/resources/teamIdAcroynmMap.json"), Map.class);
 		} catch (IOException e) {
 			return new HashMap<>();
 		}

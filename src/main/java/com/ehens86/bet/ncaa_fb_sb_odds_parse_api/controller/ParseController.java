@@ -37,7 +37,7 @@ public class ParseController {
 	ParseService gamesService;
 	@Autowired
 	PbpService pbpService;
-	
+
 	@Value("${credentials.admin.password}")
 	private String loginKey;
 
@@ -45,7 +45,7 @@ public class ParseController {
 
 	@ApiOperation(value = "Add Teams From FCS Week")
 	@PostMapping("games/fcs/teams")
-	public ResponseEntity<ParseResponse> addTeams (
+	public ResponseEntity<ParseResponse> addTeams(
 			@RequestHeader(value = "password", required = true) String attemptedPassword,
 			@RequestHeader(value = "debug", required = false) String debug,
 			@RequestHeader(value = "stack", required = false) String stack, @RequestBody ParseRequest request) {
@@ -78,10 +78,10 @@ public class ParseController {
 			return new ResponseEntity<>(response, response.getStatus());
 		}
 	}
-	
+
 	@ApiOperation(value = "Parse PBP Stats from Game")
 	@PostMapping("games/fcs/pbp")
-	public ResponseEntity<ParseResponse> addPbp (
+	public ResponseEntity<ParseResponse> addPbp(
 			@RequestHeader(value = "password", required = true) String attemptedPassword,
 			@RequestHeader(value = "debug", required = false) String debug,
 			@RequestHeader(value = "stack", required = false) String stack, @RequestBody ParseRequest request) {
@@ -97,7 +97,8 @@ public class ParseController {
 			ThreadContext.put(NcaaConstants.CONTEXT_STACK_KEY, NcaaConstants.CONTEXT_STACK_VALUE_FALSE);
 		}
 		final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-		String methodStartInfo = String.format(" -- Request Received [%s]", ste[1].getMethodName());
+		String methodStartInfo = String.format(" -- Request Received [%s] [GameId: %s]", ste[1].getMethodName(),
+				request.getGameId());
 		LOG.log(Level.INFO, methodStartInfo);
 
 		if (loginKey.equals(attemptedPassword)) {

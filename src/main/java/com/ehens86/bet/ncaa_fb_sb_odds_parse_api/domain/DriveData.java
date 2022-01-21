@@ -73,13 +73,6 @@ public class DriveData extends OidAuditEntity implements Serializable {
 		this.plays = new ArrayList<>();
 	}
 
-//	/**
-//	 * @return the game
-//	 */
-//	public GameData getGame() {
-//		return game;
-//	}
-
 	/**
 	 * @param game the game to set
 	 */

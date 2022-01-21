@@ -27,7 +27,14 @@ public class PlayerData extends OidAuditEntity implements Serializable {
 	private TeamData team;
 
 	public PlayerData() {
+		// Base constructor
+	}
 
+	public PlayerData(String firstName, String lastName, TeamData team) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.team = team;
 	}
 
 	/**

@@ -8,7 +8,7 @@ public class PlayerStatKickingPojo extends BaseStatKickingPojo {
 	protected Integer fieldGoalLong;
 
 	public PlayerStatKickingPojo() {
-
+		// Base constructor
 	}
 
 	/**

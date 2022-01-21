@@ -22,7 +22,7 @@ public class PlayerStatEntity extends BaseStatEntity implements Serializable {
 	protected PlayerData player;
 
 	public PlayerStatEntity() {
-		
+		// Base constructor
 	}
 
 	/**

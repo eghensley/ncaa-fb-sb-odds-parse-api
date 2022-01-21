@@ -2,19 +2,19 @@ package com.ehens86.bet.ncaa_fb_sb_odds_parse_api.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
 
 import com.ehens86.bet.ncaa_fb_sb_odds_parse_api.constants.NcaaConstants;
 
-@Service
-public class ParsingUtils {
-	private static final Logger LOG = Logger.getLogger(ParsingUtils.class.toString());
+public final class ParsingUtils {
 
-	public Integer parseString(String val) {
+    // Private constructor to prevent instantiation
+    private ParsingUtils() {
+        throw new UnsupportedOperationException();
+    }
+    
+	public static Integer parseString(String val) {
 		try {
 			if ("".equals(val)) {
 				return 0;
@@ -24,13 +24,13 @@ public class ParsingUtils {
 		} catch (Exception e) {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String errorStr = String.format(NcaaConstants.ERROR_S_FAILED_WITH_S, ste[1].getMethodName(), e.toString());
-			LOG.log(Level.SEVERE, errorStr);
-			LOG.log(Level.INFO, e.getMessage(), e);
+			LoggingUtils.logInfo(errorStr);
+			LoggingUtils.logException(e, errorStr);
 			throw new IllegalArgumentException(errorStr);
 		}
 	}
 
-	public Double parseStringToDouble(String val) {
+	public static Double parseStringToDouble(String val) {
 		try {
 			if ("".equals(val)) {
 				return 0.0;
@@ -40,13 +40,13 @@ public class ParsingUtils {
 		} catch (Exception e) {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String errorStr = String.format(NcaaConstants.ERROR_S_FAILED_WITH_S, ste[1].getMethodName(), e.toString());
-			LOG.log(Level.SEVERE, errorStr);
-			LOG.log(Level.INFO, e.getMessage(), e);
+			LoggingUtils.logInfo(errorStr);
+			LoggingUtils.logException(e, errorStr);
 			throw new IllegalArgumentException(errorStr);
 		}
 	}
-	
-	public Integer splitValue(String value, String delim, Integer index) {
+
+	public static Integer splitValue(String value, String delim, Integer index) {
 		try {
 			ArrayList<Integer> mults = new ArrayList<>(Arrays.asList(1, 1));
 
@@ -58,9 +58,14 @@ public class ParsingUtils {
 					mults.set(1, -1);
 				}
 			} else if (Integer.valueOf("0").equals(delimCount)) {
-				System.out.println(value);
+				String noDelimiterMessageStr = String.format(
+						"No delimiters found in string provided.  Input value: %s | Delimiter value: %s", value, delim);
+				LoggingUtils.logInfo(noDelimiterMessageStr);
 			} else if (delimCount > 2) {
-				System.out.println(value);
+				String excessDelimiterMessageStr = String.format(
+						"Multiple delimiters found in string provided.  Delimiters found: %s | Input value: %s | Delimiter value: %s",
+						delimCount, value, delim);
+				LoggingUtils.logInfo(excessDelimiterMessageStr);
 			}
 
 			Integer delimIndex = value.indexOf(delim);
@@ -79,8 +84,8 @@ public class ParsingUtils {
 		} catch (Exception e) {
 			final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
 			String errorStr = String.format(NcaaConstants.ERROR_S_FAILED_WITH_S, ste[1].getMethodName(), e.toString());
-			LOG.log(Level.SEVERE, errorStr);
-			LOG.log(Level.INFO, e.getMessage(), e);
+			LoggingUtils.logInfo(errorStr);
+			LoggingUtils.logException(e, errorStr);
 			throw new IllegalArgumentException(errorStr);
 		}
 	}

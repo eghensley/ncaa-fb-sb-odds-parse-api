@@ -98,7 +98,7 @@ public class DrivePojo {
 				play -> (play.getPlayType() == PlayTypeEnum.KICKOFF && play.getPlayerStat().get(this.possessionTeamId)
 						.getSpecialTeam().getKickoff().get(0).getKickoffOnsideAttempt() == 1))
 				.collect(Collectors.toList());
-		if (onsideAttempts.size() > 0) {
+		if (!onsideAttempts.isEmpty()) {
 			int onsideAttemptIndex = this.drivePlays.indexOf(onsideAttempts.get(0));
 			if (onsideAttemptIndex < this.drivePlays.size() - 1) {
 				onsideAttempts.get(0).getPlayerStat().get(this.possessionTeamId).getSpecialTeam().getKickoff().get(0)
